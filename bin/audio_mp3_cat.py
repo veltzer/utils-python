@@ -43,5 +43,7 @@ if os.path.isfile(options.output):
 ########
 # code #
 ########
-args=[ 'avconv', '-i', 'concat:'+'|'.join(free_args), '-acodec', 'copy', options.output, '-loglevel', 'quiet' ]
+# args=[ 'avconv', '-i', 'concat:'+'|'.join(free_args), '-acodec', 'copy', options.output, '-loglevel', 'quiet' ]
+args=[ 'ffmpeg', '-i', 'concat:'+'|'.join(free_args), '-acodec', 'copy', options.output ]
+print(args)
 subprocess.check_call(args)

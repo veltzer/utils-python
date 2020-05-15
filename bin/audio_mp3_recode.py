@@ -30,7 +30,7 @@ def fix(filename):
     out=f.name
     f.close()
     #args=[
-    #    'avconv',
+    #    'ffmpeg',
     #    '-i',
     #    filename,
     #    '-acodec',
