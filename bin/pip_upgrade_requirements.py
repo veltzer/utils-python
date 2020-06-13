@@ -12,11 +12,11 @@ debug=False
 debug=True
 
 if not os.path.isfile("requirements.txt"):
-    print("erorr: no requirements.txt file found", file=sys.stderr)
+    print("error: no requirements.txt file found", file=sys.stderr)
 subprocess.check_call([
     "pip",
     "install",
     "-r",
     "requirements.txt",
     "--upgrade",
-]
+])
