@@ -3,6 +3,7 @@
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
+ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
 
 ########
 # CODE #
@@ -29,3 +30,7 @@ all: $(ALL)
 install:
 	$(Q)pymakehelper symlink_install --source_folder bin --target_folder ~/install/bin
 	$(Q)pymakehelper symlink_install --source_folder python --target_folder ~/install/python
+
+.PHONY: pylint
+pylint:
+	@pylint --reports=n --score=n $(ALL_PACKAGES)
