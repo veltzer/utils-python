@@ -15,18 +15,21 @@ logger.setLevel(logging.DEBUG)
 
 
 def yield_files():
+    """
+    Get all files in a folder
+    """
     root_folder = "."
-    for root, dirs, files in os.walk(root_folder):
+    for root, _dirs, files in os.walk(root_folder):
         for file in files:
             full = os.path.join(root, file)
             yield full
 
 
-if len(sys.argv)!=3:
+if len(sys.argv) != 3:
     prog = os.path.basename(sys.argv[0])
-    print('{prog}: usage: {prog} [bad_suffix] [good_suffix]'.format(prog=prog))
-    print('{prog}: example: {prog} .MP3 .mp3'.format(prog=prog))
-    print('{prog}: if files have no suffix use ""'.format(prog=prog))
+    print(f'{prog}: usage: {prog} [bad_suffix] [good_suffix]')
+    print(f'{prog}: example: {prog} .MP3 .mp3')
+    print(f'{prog}: if files have no suffix use ""')
     sys.exit(1)
 
 bad_suffix = sys.argv[1]
