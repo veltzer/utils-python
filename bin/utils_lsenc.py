@@ -3,5 +3,7 @@
 import chardet
 import os  
 
-for n in os.listdir('.'):
-    print('{0} => {1} ({2})'.format(n, chardet.detect(n)['encoding'], chardet.detect(n)['confidence']))
+for n in os.listdir('.'.encode()):
+    encoding = chardet.detect(n)['encoding']
+    confidence = chardet.detect(n)['confidence']
+    print(f"{n} => {encoding} ({confidence})")
