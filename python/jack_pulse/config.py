@@ -11,7 +11,7 @@ mysection='jack_pulse'
 def getConfig():
     inifile=os.path.expanduser('~/.jack_pulse.ini')
     if not os.path.isfile(inifile):
-        print('inifile did not exist, writing it for the first time. find it in {inifile}'.format(**vars()))
+        print(f"inifile did not exist, writing it for the first time. find it in {inifile}")
         config=configparser.ConfigParser()
         config[mysection]={
             'do_midi_bridge': 'yes',

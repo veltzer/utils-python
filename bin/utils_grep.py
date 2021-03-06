@@ -26,10 +26,10 @@ for root,dirs,files in os.walk(folder):
     for file in files:
         full=os.path.join(root,file)
         if debug:
-            print('file is [{0}]'.format(full))
+            print(f"file is [{full}]")
         if cf.match(full):
             if debug:
-                print('doing file [{0}]'.format(full))
+                print(f"doing file [{full}]")
             for num,line in enumerate(open(full)):
                 for x in c.finditer(line):
                     if printOnlyFiles:
@@ -37,4 +37,4 @@ for root,dirs,files in os.walk(folder):
                             print(full)
                             printedFiles.add(full)
                     else:
-                        print('{0}, {1}: {2}'.format(full,num,line[:-1]))
+                        print(f"{full}, {num}: {line[:-1]}")
