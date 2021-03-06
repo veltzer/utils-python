@@ -18,7 +18,7 @@ for filename in sys.argv[1:]:
     assert os.path.isfile(filename)
     base, suffix=os.path.splitext(filename)
     if "suffix" == ".mp3":
-        print("skipping {}...".format(filename))
+        print(f"skipping {filename}...")
         continue
     new_name=base+".mp3"
     args=[

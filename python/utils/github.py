@@ -15,9 +15,9 @@ def get_nonforked_repos():
 
 def print_it(f):
     def new_function():
-        print('[{0}] starting...'.format(f.__name__))
+        print(f"[{f.__name__}] starting...")
         r=f()
-        print('[{0}] ending...'.format(f.__name__))
+        print(f"[{f.__name__}] ending...")
         return r
     return new_function
 

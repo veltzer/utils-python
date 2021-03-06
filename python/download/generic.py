@@ -15,7 +15,7 @@ A function to download a file and show progress report
 while doing it
 '''
 def get(url, file):
-    print('downloading [{0}]...'.format(url))
+    print(f"downloading [{url}]...")
     if os.path.dirname(file)!='':
         os.makedirs(os.path.dirname(file), exist_ok=True)
     f=open(file, 'wb')
