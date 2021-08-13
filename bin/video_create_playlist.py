@@ -35,7 +35,7 @@ for root, dirs, files in os.walk('.'):
             continue
         filenames.append(full)
 # sort according to basename
-filenames = sorted(filenaes, key=os.path.basename)
+filenames = sorted(filenames, key=os.path.basename)
 # now write the result
 with open("playlist.m3u", "w") as f:
     for filename in filenames:
