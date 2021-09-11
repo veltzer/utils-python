@@ -1,0 +1,7 @@
+
+should we use #!/usr/bin/python3 or #!/usr/bin/env python3?
+
+In this case we want to use the systems python3 (meaning #!/usr/bin/python3)
+since we want these script to not use any python3 in any virutal env
+used by user since that envrionment may not have the third party support that
+we need to run these scripts.

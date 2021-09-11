@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-'''
+"""
 This script prints all of your github projects.
-'''
+"""
 
 import os.path # for expanduser
 import configparser # for ConfigParser

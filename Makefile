@@ -34,3 +34,7 @@ install:
 .PHONY: pylint
 pylint:
 	@pylint --reports=n --score=n $(ALL_PACKAGES)
+
+.PHONT: check_shebang
+check_shebang:
+	@head --lines=1 --quiet bin/*.py | sort -u
