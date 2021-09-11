@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 '''
-This script pulls all the project from a github account.
+This script pulls all the projects from a github account.
 
 NOTES:
 - this script should be python2 because it relies on the github module which
