@@ -7,9 +7,7 @@ This script prints all of your github projects.
 import os.path # for expanduser
 import configparser # for ConfigParser
 import github # for Github
-import json # for dumps
 import sys # for stdout
-import jsonpickle # for encode
 
 inifile=os.path.expanduser('~/.details.ini')
 config=configparser.ConfigParser()
@@ -24,7 +22,8 @@ opt_personal_token=config.get('github','personal_token')
 
 '''
 This is an unauthenticated call, we don't really need an authenticated call
-for what we do here
+for what we do here but we still authenticate because it increases our
+rate limit on number of api calls we make...
 
 for authenticated called pass one of:
 1) login_or_token=opt_username, password=opt_password
@@ -35,11 +34,10 @@ for authenticated called pass one of:
     These items are also generated in the github gui.
 '''
 
-g=github.Github()
+g=github.Github(login_or_token=opt_personal_token)
 for repo in g.get_user(opt_username).get_repos():
-    print(repo.name)
-    print(repo.description)
-    print(repo.fork)
-#    print(jsonpickle.encode(repo, max_depth=1, unpicklable=False, make_refs=False))
-#    json.dump(repo, sys.stdout, skipkeys=True);
-#    print(repo)
+    if repo.description is None:
+        description = "NONE"
+    else:
+        description = repo.description
+    print(','.join([repo.name, description, str(repo.fork)]))
