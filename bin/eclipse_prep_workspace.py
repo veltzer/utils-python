@@ -9,11 +9,10 @@
 # imports #
 ###########
 import shutil # for rmtree
+import os # for getcwd, mkdir
 import os.path # for isdir, expanduser
 import subprocess # for check_call, DEVNULL
-import time # for sleep
 import sys # for stderr
-import os # for getcwd, mkdir
 
 ##############
 # parameters #

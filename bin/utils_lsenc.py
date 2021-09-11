@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
+import os
 import chardet
-import os  
 
 for n in os.listdir('.'.encode()):
     encoding = chardet.detect(n)['encoding']

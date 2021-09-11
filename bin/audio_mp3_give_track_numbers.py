@@ -4,29 +4,22 @@
 This script gives track number according to order.
 use like this: [script name] *.mp3
 
-NOTES:
-- this script must stay python2 until we get ID3 for python3
+It works using id3v2 something like this:
+let y=1; for x in *; do id3v2 -T $y/36 "$x" ; let "y=y+1"; done
+
 '''
 
-from __future__ import print_function
+import subprocess # for check_call
 import os.path # for isfile
-import os # for stat
-import sys # for argv, exit
-import stat # for ST_IWRITE, ST_MODE
-import ID3 # for ID3
+import sys # for argv
 
 # first check that all files are there
-for file in sys.argv[1:]:
-    if not os.path.isfile(file):
-        print('file {file} is not there!'.format(file=file))
-        sys.exit(1)
-    st=os.stat(file)
-    mode=st[stat.ST_MODE]
-    if not mode & stat.S_IWRITE:
-        print('file {file} is not writable!'.format(file=file))
-        sys.exit(1)
-# now change the track numbers
-for i, file in enumerate(sys.argv[1:]):
-    id3info = ID3.ID3(file)
-    id3info['TRACKNUMBER'] = i+1
-    id3info.write()
+set_size=len(sys.argv)-1
+for i, filename in enumerate(sys.argv[1:]):
+    assert os.path.isfile(filename)
+    subprocess.check_call([
+        'id3v2',
+        '-T',
+        '{0}/{1}'.format(i+1, set_size),
+        filename,
+    ])
