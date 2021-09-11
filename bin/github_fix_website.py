@@ -25,8 +25,7 @@ opt_personal_token=config.get('github','personal_token')
 
 g=github.Github(login_or_token=opt_personal_token)
 for repo in g.get_user(opt_username).get_repos():
-    if repo.homepage=='':
-        print('patching {0}...'.format(repo.name))
-        # repo.edit(repo.name, homepage="");
-    if repo.homepage is None:
-        print('webpage is None for {0}...'.format(repo.name))
+    if repo.homepage=='' or repo.homepage is None:
+        homepage = f"https://github.com/veltzer/{repo.name}"
+        print(f"patching [{repo.name}]...")
+        repo.edit(repo.name, homepage=homepage);
