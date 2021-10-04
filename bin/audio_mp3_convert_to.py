@@ -12,7 +12,7 @@ import os.path # for splitext
 
 doRun=True
 doDebug=True
-doRedirect=True
+doRedirect=False
 
 for filename in sys.argv[1:]:
     assert os.path.isfile(filename)
