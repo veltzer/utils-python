@@ -17,7 +17,7 @@ Q:=@
 #.SILENT:
 endif # DO_MKDBG
 
-ALL:=
+ALL:=pylint
 
 #########
 # RULES #
@@ -33,7 +33,7 @@ install:
 
 .PHONY: pylint
 pylint:
-	@pylint --reports=n --score=n $(ALL_PACKAGES)
+	@PYTHONPATH=python pylint --reports=n --score=n $(ALL_PACKAGES)
 
 .PHONT: check_shebang
 check_shebang:

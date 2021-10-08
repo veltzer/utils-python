@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-'''
+"""
 This is a script that knows how to download eclipse.
 
 These are examples of urls to download
@@ -9,12 +9,13 @@ http://mirrors.hustunique.com/eclipse/technology/epp/downloads/release/luna/SR2/
 
 TODO:
 - make this script convert the files to .xz storage.
-'''
+"""
 
-import download.generic # for get
 import os.path # for isfile
 import hashlib # for new
 import sys # for exit
+
+import download.generic # for get
 
 def hexdigest(filename, algo):
     BLOCKSIZE = 65536
@@ -54,30 +55,40 @@ platforms=[
 ]
 cs_type='sha512'
 
-for product, incubation in products:
-    if incubation:
-        incubation_str='-incubation'
-    else:
-        incubation_str=''
-    for platform in platforms:
-        url='{mirror}/{release}/{version}/eclipse-{product}-{release}-{version}{incubation_str}-linux-gtk{platform}.tar.gz'.format(**vars())
-        cs_url='{mirror}/{release}/{version}/eclipse-{product}-{release}-{version}{incubation_str}-linux-gtk{platform}.tar.gz.{cs_type}'.format(**vars())
-        filename='eclipse-{product}-{release}-{version}-linux-gtk{platform}.tar.gz'.format(**vars())
-        cs_filename='eclipse-{product}-{release}-{version}-linux-gtk{platform}.tar.gz.{cs_type}'.format(**vars())
-        if os.path.isfile(filename):
-            print('skipping download for [{0}]...'.format(filename))
+def main():
+
+    for product, incubation in products:
+        if incubation:
+            incubation_str='-incubation'
         else:
-            download.generic.get(url, filename)
-        if os.path.isfile(cs_filename):
-            print('skipping download for [{0}]...'.format(cs_filename))
-        else:
-            download.generic.get(cs_url, cs_filename)
-        # read the checksum and compare
-        with open(cs_filename) as f:
-            read_cs=f.readline().split()[0]
-            calc_cs=hexdigest(filename, cs_type)
-            if read_cs!=calc_cs:
-                print('checksum for [{0}] is bad...'.format(filename))
-                sys.exit(1)
+            incubation_str=''
+        for platform in platforms:
+            url=(
+                    f"{mirror}/{release}/{version}/"
+                    f"eclipse-{product}-{release}-{version}{incubation_str}-linux-gtk{platform}.tar.gz"
+            )
+            cs_url=(
+                    f"{mirror}/{release}/{version}/"
+                    f"eclipse-{product}-{release}-{version}{incubation_str}-linux-gtk{platform}.tar.gz.{cs_type}"
+            )
+            filename=f"eclipse-{product}-{release}-{version}-linux-gtk{platform}.tar.gz"
+            cs_filename=f"eclipse-{product}-{release}-{version}-linux-gtk{platform}.tar.gz.{cs_type}"
+            if os.path.isfile(filename):
+                print(f"skipping download for [{filename}]...")
             else:
-                print('checksum for [{0}] is good...'.format(filename))
+                download.generic.get(url, filename)
+            if os.path.isfile(cs_filename):
+                print(f"skipping download for [{cs_filename}]...")
+            else:
+                download.generic.get(cs_url, cs_filename)
+            # read the checksum and compare
+            with open(cs_filename) as f:
+                read_cs=f.readline().split()[0]
+                calc_cs=hexdigest(filename, cs_type)
+                if read_cs!=calc_cs:
+                    print(f"checksum for [{filename}] is bad...")
+                    sys.exit(1)
+                else:
+                    print(f"checksum for [{filename}] is good...")
+
+main()

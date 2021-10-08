@@ -11,7 +11,7 @@ import subprocess # for check_call
 
 home=os.getenv('HOME')
 
-projects=list()
+projects=[]
 filename=os.path.expanduser('~/.mrconfig')
 for line in open(filename):
     line=line.rstrip()

@@ -61,7 +61,7 @@ class Gmail(object):
         log('Sending "%s" (%d bytes)' % (subject, len(content)))
         del message
 
-    print(self.folder)
+        print(self.folder)
         print(self.imap.append(self.folder, '(\\Seen)', timestamp, content))
         self.mark_appended(filename)
 
@@ -119,7 +119,7 @@ def encode_unicode(value):
 
 
 def log(message):
-    print '[%s]: %s' % (time.strftime('%H:%M:%S'), encode_unicode(message))
+    print(f"[{time.strftime('%H:%M:%S')}]: {encode_unicode(message)}")
 
 
 def main():

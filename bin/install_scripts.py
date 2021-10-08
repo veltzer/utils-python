@@ -28,8 +28,8 @@ def do_install(source, target):
 
 def file_gen(root_folder, recurse):
     if recurse:
-        for root,dirs,files in os.walk(root_folder):
-            yield root,dirs,files
+        for root, dirs, files in os.walk(root_folder):
+            yield root, dirs, files
     else:
         dirs=[]
         files=[]
@@ -39,7 +39,7 @@ def file_gen(root_folder, recurse):
                 dirs.append(file)
             if os.path.isfile(full):
                 files.append(file)
-        yield root_folder,dirs,files
+        yield root_folder, dirs, files
 
 def install(root_folder, target_folder, recurse):
     target_folder=os.path.expanduser(target_folder)
@@ -56,14 +56,14 @@ def install(root_folder, target_folder, recurse):
                         os.unlink(full)
     else:
         os.mkdir(target_folder)
-    for root,dirs,files in file_gen(root_folder, recurse):
+    for root, directories, files in file_gen(root_folder, recurse):
         for file in files:
             source=os.path.abspath(os.path.join(root, file))
             target=os.path.join(target_folder, file)
             do_install(source, target)
-        for dir in dirs:
-            source=os.path.abspath(os.path.join(root, dir))
-            target=os.path.join(target_folder, dir)
+        for directory in directories:
+            source=os.path.abspath(os.path.join(root, directory))
+            target=os.path.join(target_folder, directory)
             do_install(source, target)
 
 

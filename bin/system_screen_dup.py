@@ -81,9 +81,9 @@ def find_all_outputs():
     outputs=[]
     # regular expresson to find disconnected|connected devices
     re_output = re.compile('^(.*) (?:disconnected|connected) (.*)')
-    re_res = re.compile('^   (\d+)x(\d+) *(.*)')
-    process = subprocess.Popen(['xrandr'], stdout=subprocess.PIPE)
-    xrandr_stdout, xrandr_stderr = process.communicate()
+    re_res = re.compile(r"^   (\d+)x(\d+) *(.*)")
+    with subprocess.Popen(['xrandr'], stdout=subprocess.PIPE) as process:
+        xrandr_stdout, _ = process.communicate()
     for line in str(xrandr_stdout, encoding='utf8').split('\n'):
         m = re_output.match(line)
         if m:
@@ -101,10 +101,10 @@ def find_all_outputs():
 def find_outputs():
     outputs=[]
     # regular expresson to find connected devices
-    re_output = re.compile('^(.*) (?:connected) (.*)')
-    re_res = re.compile('^   (\d+)x(\d+) *(.*)')
-    process = subprocess.Popen(['xrandr'], stdout=subprocess.PIPE)
-    xrandr_stdout, xrandr_stderr = process.communicate()
+    re_output = re.compile(r"^(.*) (?:connected) (.*)")
+    re_res = re.compile(r"^   (\d+)x(\d+) *(.*)")
+    with subprocess.Popen(['xrandr'], stdout=subprocess.PIPE) as process:
+        xrandr_stdout, _ = process.communicate()
     for line in str(xrandr_stdout, encoding='utf8').split('\n'):
         m = re_output.match(line)
         if m:
@@ -144,25 +144,27 @@ def invert_the_screen():
         '--rotate','inverted',
     ])
 
-# Here is our main code...
-outputs=find_outputs()
-if checkTwoScreens and len(outputs)!=2:
-    raise ValueError('you have !=2 screens connected')
-if doPrint:
-    print('found two screens')
-if doUseResolution:
-    # check that the two outputs support 'resolutionToUse'
-    # if so set them
-    # if not issue error message
-    if outputs[0].supports(resolutionToUse) and \
-        outputs[1].supports(resolutionToUse):
-        set_outputs(outputs, resolutionToUse)
-    else:
-        raise ValueError('your two screens do not support resolution', resolutionToUse)
-else:
-    # find the highest resolution supported by the two screens
-    mode=find_highest_mode(outputs)
+def main():
+    outputs=find_outputs()
+    if checkTwoScreens and len(outputs)!=2:
+        raise ValueError('you have !=2 screens connected')
     if doPrint:
-        print('found best mode to be',mode)
-    # set it!
-    set_outputs(outputs, mode)
+        print('found two screens')
+    if doUseResolution:
+        # check that the two outputs support 'resolutionToUse'
+        # if so set them
+        # if not issue error message
+        if outputs[0].supports(resolutionToUse) and \
+            outputs[1].supports(resolutionToUse):
+            set_outputs(outputs, resolutionToUse)
+        else:
+            raise ValueError('your two screens do not support resolution', resolutionToUse)
+    else:
+        # find the highest resolution supported by the two screens
+        mode=find_highest_mode(outputs)
+        if doPrint:
+            print('found best mode to be',mode)
+        # set it!
+        set_outputs(outputs, mode)
+
+main()
