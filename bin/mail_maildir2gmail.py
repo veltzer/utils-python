@@ -5,14 +5,17 @@
 __version__ = '0.1'
 
 import email
-import email.Header
-import email.Utils
+import email.header
+import email.utils
 import os
 import sys
 import time
+from imaplib import IMAP4_SSL
+from optparse import OptionParser
+import bsddb3
 
 
-class Gmail(object):
+class Gmail:
     def __init__(self, options):
         self.username = options.username
         self.password = options.password
@@ -30,7 +33,7 @@ class Gmail(object):
         if self.__database is not None:
             try:
                 self.__database.close()
-            except:
+            except Exception:
                 pass
             self.__database = None
 
@@ -38,7 +41,7 @@ class Gmail(object):
             try:
                 self.__imap.logout()
                 self.__imap.close()
-            except:
+            except Exception:
                 pass
             self.__imap = None
 
@@ -46,7 +49,9 @@ class Gmail(object):
         if self.check_appended(filename):
             return
 
-        content = open(filename, 'rb').read()
+        with open(filename, 'rb') as f:
+            content = f.read()
+
         if content.endswith('\x00\x00\x00'):
             log('Skipping "%s" - corrupted' % os.path.basename(filename))
             return
@@ -73,15 +78,13 @@ class Gmail(object):
 
     @property
     def database(self):
-        import dbhash
         if self.__database is None:
             dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + '.db')
-            self.__database = dbhash.open(dbname, 'w')
+            self.__database = bsddb3.open(dbname, 'w')
         return self.__database
 
     @property
     def imap(self):
-        from imaplib import IMAP4_SSL
         if self.__imap is None:
             if not self.username or not self.password:
                 raise Exception('Username/password not supplied')
@@ -94,7 +97,7 @@ class Gmail(object):
 
 def decode_header(value):
     result = []
-    for v, c in email.Header.decode_header(value):
+    for v, c in email.header.decode_header(value):
         try:
             if c is None:
                 v = v.decode()
@@ -103,11 +106,11 @@ def decode_header(value):
         except (UnicodeError, LookupError):
             v = v.decode('iso-8859-1')
         result.append(v)
-    return u' '.join(result)
+    return " ".join(result)
 
 
 def encode_unicode(value):
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         for codec in ['iso-8859-1', 'utf8']:
             try:
                 value = value.encode(codec)
@@ -123,7 +126,6 @@ def log(message):
 
 
 def main():
-    from optparse import OptionParser
 
     parser = OptionParser(
         description=__doc__,
@@ -153,16 +155,16 @@ def main():
 
 
 def parsedate(value):
-    if value:
-        value = decode_header(value)
-        value = email.Utils.parsedate_tz(value)
-        if isinstance(value, tuple):
-            timestamp = time.mktime(tuple(value[:9]))
-            if value[9]:
-                timestamp -= time.timezone + value[9]
-                if time.daylight:
-                    timestamp += 3600
-            return time.localtime(timestamp)
+    value = decode_header(value)
+    value = email.utils.parsedate_tz(value)
+    if isinstance(value, tuple):
+        timestamp = time.mktime(tuple(value[:9]))
+        if value[9]:
+            timestamp -= time.timezone + value[9]
+            if time.daylight:
+                timestamp += 3600
+        return time.localtime(timestamp)
+    raise ValueError(f"value {value} is bad")
 
 
 if __name__ == '__main__':

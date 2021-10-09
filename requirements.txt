@@ -1,3 +1,4 @@
 pymakehelper
 jsonpickle
 PyGithub
+bsddb3

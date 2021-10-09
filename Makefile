@@ -3,7 +3,8 @@
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
-ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
+# do you want to lint python files?
+DO_LINT:=1
 
 ########
 # CODE #
@@ -17,7 +18,15 @@ Q:=@
 #.SILENT:
 endif # DO_MKDBG
 
-ALL:=pylint
+ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
+ALL:=
+ALL_DEP:=Makefile
+ALL_PY:=$(shell find bin python -name "*.py")
+ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
+
+ifeq ($(DO_LINT),1)
+	ALL+=$(ALL_LINT)
+endif # DO_LINT
 
 #########
 # RULES #
@@ -33,8 +42,20 @@ install:
 
 .PHONY: pylint
 pylint:
-	@PYTHONPATH=python pylint --reports=n --score=n $(ALL_PACKAGES)
+	$(Q)PYTHONPATH=python pylint --reports=n --score=n $(ALL_PACKAGES)
 
-.PHONT: check_shebang
+.PHONY: check_shebang
 check_shebang:
-	@head --lines=1 --quiet bin/*.py | sort -u
+	$(Q)head --lines=1 --quiet bin/*.py | sort -u
+
+.PHONY: debug
+debug:
+	$(info ALL_PY is $(ALL_PY))
+
+############
+# patterns #
+############
+$(ALL_LINT): out/%.lint: %.py $(ALL_DEP)
+	$(info doing [$@])
+	$(Q)PYTHONPATH=python pylint --reports=n --score=n $<
+	$(Q)pymakehelper touch_mkdir $@
