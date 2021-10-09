@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 import sys
-import apt
+# import apt
 
-cache = apt.Cache()
+# cache = apt.Cache()
+cache = {}
 keep = 2
 
 l = []
-for pkg in apt.Cache():
+for pkg in cache:
     if pkg.is_installed:
         for x in pkg.versions:
             if 'linux-image' in x.provides:
@@ -26,7 +27,8 @@ for to_remove in to_remove_list:
     pkg.mark_delete(True, purge=True)
 # pylint: disable=broad-except
 try:
-    cache.commit()
-    cache.close()
+    # cache.commit()
+    # cache.close()
+    pass
 except Exception as e:
     print(f"Sorry, package removal failed [{e}]")

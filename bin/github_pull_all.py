@@ -31,7 +31,7 @@ for repo in g.get_user().get_repos():
     project=folder
     if os.path.isdir(folder):
         if not os.path.isfile(os.path.join(folder,'.skip')):
-            print('project [{project}] exists, pulling it...'.format(project=project))
+            print(f"project [{project}] exists, pulling it...")
             os.chdir(folder)
             subprocess.check_call([
                 'git',
@@ -40,9 +40,9 @@ for repo in g.get_user().get_repos():
             ])
             os.chdir('..')
         else:
-            print('project [{project}] exists, skipping it because of .skip file...'.format(project=project))
+            print(f"project [{project}] exists, skipping it because of .skip file...")
     else:
-        print('project [{project}] does not exists, cloning it...'.format(project=project))
+        print(f"project [{project}] does not exists, cloning it...")
         #print(dir(repo))
         subprocess.check_call([
             'git',
@@ -56,7 +56,7 @@ for gitfolder in glob.glob('*/.git'):
     if not folder in done:
         project=folder
         if not os.path.isfile(os.path.join(folder,'.skip')):
-            print('doing non-github project [{project}]'.format(project=project))
+            print(f"doing non-github project [{project}]")
             os.chdir(folder)
             subprocess.check_call([
                 'git',
