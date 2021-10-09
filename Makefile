@@ -3,8 +3,10 @@
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
+# do you want to check python syntax?
+DO_SYNTAX:=1
 # do you want to lint python files?
-DO_LINT:=1
+DO_LINT:=0
 
 ########
 # CODE #
@@ -22,8 +24,12 @@ ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
 ALL:=
 ALL_DEP:=Makefile
 ALL_PY:=$(shell find bin python -name "*.py")
+ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
 ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
 
+ifeq ($(DO_SYNTAX),1)
+	ALL+=$(ALL_SYNTAX)
+endif # DO_SYNTAX
 ifeq ($(DO_LINT),1)
 	ALL+=$(ALL_LINT)
 endif # DO_LINT
@@ -55,6 +61,10 @@ debug:
 ############
 # patterns #
 ############
+$(ALL_SYNTAX): out/%.syntax: %.py $(ALL_DEP)
+	$(info doing [$@])
+	$(Q)scripts/syntax_check.py $<
+	$(Q)pymakehelper touch_mkdir $@
 $(ALL_LINT): out/%.lint: %.py $(ALL_DEP)
 	$(info doing [$@])
 	$(Q)PYTHONPATH=python pylint --reports=n --score=n $<
