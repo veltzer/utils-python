@@ -1,6 +1,6 @@
-import github # for Github
 import configparser # for ConfigParser
 import os.path # for expanduser
+import github # for Github
 
 inifile=os.path.expanduser('~/.details.ini')
 config=configparser.ConfigParser()
@@ -23,4 +23,4 @@ def print_it(f):
 
 @print_it
 def get_nonforked_repos_list():
-    return [repo for repo in get_nonforked_repos()]
+    return list(get_nonforked_repos())
