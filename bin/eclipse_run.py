@@ -12,9 +12,9 @@
 # imports #
 ###########
 import os.path # for isdir, expanduser
+import os # for getcwd
 import subprocess # for check_call, DEVNULL
 import time # for sleep
-import os # for getcwd
 
 ##############
 # parameters #
@@ -59,38 +59,36 @@ def max_output(out):
             print(' '.join(args))
         subprocess.check_call(args)
         return True
+    return False
+
+def main():
+    # run eclipse with the folder as the workspace
+    pid=os.fork()
+    if pid==0:
+        # child
+        # we MUST launch with '-nosplash' so that the trick of sending
+        # a 'maximize' event to the window will work...
+        subprocess.check_call([
+            eclipse,
+            '-nosplash',
+            '-data',
+            folder,
+            '-pluginCustomization',
+            'support/pluginCustomization.ini',
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     else:
-        return False
-
-########
-# code #
-########
-
-# run eclipse with the folder as the workspace
-pid=os.fork()
-if pid==0:
-    # child
-    # we MUST launch with '-nosplash' so that the trick of sending
-    # a 'maximize' event to the window will work...
-    subprocess.check_call([
-        eclipse,
-        '-nosplash',
-        '-data',
-        folder,
-        '-pluginCustomization',
-        'support/pluginCustomization.ini',
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-else:
-    # parent
-    # wait for child to appear as window and then maximize it
-    for x in range(10):
-        out=subprocess.check_output([
-            'wmctrl',
-            '-l',
-        ]).decode()
-        if max_output(out):
-            break
-        else:
+        # parent
+        # wait for child to appear as window and then maximize it
+        for _ in range(10):
+            out=subprocess.check_output([
+                'wmctrl',
+                '-l',
+            ]).decode()
+            if max_output(out):
+                break
             time.sleep(2)
-    if debug:
-        print('in end of script')
+        if debug:
+            print('in end of script')
+
+
+main()

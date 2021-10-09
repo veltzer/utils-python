@@ -25,27 +25,26 @@ opt_codec='copy'
 #opt_codec='libmp3lame'
 
 def fix(filename):
-    print('fixing [{0}]...'.format(filename))
-    f=tempfile.NamedTemporaryFile(suffix='.mp3')
-    out=f.name
-    f.close()
+    print(f"fixing [{filename}]...")
+    with tempfile.NamedTemporaryFile(suffix=".mp3") as f:
+        out=f.name
     #args=[
-    #    'ffmpeg',
-    #    '-i',
+    #    "ffmpeg",
+    #    "-i",
     #    filename,
-    #    '-acodec',
+    #    "-acodec",
     #    opt_codec,
     #    out,
-    #    '-loglevel',
+    #    "-loglevel",
     #    'quiet'
     #]
     args=[
-        'lame',
-        '-m',
-        's',
-        '--resample',
-        '11.025',
-        '--quiet',
+        "lame",
+        "-m",
+        "s",
+        "--resample",
+        "11.025",
+        "--quiet",
         filename,
         out,
     ]
@@ -71,6 +70,9 @@ def fix(filename):
     os.unlink(filename)
     shutil.move(out, filename)
 
-for filename in sys.argv[1:]:
-    assert os.path.isfile(filename)
-    fix(filename)
+def main():
+    for filename in sys.argv[1:]:
+        assert os.path.isfile(filename)
+        fix(filename)
+
+main()

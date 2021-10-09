@@ -35,9 +35,9 @@ movie=sys.argv[1]
 srt=sys.argv[2]
 outfile=sys.argv[3]
 if debug:
-    print("movie is",movie);
-    print("srt is",srt);
-    print("outfile is",outfile);
+    print(f"movie is {movie}")
+    print(f"srt is {srt}")
+    print(f"outfile is {outfile}")
 args=[
     'mencoder',movie,
     # with copy you don't get the subtitles inserted, you have

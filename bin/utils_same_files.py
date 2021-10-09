@@ -23,7 +23,8 @@ for file in files:
         sys.exit(1)
 md5=None
 for file in files:
-    new_md5=hashlib.md5(open(file, 'r').read().encode())
+    with open(file) as f:
+        new_md5=hashlib.md5(f.read().encode())
     if md5 is not None:
         if new_md5.hexdigest()!=md5.hexdigest():
             print('they are different')
