@@ -169,51 +169,36 @@ class IMAP:
         self.append(mailbox, flags, timestamp, content)
 
     def test(self):
-        '''
-        test function
-        '''
+        """ test function """
         # this works
-        '''
         print(self.imap.capability())
         print(self.imap.list())
-        '''
-
         # this works
-        '''
         assert not self.have('dontexist')
         assert self.have('business')
-        '''
-
         # this works
-        '''
         # now we try to delete a folder which does not exist.
         # this should raise an error. If it doesn't then we need to
         # error
         have_error=False
         try:
             self.delete('dontexist')
-        except ValueError as e:
+        except ValueError:
             have_error=True
         assert have_error
-        '''
 
         # this works
-        '''
         self.create('foo')
         assert self.have('foo')
         self.delete('foo')
         assert not self.have('foo')
-        '''
 
         # this works
         # this creates a label called 'foo/bar' and not two labels one within the other
-        '''
         self.create('foo/bar')
         self.delete('foo/bar')
-        '''
 
         # this works
-        '''
         self.create_fullpath('foo/bar/zoo')
         assert self.have('foo')
         assert self.have('foo/bar')
@@ -222,25 +207,20 @@ class IMAP:
         assert not self.have('foo')
         assert not self.have('foo/bar')
         assert not self.have('foo/bar/zoo')
-        '''
 
         # this should fail
-        '''
         self.create('business')
-        '''
 
         # this works
-        '''
         assert self.have_fullpath('business/hinbit/projects/smartbuild')
-        '''
 
         # this works
-        '''
         #filename='/home/mark/Mail/.hobbies.directory/blog/cur/1279466171.2097.5oTh7:2,S'
         filename='support/test_mail_msg'
         self.create_fullpath('test/foo/bar/zoo')
-        self.append('test/foo/bar/zoo', None, None, open(filename, 'rb').read())
-        '''
+        with open(filename, "rb") as f:
+            content = f.read()
+        self.append('test/foo/bar/zoo', None, None, content)
 
         # lets try this
         self.delete_fullpath('test/foo/bar/zoo')
@@ -269,6 +249,5 @@ class IMAP:
                 self.create_fullpath_db(target_folder)
                 if not db_have(filename, self.db):
                     with open(filename, "rb") as f:
-                        content = f.read()
-                    self.append(target_folder, None, None, content)
+                        self.append(target_folder, None, None, f.read())
                     db_mark(filename, self.db)

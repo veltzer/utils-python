@@ -12,7 +12,6 @@ if len(sys.argv)!=1:
     sys.exit(1)
 
 old_emails=[
-    'mark@veltzer.net',
     'mark@twiggle.com',
     'mark.veltzer@gmail.net',
 ]

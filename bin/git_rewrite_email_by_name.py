@@ -14,8 +14,8 @@ def main():
     oldname=sys.argv[1]
     commiter_name='Mark Veltzer'
     author_name='Mark Veltzer'
-    commiter_email='mark@veltzer.net'
-    author_email='mark@veltzer.net'
+    commiter_email='mark.veltzer@gmail.com'
+    author_email='mark.veltzer@gmail.com'
     expr=f"""if [ "$GIT_COMMITTER_NAME" = "{oldname}" ];
     then
         GIT_COMMITTER_NAME="{commiter_name}";

@@ -1,8 +1,9 @@
-'''
+"""
 This is the config object for the jack+pulse scripts
 
-    Mark Veltzer <mark@veltzer.net>
-'''
+    Mark Veltzer <mark.veltzer@gmain.com>
+"""
+
 import configparser # for ConfigParser
 import os.path # for expanduser, isfile
 
