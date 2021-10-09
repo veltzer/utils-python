@@ -58,6 +58,14 @@ check_shebang:
 debug:
 	$(info ALL_PY is $(ALL_PY))
 
+.PHONY: clean
+clean:
+	$(Q)rm -f $(ALL)
+
+.PHONY: clean_hard
+clean_hard:
+	$(Q)git clean -qffxd
+
 ############
 # patterns #
 ############
