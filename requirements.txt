@@ -4,3 +4,4 @@ PyGithub
 bsddb3
 progressbar
 pylint
+chardet
