@@ -1,2 +1,6 @@
-libdb5.3
-libdb-dev 
+# THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
+pymakehelper
+jsonpickle
+PyGithub
+bsddb3
+progressbar
