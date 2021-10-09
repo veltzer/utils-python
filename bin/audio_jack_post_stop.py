@@ -1,22 +1,9 @@
 #!/usr/bin/python3
 
-########
-# path #
-########
-import sys # for path
-import os.path # for expanduser
-sys.path.append(os.path.expanduser('~/install/python'))
-
-###########
-# imports #
-###########
 import os.path # for expanduser
 import os # for kill
 import jack_pulse.config # for getConfig
 
-########
-# code #
-########
 jack_pulse.config.getConfig()
 runfile=os.path.expanduser('~/.myjack_run')
 

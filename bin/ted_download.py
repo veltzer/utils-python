@@ -4,8 +4,8 @@
 A simple script to download stuff from ted.com via the command line
 '''
 
-import download.ted # for get
 import sys # for stderr, exit
+import download.ted # for get
 
 if len(sys.argv)!=3:
     print('usage: ted_download.py [url] [file]', file=sys.stderr)

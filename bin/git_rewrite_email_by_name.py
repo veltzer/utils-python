@@ -16,7 +16,7 @@ def main():
     author_name='Mark Veltzer'
     commiter_email='mark@veltzer.net'
     author_email='mark@veltzer.net'
-    expr='''if [ "$GIT_COMMITTER_NAME" = "{oldname}" ];
+    expr=f"""if [ "$GIT_COMMITTER_NAME" = "{oldname}" ];
     then
         GIT_COMMITTER_NAME="{commiter_name}";
         GIT_AUTHOR_NAME="{author_name}";
@@ -25,7 +25,7 @@ def main():
         git commit-tree "$@";
     else
         git commit-tree "$@";
-    fi'''.format(**locals())
+    fi"""
     args=['git','filter-branch','--force','--commit-filter',expr,'HEAD']
     subprocess.check_call(args)
 
