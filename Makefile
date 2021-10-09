@@ -8,7 +8,7 @@ DO_SYNTAX:=1
 # do you want to lint python files?
 DO_LINT:=1
 # do you want to lint python files using flake8?
-DO_FLAKE8:=1
+DO_FLAKE8:=0
 
 ########
 # CODE #
