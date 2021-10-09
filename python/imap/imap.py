@@ -25,6 +25,7 @@ import time # for localtime, mktime, timezone
 
 def db_open():
     dbname=os.path.expanduser('~/.imap_import.db')
+    # pylint: disable=no-member
     return dbm.gnu.open(dbname, 'c')
 def db_have(filename, opt_database):
     return filename in opt_database
