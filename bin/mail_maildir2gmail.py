@@ -11,7 +11,7 @@ import os
 import sys
 import time
 from imaplib import IMAP4_SSL
-from optparse import OptionParser
+import argparse
 import bsddb3
 
 
@@ -31,6 +31,7 @@ class Gmail:
 
     def __del__(self):
         if self.__database is not None:
+            # pylint: disable=broad-except
             try:
                 self.__database.close()
             except Exception:
@@ -38,6 +39,7 @@ class Gmail:
             self.__database = None
 
         if self.__imap is not None:
+            # pylint: disable=broad-except
             try:
                 self.__imap.logout()
                 self.__imap.close()
@@ -80,7 +82,7 @@ class Gmail:
     def database(self):
         if self.__database is None:
             dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + '.db')
-            self.__database = bsddb3.open(dbname, 'w')
+            self.__database = bsddb3.btopen(dbname, 'w')
         return self.__database
 
     @property
@@ -126,24 +128,16 @@ def log(message):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--folder", help="Folder to store the emails", default="All Mail")
+    parser.add_argument("--password", help="Password to log into Gmail", default="password")
+    parser.add_argument("--username", help="Username to log into Gamil", default="username")
+    args = parser.parse_args()
 
-    parser = OptionParser(
-        description=__doc__,
-        usage='%prog [options] [maildirs]',
-        version=__version__
-    )
+    args, dirnames = parser.parse_known_args()
 
-    parser.add_option('-f', '--folder', dest='folder', default='All Mail',
-        help='Folder to store the emails. [default: %default]')
-    parser.add_option('-p', '--password', dest='password',
-        help='Password to log into Gmail')
-    parser.add_option('-u', '--username', dest='username',
-        help='Username to log into Gmail')
-
-    options, args = parser.parse_args()
-
-    gmail = Gmail(options)
-    for dirname in args:
+    gmail = Gmail(args)
+    for dirname in dirnames:
         for filename in os.listdir(dirname):
             filename = os.path.join(dirname, filename)
             if os.path.isfile(filename):

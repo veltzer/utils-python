@@ -11,16 +11,15 @@ TODO:
 - remove the username and password from this script.
 '''
 
-from __future__ import print_function
 import glob # for glob
 import os.path # for split, join, isfile, expanduser
-import subprocess # for check_call
 import os # for chdir
+import subprocess # for check_call
+import configparser # for ConfigParser
 import github # for Github
-import ConfigParser # for ConfigParser
 
 inifile=os.path.expanduser('~/.github.ini')
-config=ConfigParser.ConfigParser()
+config=configparser.ConfigParser()
 config.read(inifile)
 opt_login=config.get('github','login')
 opt_pass=config.get('github','pass')

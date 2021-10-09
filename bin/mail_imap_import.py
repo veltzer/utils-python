@@ -20,8 +20,8 @@ TODO:
 import configparser # for ConfigParser
 import os.path # for expanduser
 import argparse # for ArgumentParser, ArgumentDefaultsHelpFormatter
-import imap.imap # for IMAP
 import sys # for exit
+import imap.imap # for IMAP
 
 ########
 # code #
@@ -51,13 +51,13 @@ subparser_import=subparsers.add_parser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
 subparser_import.add_argument('--mailfolder', help='folder where the mail is', default='~/Mail')
-subparser_import.add_argument('--toplevel', help='tag under which to import', default='imap_import', action='store_true')
-    
+subparser_import.add_argument('--toplevel', help='tag to import', default='imap_import', action='store_true')
+
 subparser_test=subparsers.add_parser(
     'test',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 )
-    
+
 subparser_rmdir=subparsers.add_parser(
     'rmdir',
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -84,7 +84,5 @@ if args.subcommand=='import':
     imp.import_folder(os.path.expanduser(args.mailfolder), args.toplevel, not args.noprogress)
 if args.subcommand=='test':
     imp.test()
-if args.subcommand=='rmdir':
-    imp.rmdir()
 
 imp.logout()

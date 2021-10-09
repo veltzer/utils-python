@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import apt
 import sys
+import apt
 
 cache = apt.Cache()
 keep = 2
@@ -24,8 +24,9 @@ to_remove_list=l[:-keep]
 for to_remove in to_remove_list:
     pkg = cache[to_remove]
     pkg.mark_delete(True, purge=True)
+# pylint: disable=broad-except
 try:
     cache.commit()
     cache.close()
 except Exception as e:
-    print("Sorry, package removal failed [{}]".format(str(e)))
+    print(f"Sorry, package removal failed [{e}]")

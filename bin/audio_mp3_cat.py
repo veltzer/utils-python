@@ -26,7 +26,7 @@ parser = optparse.OptionParser(
 )
 
 parser.add_option('-o', '--output', dest='output', default=None, help='output file [default: %default]')
-(options, free_args) = parser.parse_args()
+options, free_args = parser.parse_args()
 
 # check that all free files are there
 for file in free_args:

@@ -6,15 +6,15 @@ It auto-detects the current encoding, reads using the current
 encoding and writes using the utf-encoding.
 '''
 
-import chardet # for detect
 import sys # for argv, stderr
 import codecs # for open
+import chardet # for detect
 
 # to which charset to translate to? the -sig is what causes codecs to emit the
 # utf-8 BOM at the begining of the output file (these are 3 characters)
-to_charset='utf-8-sig';
+to_charset='utf-8-sig'
 # from which charset to translate from?
-from_charset='ascii';
+from_charset='ascii'
 # overwrite the files we read?
 write=True
 # do you want to debug?
@@ -28,7 +28,7 @@ debug=True
 
 if len(sys.argv)<2:
     print('usage: utils_to_encoding.py [filename]', file=sys.stderr)
-    exit(1)
+    sys.exit(1)
 
 for filename in sys.argv[1:]:
     if debug:
