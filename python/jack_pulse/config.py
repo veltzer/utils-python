@@ -24,9 +24,10 @@ def getConfig():
             config.write(configfile)
     config=configparser.ConfigParser()
     config.read(inifile)
-    global do_midi_bridge, do_load_jack_module, do_route_jack, do_route_apps
     sect=config[mysection]
-    do_midi_bridge=sect.getboolean('do_midi_bridge')
-    do_load_jack_module=sect.getboolean('do_load_jack_module')
-    do_route_jack=sect.getboolean('do_route_jack')
-    do_route_apps=sect.getboolean('do_route_apps')
+    options = {}
+    options["do_midi_bridge"]=sect.getboolean('do_midi_bridge')
+    options["do_load_jack_module"]=sect.getboolean('do_load_jack_module')
+    options["do_route_jack"]=sect.getboolean('do_route_jack')
+    options["do_route_apps"]=sect.getboolean('do_route_apps')
+    return options

@@ -12,9 +12,9 @@ import re # for compile
 import download.generic # for get
 
 def get(link, file):
-    ted_re='http://download.ted.com/talks/[\w_]+-480p.mp4'
-    web=urllib.request.urlopen(link)
-    web_content=web.read().decode()
+    ted_re=r"http://download.ted.com/talks/[\w_]+-480p.mp4"
+    with urllib.request.urlopen(link) as web:
+        web_content=web.read().decode()
     c=re.compile(ted_re)
     m=c.findall(web_content)
     if len(m)==0:
