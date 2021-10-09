@@ -36,24 +36,24 @@ def get_sinks():
 ########
 # code #
 ########
-jack_pulse.config.getConfig()
+options = jack_pulse.config.getConfig()
 runfile=os.path.expanduser('~/.myjack_run')
-if jack_pulse.config.do_midi_bridge:
+if options["do_midi_bridge"]:
     with subprocess.Popen('a2jmidi_bridge') as p1, subprocess.Popen('j2amidi_bridge') as p2:
         with open(runfile,'w') as f:
             f.write(str(p1.pid)+'\n')
             f.write(str(p2.pid)+'\n')
-    if jack_pulse.config.do_load_jack_module:
+    if options["do_load_jack_module"]:
         subprocess.check_call(
             ['pactl','load-module','module-jack-sink','channels=2'],
             stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,
         )
-if jack_pulse.config.do_route_jack:
+if options["config.do_route_jack"]:
     subprocess.check_call(
         ['pacmd','set-default-sink','jack_out'],
         stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,
     )
-if jack_pulse.config.do_route_apps:
+if options["do_route_apps"]:
     for index in get_sinks():
         subprocess.check_call(
             ['pacmd','move-sink-input',str(index),'jack_out'],

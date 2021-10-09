@@ -4,10 +4,10 @@ import os.path # for expanduser
 import os # for kill
 import jack_pulse.config # for getConfig
 
-jack_pulse.config.getConfig()
+options = jack_pulse.config.getConfig()
 runfile=os.path.expanduser('~/.myjack_run')
 
-if jack_pulse.config.do_midi_bridge:
+if options["do_midi_bridge"]:
     with open(runfile,'r') as f:
         p1=int(f.readline().rstrip())
         p2=int(f.readline().rstrip())
