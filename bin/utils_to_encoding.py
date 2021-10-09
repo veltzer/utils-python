@@ -32,7 +32,7 @@ if len(sys.argv)<2:
 
 for filename in sys.argv[1:]:
     if debug:
-        print('doing file [{0}]'.format(filename))
+        print(f"doing file [{filename}]")
     with open(filename, 'rb') as f:
         b=f.read()
         h=chardet.detect(b)

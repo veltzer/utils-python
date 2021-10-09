@@ -23,7 +23,7 @@ def do_install(source, target):
             os.unlink(target)
     if doit:
         if debug:
-            print('symlinking [{0}], [{1}]'.format(source, target))
+            print(f"symlinking [{source}], [{target}]")
         os.symlink(source, target)
 
 def file_gen(root_folder, recurse):
@@ -52,7 +52,7 @@ def install(root_folder, target_folder, recurse):
                 if link_target.startswith(cwd):
                     if doit:
                         if debug:
-                            print('unlinking [{0}]'.format(full))
+                            print(f"unlinking [{full}]")
                         os.unlink(full)
     else:
         os.mkdir(target_folder)

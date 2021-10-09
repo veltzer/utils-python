@@ -12,7 +12,7 @@ for pkg in apt.Cache():
         for x in pkg.versions:
             if 'linux-image' in x.provides:
                 l.append(pkg.name)
-print("found the following kernels: {}".format(l))
+print(f"found the following kernels: {l}")
 if len(l)<=keep:
     print("too few kernels installed, not doing anything")
     sys.exit(0)

@@ -53,17 +53,17 @@ class Gmail:
             content = f.read()
 
         if content.endswith('\x00\x00\x00'):
-            log('Skipping "%s" - corrupted' % os.path.basename(filename))
+            log(f"Skipping [{os.path.basename(filename)}] - corrupted")
             return
 
         message = email.message_from_string(content)
         timestamp = parsedate(message['date'])
         if not timestamp:
-            log('Skipping "%s" - no date' % os.path.basename(filename))
+            log(f"Skipping [{os.path.basename(filename)}] - no date")
             return
 
         subject = decode_header(message['subject'])
-        log('Sending "%s" (%d bytes)' % (subject, len(content)))
+        log(f"Sending [{subject}] ([{len(content)}] bytes)")
         del message
 
         print(self.folder)
@@ -142,7 +142,7 @@ def main():
                 try:
                     gmail.append(filename)
                 except:
-                    log('Unable to send %s' % filename)
+                    log(f"Unable to send [{filename}]")
                     raise
 
 

@@ -5,3 +5,4 @@ bsddb3
 progressbar
 pylint
 chardet
+python-apt

@@ -23,7 +23,7 @@ with open(filename) as f:
 #projects=[(repo.name, os.path.join(home,'git',repo.name)) for repo in utils.github.get_nonforked_repos_list()]
 
 for project_name, project_root in projects:
-    print('cleaning [{0}] at [{1}]...'.format(project_name, project_root), end='')
+    print(f"cleaning [{project_name}] at [{project_root}]...", end="")
     if os.path.isdir(project_root):
         os.chdir(project_root)
         subprocess.check_call(['git','clean','-qffxd'])
