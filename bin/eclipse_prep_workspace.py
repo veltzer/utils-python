@@ -8,40 +8,35 @@
 ###########
 # imports #
 ###########
-import shutil # for rmtree
-import os # for getcwd, mkdir
-import os.path # for isdir, expanduser
-import subprocess # for check_call, DEVNULL
-import sys # for stderr
+import shutil
+import os
+import os.path
+import subprocess
+import sys
 
 ##############
 # parameters #
 ##############
 # project
-project=os.getcwd().split('/')[-1]
+project = os.getcwd().split('/')[-1]
 # where to put the workspace
-folder=os.path.expanduser(f"~/shared_archive/workspaces/{project}")
+folder = os.path.expanduser(f"~/shared_archive/workspaces/{project}")
 # where is the eclipse to run
-eclipse=os.path.expanduser('~/install/eclipse-jee/eclipse')
+eclipse = os.path.expanduser('~/install/eclipse-jee/eclipse')
 # remove and recreate the workspace everytime?
-remove_and_recreate=True
+remove_and_recreate = True
 # debug the script?
-debug=False
+debug = False
 # report progress?
-do_progress=True
+do_progress = True
 # do import?
-do_import=True
+do_import = True
 
-#############
-# functions #
-#############
+
 def progress(msg):
     if do_progress:
         print(msg, file=sys.stderr)
 
-########
-# code #
-########
 
 if remove_and_recreate:
     # remove the old folder

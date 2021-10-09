@@ -7,6 +7,8 @@ DO_MKDBG:=0
 DO_SYNTAX:=1
 # do you want to lint python files?
 DO_LINT:=1
+# do you want to lint python files using flake8?
+DO_FLAKE8:=1
 
 ########
 # CODE #
@@ -26,6 +28,7 @@ ALL_DEP:=Makefile
 ALL_PY:=$(shell find bin python -name "*.py")
 ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
 ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
+ALL_FLAKE8:=$(addprefix out/,$(addsuffix .flake8, $(basename $(ALL_PY))))
 
 ifeq ($(DO_SYNTAX),1)
 	ALL+=$(ALL_SYNTAX)
@@ -33,6 +36,9 @@ endif # DO_SYNTAX
 ifeq ($(DO_LINT),1)
 	ALL+=$(ALL_LINT)
 endif # DO_LINT
+ifeq ($(DO_FLAKE8),1)
+	ALL+=$(ALL_FLAKE8)
+endif # DO_FLAKE8
 
 #########
 # RULES #
@@ -76,4 +82,8 @@ $(ALL_SYNTAX): out/%.syntax: %.py $(ALL_DEP)
 $(ALL_LINT): out/%.lint: %.py $(ALL_DEP)
 	$(info doing [$@])
 	$(Q)PYTHONPATH=python pylint --reports=n --score=n $<
+	$(Q)pymakehelper touch_mkdir $@
+$(ALL_FLAKE8): out/%.flake8: %.py $(ALL_DEP)
+	$(info doing [$@])
+	$(Q)PYTHONPATH=python flake8 $<
 	$(Q)pymakehelper touch_mkdir $@

@@ -6,3 +6,4 @@ progressbar
 pylint
 chardet
 # python-apt
+flake8
