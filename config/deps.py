@@ -1,7 +1,4 @@
 packages = [
-    "pymakehelper",
-    "jsonpickle",
-    "PyGithub",
-    "bsddb3",
-    "progressbar",
+    "libdb5.3",
+    "libdb-dev",
 ]
