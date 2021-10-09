@@ -9,17 +9,17 @@ import os.path # for isfile
 import hashlib # for md5
 
 if len(sys.argv)==1:
-    print('{0}: usage: {0} [files...]'.format(sys.argv[0]))
+    print("{sys.argv[0]}: usage: {sys.argv[0]} [files...]")
     sys.exit(1)
 if len(sys.argv)==2:
-    print('{0}: only one file given...'.format(sys.argv[0]))
-    print('{0}: usage: {0} [files...]'.format(sys.argv[0]))
+    print(f"{sys.argv[0]}: only one file given...")
+    print(f"{sys.argv[0]}: usage: {sys.argv[0]} [files...]")
     sys.exit(1)
 
 files=sys.argv[1:]
 for file in files:
     if not os.path.isfile(file):
-        print('{0}: cannot find or access file [{1}]'.format(sys.argv[0], file))
+        print(f"{sys.argv[0]}: cannot find or access file [{file}]")
         sys.exit(1)
 md5=None
 for file in files:

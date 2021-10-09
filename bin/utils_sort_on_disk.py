@@ -17,7 +17,7 @@ import tempfile # for TemporaryDirectory
 
 # command line usage...
 if len(sys.argv)!=1:
-    print('usage: {0}'.format(sys.argv[0]), file=sys.stderr)
+    print(f"usage: {sys.argv[0]}", file=sys.stderr)
     sys.exit(1)
 
 # this iterates in disk order

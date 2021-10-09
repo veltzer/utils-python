@@ -72,14 +72,14 @@ class IMAP:
     def login(self, username, password):
         (res, _)=self.imap.login(username, password)
         if res!='OK':
-            raise ValueError('could not login with error [{0}]'.format(res))
+            raise ValueError(f"could not login with error [{res}]")
         self.db = db_open()
 
     def logout(self):
         db_close(self.db)
         (res, _)=self.imap.logout()
         if res!='BYE':
-            raise ValueError('could not logout with error [{0}]'.format(res))
+            raise ValueError(f"could not logout with error [{res}]")
 
     def have(self, name):
         """
@@ -88,7 +88,7 @@ class IMAP:
         """
         (res, l)=self.imap.list(name)
         if res!='OK':
-            raise ValueError('could not list [{0}]. error is [{1}]'.format(name, l[0].decode()))
+            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
         if len(l)==1 and l[0] is None:
             return False
         return True
@@ -100,7 +100,7 @@ class IMAP:
         """
         (res, l)=self.imap.create(name)
         if res!='OK':
-            raise ValueError('could not create [{0}]. error is [{1}]'.format(name, l[0].decode()))
+            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
 
     def delete(self, name):
         """
@@ -109,7 +109,7 @@ class IMAP:
         """
         (res, l)=self.imap.delete(name)
         if res!='OK':
-            raise ValueError('could not delete [{0}]. error is [{1}]'.format(name, l[0].decode()))
+            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
 
     def have_fullpath(self, path):
         '''
@@ -158,7 +158,7 @@ class IMAP:
         '''
         (res, l)=self.imap.append(mailbox, flags, date_time, message)
         if res!='OK':
-            raise ValueError('could not append to [{0}]. error is [{1}]'.format(mailbox, l[0].decode()))
+            raise ValueError(f"could not append to [{mailbox}]. error is [{l[0].decode()}]")
 
     def append_file(self, mailbox, flags, filename):
         with open(filename, "rb") as f:
@@ -244,8 +244,8 @@ class IMAP:
                     parts[i]=part[1:-10]
                 target_folder='/'.join([toplevel, '/'.join(parts)])
                 if doprogress:
-                    print('filename is [{0}]'.format(filename))
-                    print('target_folder is [{0}]'.format(target_folder))
+                    print(f"filename is [{filename}]")
+                    print(f"target_folder is [{target_folder}]")
                 self.create_fullpath_db(target_folder)
                 if not db_have(filename, self.db):
                     with open(filename, "rb") as f:

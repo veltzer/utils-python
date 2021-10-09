@@ -22,7 +22,7 @@ import time # for sleep
 # project
 project=os.getcwd().split('/')[-1]
 # where to put the workspace
-folder=os.path.expanduser('~/shared_archive/workspaces/{project}'.format(project=project))
+folder=os.path.expanduser(f"~/shared_archive/workspaces/{project}")
 # where is the eclipse to run
 eclipse=os.path.expanduser('~/install/eclipse/eclipse')
 # debug the script?

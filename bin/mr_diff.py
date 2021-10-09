@@ -42,7 +42,7 @@ def main():
         print("total diff")
         print(have_folder ^ have_mrconfig)
     else:
-        print('all ok with {0} entries...'.format(len(have_mrconfig)))
+        print(f"all ok with {len(have_mrconfig)} entries...")
 
 
 main()

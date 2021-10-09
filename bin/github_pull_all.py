@@ -65,4 +65,4 @@ for gitfolder in glob.glob('*/.git'):
             ])
             os.chdir('..')
         else:
-            print('skipping non-github project [{project}]'.format(project=project))
+            print(f"skipping non-github project [{project}]")

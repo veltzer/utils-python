@@ -48,7 +48,7 @@ def main():
 
     for feature in features:
         if progress:
-            print('doing feature [{0}]'.format(feature))
+            print(f"doing feature [{feature}]")
         args=[
             './eclipse',
             '-nosplash',

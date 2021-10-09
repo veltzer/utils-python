@@ -27,7 +27,7 @@ for filename in sys.argv[1:]:
         new_name,
     ]
     if doDebug:
-        print("arguments are [{}]".format(args))
+        print(f"arguments are [{args}]")
     if doRun:
         if doRedirect:
             subprocess.check_call(args, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)

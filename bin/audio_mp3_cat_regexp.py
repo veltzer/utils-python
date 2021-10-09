@@ -50,17 +50,17 @@ def unite(filenames, out):
 if do_numbers:
     lect=1
     for x in range(1,37):
-        newx='%02d' % (x,)
+        newx=f"{x:02d}"
         if doDebug:
             print(newx)
-        l=sorted(glob.glob('%s-*' % (str(newx),)))
+        l=sorted(glob.glob(f"{newx}-*"))
         if doDebug:
             print(l)
         assert len(l)==6
         name=l[0][5:]
-        res='%02d - %s' % (lect,name)
+        res=f"{lect:02d} - {name}"
         if doDebug:
-            print('new name is [%s]' % (res))
+            print(f"new name is [{res}]")
         unite(l, res)
         lect+=1
 
@@ -68,12 +68,12 @@ if do_six:
     l=[]
     count=1
     lect=1
-    for f in sorted(glob.glob('*.mp3')):
+    for f in sorted(glob.glob("*.mp3")):
         l.append(f)
         if count%6==0:
             name=f[5:]
-            res='%02d - %s' % (lect,name)
-            #res='%02d.mp3' % (lect)
+            res=f"{lect:02d} - {name}"
+            #res=f"{lect:02d}.mp3"
             unite(l, res)
             l=[]
             count=1
@@ -89,7 +89,7 @@ if do_same_names:
     for f in sorted(glob.glob('*.mp3')):
         name=f[15:]
         if name!=old_name and len(l)>0:
-            res='%02d - %s' % (lect,old_name)
+            res=f"{lect:02d} - {old_name}"
             unite(l, res)
             lect+=1
             l=[]
