@@ -8,15 +8,17 @@ import subprocess
 import os
 import sys
 
-debug=False
-debug=True
+debug = False
+debug = True
 
 if not os.path.isfile("requirements.txt"):
     print("error: no requirements.txt file found", file=sys.stderr)
-subprocess.check_call([
-    "pip",
-    "install",
-    "-r",
-    "requirements.txt",
-    "--upgrade",
-])
+subprocess.check_call(
+    [
+        "pip",
+        "install",
+        "-r",
+        "requirements.txt",
+        "--upgrade",
+    ]
+)

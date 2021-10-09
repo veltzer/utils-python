@@ -6,15 +6,15 @@ import sys
 import os.path
 import subprocess
 
-filename="packages.txt"
+filename = "packages.txt"
 if not os.path.exists(filename):
     print(f"You need to run this script where a ${filename} file exists")
     sys.exit(1)
 
-packages=[]
+packages = []
 with open(filename) as f:
     for line in f:
-        line=line.rstrip()
+        line = line.rstrip()
         if line.startswith("#"):
             continue
         packages.append(line)

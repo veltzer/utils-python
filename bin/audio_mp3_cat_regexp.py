@@ -4,17 +4,17 @@
 Script to be used to catenate many mp3 files.
 """
 
-import subprocess # for check_call, call, DEVNULL
-import glob # for glob
+import subprocess  # for check_call, call, DEVNULL
+import glob  # for glob
 
 ##############
 # parameters #
 ##############
-doRun=True
-doDebug=False
-doCheck=False
+doRun = True
+doDebug = False
+doCheck = False
 # do you want to redirect standard output?
-doRedirect=False
+doRedirect = False
 do_numbers = False
 do_six = True
 do_same_names = False
@@ -24,14 +24,16 @@ do_same_names = False
 ########
 def unite(filenames, out):
     print(f"creating [{out}] out of [{','.join(filenames)}]")
-    args=[
+    args = [
         # "ffmpeg",
         "avconv",
-        '-i',
-        'concat:'+'|'.join(filenames),
-        '-acodec', 'copy',
+        "-i",
+        "concat:" + "|".join(filenames),
+        "-acodec",
+        "copy",
         out,
-        '-loglevel', 'quiet'
+        "-loglevel",
+        "quiet",
     ]
     if doRun:
         if doCheck:
@@ -45,53 +47,54 @@ def unite(filenames, out):
             else:
                 subprocess.call(args)
     else:
-        print(filenames,out)
+        print(filenames, out)
+
 
 if do_numbers:
-    lect=1
-    for x in range(1,37):
-        newx=f"{x:02d}"
+    lect = 1
+    for x in range(1, 37):
+        newx = f"{x:02d}"
         if doDebug:
             print(newx)
-        l=sorted(glob.glob(f"{newx}-*"))
+        l = sorted(glob.glob(f"{newx}-*"))
         if doDebug:
             print(l)
-        assert len(l)==6
-        name=l[0][5:]
-        res=f"{lect:02d} - {name}"
+        assert len(l) == 6
+        name = l[0][5:]
+        res = f"{lect:02d} - {name}"
         if doDebug:
             print(f"new name is [{res}]")
         unite(l, res)
-        lect+=1
+        lect += 1
 
 if do_six:
-    l=[]
-    count=1
-    lect=1
+    l = []
+    count = 1
+    lect = 1
     for f in sorted(glob.glob("*.mp3")):
         l.append(f)
-        if count%6==0:
-            name=f[5:]
-            res=f"{lect:02d} - {name}"
-            #res=f"{lect:02d}.mp3"
+        if count % 6 == 0:
+            name = f[5:]
+            res = f"{lect:02d} - {name}"
+            # res=f"{lect:02d}.mp3"
             unite(l, res)
-            l=[]
-            count=1
-            lect+=1
+            l = []
+            count = 1
+            lect += 1
         else:
-            count+=1
+            count += 1
 
 if do_same_names:
-    l=[]
-    count=1
-    lect=1
-    old_name=None
-    for f in sorted(glob.glob('*.mp3')):
-        name=f[15:]
-        if name!=old_name and len(l)>0:
-            res=f"{lect:02d} - {old_name}"
+    l = []
+    count = 1
+    lect = 1
+    old_name = None
+    for f in sorted(glob.glob("*.mp3")):
+        name = f[15:]
+        if name != old_name and len(l) > 0:
+            res = f"{lect:02d} - {old_name}"
             unite(l, res)
-            lect+=1
-            l=[]
-        old_name=name
+            lect += 1
+            l = []
+        old_name = name
         l.append(f)

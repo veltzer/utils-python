@@ -18,11 +18,11 @@ import sys
 # parameters #
 ##############
 # project
-project = os.getcwd().split('/')[-1]
+project = os.getcwd().split("/")[-1]
 # where to put the workspace
 folder = os.path.expanduser(f"~/shared_archive/workspaces/{project}")
 # where is the eclipse to run
-eclipse = os.path.expanduser('~/install/eclipse-jee/eclipse')
+eclipse = os.path.expanduser("~/install/eclipse-jee/eclipse")
 # remove and recreate the workspace everytime?
 remove_and_recreate = True
 # debug the script?
@@ -49,15 +49,19 @@ if remove_and_recreate:
 
 if do_import:
     progress("running headless eclipse to import the project")
-    subprocess.check_call([
-        eclipse,
-        "-nosplash",
-        "-data",
-        folder,
-        "-application",
-        "org.eclipse.cdt.managedbuilder.core.headlessbuild",
-        "-import",
-        ".",
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.check_call(
+        [
+            eclipse,
+            "-nosplash",
+            "-data",
+            folder,
+            "-application",
+            "org.eclipse.cdt.managedbuilder.core.headlessbuild",
+            "-import",
+            ".",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
 progress(f"eclipse workspace is ready ([{format}])")

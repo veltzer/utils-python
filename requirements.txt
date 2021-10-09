@@ -7,3 +7,4 @@ pylint
 chardet
 # python-apt
 flake8
+black

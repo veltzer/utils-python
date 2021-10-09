@@ -20,7 +20,8 @@ def make_hour(e, v, add=0):
     t = -5
     while t < 0:
         t = random.normalvariate(e, v)
-    return add+t
+    return add + t
+
 
 def print_time(t):
     # print(t)
@@ -34,7 +35,7 @@ for i in range(days):
         print_time(now)
         b = now
         now = make_hour(work_mu, work_sigma, now)
-        s += now-b
+        s += now - b
         print(" - ", end="")
         print_time(now)
         print()

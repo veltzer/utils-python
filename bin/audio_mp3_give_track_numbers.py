@@ -16,9 +16,11 @@ import sys
 set_size = len(sys.argv) - 1
 for i, filename in enumerate(sys.argv[1:]):
     assert os.path.isfile(filename)
-    subprocess.check_call([
-        "id3v2",
-        "-T",
-        f"{i+1}/{set_size}",
-        filename,
-    ])
+    subprocess.check_call(
+        [
+            "id3v2",
+            "-T",
+            f"{i+1}/{set_size}",
+            filename,
+        ]
+    )

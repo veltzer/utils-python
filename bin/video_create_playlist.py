@@ -7,7 +7,7 @@ This script creates a playlist from the current folder
 import os.path
 import os
 
-extensions={
+extensions = {
     ".avi",
     ".flv",
     ".wmv",
@@ -27,7 +27,7 @@ extensions={
     ".vid",
 }
 filenames = []
-for root, dirs, files in os.walk('.'):
+for root, dirs, files in os.walk("."):
     for file in files:
         full = os.path.join(root, file)
         _, extension = os.path.splitext(file)

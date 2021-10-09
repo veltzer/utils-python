@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-'''
+"""
 This script serves as post jack start script to route pulseaudio to jack...
 
 References:
@@ -12,50 +12,58 @@ http://superuser.com/questions/210617/how-to-automatically-set-pulseaudio-defaul
 
 TODO:
 - make a post about it...
-'''
+"""
 
 ########
 # path #
 ########
-import os.path # for expanduser
-import subprocess # for Popen, check_call
-import re # for compile
+import os.path  # for expanduser
+import subprocess  # for Popen, check_call
+import re  # for compile
 import jack_pulse.config
 
 #############
 # functions #
 #############
 def get_sinks():
-    with subprocess.Popen(['pacmd','list-sink-inputs'],stdout=subprocess.PIPE) as pout:
-        myre=re.compile(r"^\s+index: (\d+)\n$")
+    with subprocess.Popen(
+        ["pacmd", "list-sink-inputs"], stdout=subprocess.PIPE
+    ) as pout:
+        myre = re.compile(r"^\s+index: (\d+)\n$")
         for line in pout.stdout:
-            mymatch=myre.match(line)
+            mymatch = myre.match(line)
             if mymatch:
                 yield int(mymatch.group(1))
+
 
 ########
 # code #
 ########
 options = jack_pulse.config.getConfig()
-runfile=os.path.expanduser('~/.myjack_run')
+runfile = os.path.expanduser("~/.myjack_run")
 if options["do_midi_bridge"]:
-    with subprocess.Popen('a2jmidi_bridge') as p1, subprocess.Popen('j2amidi_bridge') as p2:
-        with open(runfile,'w') as f:
-            f.write(str(p1.pid)+'\n')
-            f.write(str(p2.pid)+'\n')
+    with subprocess.Popen("a2jmidi_bridge") as p1, subprocess.Popen(
+        "j2amidi_bridge"
+    ) as p2:
+        with open(runfile, "w") as f:
+            f.write(str(p1.pid) + "\n")
+            f.write(str(p2.pid) + "\n")
     if options["do_load_jack_module"]:
         subprocess.check_call(
-            ['pactl','load-module','module-jack-sink','channels=2'],
-            stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,
+            ["pactl", "load-module", "module-jack-sink", "channels=2"],
+            stderr=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
         )
 if options["config.do_route_jack"]:
     subprocess.check_call(
-        ['pacmd','set-default-sink','jack_out'],
-        stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,
+        ["pacmd", "set-default-sink", "jack_out"],
+        stderr=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
     )
 if options["do_route_apps"]:
     for index in get_sinks():
         subprocess.check_call(
-            ['pacmd','move-sink-input',str(index),'jack_out'],
-            stderr=subprocess.DEVNULL,stdout=subprocess.DEVNULL,
+            ["pacmd", "move-sink-input", str(index), "jack_out"],
+            stderr=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
         )

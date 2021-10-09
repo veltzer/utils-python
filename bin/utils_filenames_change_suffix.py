@@ -27,8 +27,8 @@ def yield_files():
 
 if len(sys.argv) != 3:
     prog = os.path.basename(sys.argv[0])
-    print(f'{prog}: usage: {prog} [bad_suffix] [good_suffix]')
-    print(f'{prog}: example: {prog} .MP3 .mp3')
+    print(f"{prog}: usage: {prog} [bad_suffix] [good_suffix]")
+    print(f"{prog}: example: {prog} .MP3 .mp3")
     print(f'{prog}: if files have no suffix use ""')
     sys.exit(1)
 
@@ -36,7 +36,7 @@ bad_suffix = sys.argv[1]
 good_suffix = sys.argv[2]
 
 for filename in yield_files():
-    #logger.debug(filename)
+    # logger.debug(filename)
     all_but_suffix, suffix = os.path.splitext(filename)
     if suffix == bad_suffix:
         new_filename = all_but_suffix + good_suffix
