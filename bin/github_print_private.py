@@ -7,7 +7,6 @@ This script prints all of your github projects.
 import os.path # for expanduser
 import configparser # for ConfigParser
 import github # for Github
-import sys # for stdout
 
 inifile=os.path.expanduser('~/.details.ini')
 config=configparser.ConfigParser()

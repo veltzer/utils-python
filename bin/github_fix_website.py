@@ -28,4 +28,4 @@ for repo in g.get_user(opt_username).get_repos():
     if repo.homepage=='' or repo.homepage is None:
         homepage = f"https://github.com/veltzer/{repo.name}"
         print(f"patching [{repo.name}]...")
-        repo.edit(repo.name, homepage=homepage);
+        repo.edit(repo.name, homepage=homepage)

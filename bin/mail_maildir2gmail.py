@@ -2,8 +2,6 @@
 
 """Upload email messages from a list of Maildir to Google Mail."""
 
-__version__ = '0.1'
-
 import email
 import email.header
 import email.utils

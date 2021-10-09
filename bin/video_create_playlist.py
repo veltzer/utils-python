@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-import os.path
-import os
-
 """
 This script creates a playlist from the current folder
 """
+
+import os.path
+import os
 
 extensions={
     ".avi",

@@ -30,11 +30,12 @@ for root,dirs,files in os.walk(folder):
         if cf.match(full):
             if debug:
                 print(f"doing file [{full}]")
-            for num,line in enumerate(open(full)):
-                for x in c.finditer(line):
-                    if printOnlyFiles:
-                        if not full in printedFiles:
-                            print(full)
-                            printedFiles.add(full)
-                    else:
-                        print(f"{full}, {num}: {line[:-1]}")
+            with open(full) as f:
+                for num,line in enumerate(f):
+                    for x in c.finditer(line):
+                        if printOnlyFiles:
+                            if not full in printedFiles:
+                                print(full)
+                                printedFiles.add(full)
+                        else:
+                            print(f"{full}, {num}: {line[:-1]}")
