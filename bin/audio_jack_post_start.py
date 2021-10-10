@@ -22,9 +22,7 @@ import subprocess  # for Popen, check_call
 import re  # for compile
 import jack_pulse.config
 
-#############
-# functions #
-#############
+
 def get_sinks():
     with subprocess.Popen(
         ["pacmd", "list-sink-inputs"], stdout=subprocess.PIPE
@@ -36,9 +34,6 @@ def get_sinks():
                 yield int(mymatch.group(1))
 
 
-########
-# code #
-########
 options = jack_pulse.config.getConfig()
 runfile = os.path.expanduser("~/.myjack_run")
 if options["do_midi_bridge"]:

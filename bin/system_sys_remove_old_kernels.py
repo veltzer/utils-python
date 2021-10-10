@@ -8,21 +8,21 @@ import sys
 cache = {}
 keep = 2
 
-l = []
+pkg_list = []
 for pkg in cache:
     if pkg.is_installed:
         for x in pkg.versions:
             if "linux-image" in x.provides:
-                l.append(pkg.name)
-print(f"found the following kernels: {l}")
-if len(l) <= keep:
+                pkg_list.append(pkg.name)
+print(f"found the following kernels: {pkg_list}")
+if len(pkg_list) <= keep:
     print("too few kernels installed, not doing anything")
     sys.exit(0)
 else:
     print("have enough kernels to remove so proceeding")
 
-l = sorted(l)
-to_remove_list = l[:-keep]
+pkg_list = sorted(pkg_list)
+to_remove_list = pkg_list[:-keep]
 for to_remove in to_remove_list:
     pkg = cache[to_remove]
     pkg.mark_delete(True, purge=True)

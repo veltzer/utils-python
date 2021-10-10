@@ -1,24 +1,20 @@
 #!/usr/bin/python3
 
-# this script launches eclipse
-# this script also maximizes the eclipse window using the technique
-# described in:
-# http://unix.stackexchange.com/questions/103602/how-to-maximize-a-window-programmably-in-x-window
+"""
+this script launches eclipse
+this script also maximizes the eclipse window using the technique
+described in:
+http://unix.stackexchange.com/questions/103602/how-to-maximize-a-window-programmably-in-x-window
 
-# this will require that the workspace created will be unique (say tmpfile or something).
-# this will also require that we signal the zoom of the window with that tmpfile id.
+this will require that the workspace created will be unique (say tmpfile or something).
+this will also require that we signal the zoom of the window with that tmpfile id.
+"""
 
-###########
-# imports #
-###########
 import os.path  # for isdir, expanduser
 import os  # for getcwd
 import subprocess  # for check_call, DEVNULL
 import time  # for sleep
 
-##############
-# parameters #
-##############
 # project
 project = os.getcwd().split("/")[-1]
 # where to put the workspace
@@ -28,9 +24,7 @@ eclipse = os.path.expanduser("~/install/eclipse/eclipse")
 # debug the script?
 debug = False
 
-#############
-# functions #
-#############
+
 def max_output(out):
     found_cnt = 0
     found_id = None
@@ -51,7 +45,7 @@ def max_output(out):
             "-r",
             found_id,
             "-b",
-            #'toggle,maximized_vert,maximized_horz',
+            # 'toggle,maximized_vert,maximized_horz',
             "add,maximized_vert,maximized_horz",
         ]
         if debug:

@@ -21,9 +21,7 @@ import os.path  # for isfile
 import os  # for access, X_OK
 import sys  # for exit, stderr
 
-########
-# code #
-########
+
 def die(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
     sys.exit(1)

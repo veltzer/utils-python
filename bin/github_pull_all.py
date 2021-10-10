@@ -37,7 +37,7 @@ for repo in g.get_user().get_repos():
                 [
                     "git",
                     "pull",
-                    #'--tags',
+                    # '--tags',
                 ]
             )
             os.chdir("..")
@@ -57,7 +57,7 @@ for repo in g.get_user().get_repos():
 
 for gitfolder in glob.glob("*/.git"):
     folder = os.path.split(gitfolder)[0]
-    if not folder in done:
+    if folder not in done:
         project = folder
         if not os.path.isfile(os.path.join(folder, ".skip")):
             print(f"doing non-github project [{project}]")
@@ -66,7 +66,7 @@ for gitfolder in glob.glob("*/.git"):
                 [
                     "git",
                     "pull",
-                    #'--tags',
+                    # '--tags',
                 ]
             )
             os.chdir("..")

@@ -1,4 +1,4 @@
-'''
+"""
 module to help with imap.
 
 Tecnically this is a wrapper object.
@@ -9,32 +9,40 @@ this blog post: http://scott.yang.id.au/2009/01/migrate-emails-maildir-gmail.htm
 
 Refrences:
 http://stackoverflow.com/questions/3180891/imap-deleting-messages
-'''
+"""
 
-import imaplib # for IMAP4_SSL
-import dbm.gnu # for open
+import imaplib
+import dbm.gnu
 
-import os.path # for expanduser, join, isfile, relpath, dirname, sep
-import os # for walk
-import email # for messsage_from_string
-import email.utils # for parsedate_tz
-import email.header # for decode_header
-import time # for localtime, mktime, timezone
+import os.path
+import os
+import email
+import email.utils
+import email.header
+import time
 
 # db functions
 
+
 def db_open():
-    dbname=os.path.expanduser('~/.imap_import.db')
+    dbname = os.path.expanduser('~/.imap_import.db')
     # pylint: disable=no-member
     return dbm.gnu.open(dbname, 'c')
+
+
 def db_have(filename, opt_database):
     return filename in opt_database
+
+
 def db_mark(filename, opt_database):
-    opt_database[filename]='1'
+    opt_database[filename] = '1'
+
+
 def db_close(opt_database):
     opt_database.close()
 
 # general helpers
+
 
 def decode_header(value):
     result = []
@@ -49,6 +57,7 @@ def decode_header(value):
         result.append(v)
     return " ".join(result)
 
+
 def parsedate(value):
     value = decode_header(value)
     value = email.utils.parsedate_tz(value)
@@ -61,6 +70,7 @@ def parsedate(value):
 
 # imap functions
 
+
 class IMAP:
 
     def __init__(self):
@@ -68,18 +78,18 @@ class IMAP:
         self.imap = None
 
     def connect(self, opt_hostname, opt_port):
-        self.imap=imaplib.IMAP4_SSL(opt_hostname, opt_port)
+        self.imap = imaplib.IMAP4_SSL(opt_hostname, opt_port)
 
     def login(self, username, password):
-        (res, _)=self.imap.login(username, password)
-        if res!='OK':
+        (res, _) = self.imap.login(username, password)
+        if res != 'OK':
             raise ValueError(f"could not login with error [{res}]")
         self.db = db_open()
 
     def logout(self):
         db_close(self.db)
-        (res, _)=self.imap.logout()
-        if res!='BYE':
+        (res, _) = self.imap.logout()
+        if res != 'BYE':
             raise ValueError(f"could not logout with error [{res}]")
 
     def have(self, name):
@@ -87,10 +97,10 @@ class IMAP:
         check if we have a single folder. if you pass 'a/b' it will check if you have a SINGLE
         folder called 'a/b'...
         """
-        (res, l)=self.imap.list(name)
-        if res!='OK':
+        (res, l) = self.imap.list(name)
+        if res != 'OK':
             raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
-        if len(l)==1 and l[0] is None:
+        if len(l) == 1 and l[0] is None:
             return False
         return True
 
@@ -99,8 +109,8 @@ class IMAP:
         this function creates a single folder.
         if the folder exists then it will throw an exception
         """
-        (res, l)=self.imap.create(name)
-        if res!='OK':
+        (res, l) = self.imap.create(name)
+        if res != 'OK':
             raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
 
     def delete(self, name):
@@ -108,17 +118,17 @@ class IMAP:
         this function deletes a single folder.
         If the folder doesn't exist then it will throw an exception
         """
-        (res, l)=self.imap.delete(name)
-        if res!='OK':
+        (res, l) = self.imap.delete(name)
+        if res != 'OK':
             raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
 
     def have_fullpath(self, path):
         '''
         check that we have a full path. Returns boolean to indicate the state.
         '''
-        parts=path.split('/')
-        for x in range(1, len(parts)+1):
-            cur='/'.join(parts[:x])
+        parts = path.split('/')
+        for x in range(1, len(parts) + 1):
+            cur = '/'.join(parts[:x])
             if not self.have(cur):
                 return False
         return True
@@ -127,9 +137,9 @@ class IMAP:
         '''
         create a full path and remember which paths have been created in a set
         '''
-        parts=path.split('/')
-        for x in range(1, len(parts)+1):
-            cur='/'.join(parts[:x])
+        parts = path.split('/')
+        for x in range(1, len(parts) + 1):
+            cur = '/'.join(parts[:x])
             if not db_have(cur, self.db):
                 if not self.have(cur):
                     self.create(cur)
@@ -139,26 +149,26 @@ class IMAP:
         '''
         create a full path of folders. strict.
         '''
-        parts=path.split('/')
-        for x in range(1, len(parts)+1):
+        parts = path.split('/')
+        for x in range(1, len(parts) + 1):
             self.create('/'.join(parts[:x]))
 
     def delete_fullpath(self, path):
         '''
         delete a full path of folders. strict.
         '''
-        parts=path.split('/')
+        parts = path.split('/')
         # note that delete is in reverse order
         for x in range(len(parts), 0, -1):
-            cur='/'.join(parts[:x])
+            cur = '/'.join(parts[:x])
             self.delete(cur)
 
     def append(self, mailbox, flags, date_time, message):
         '''
         append a single message to a mailbox
         '''
-        (res, l)=self.imap.append(mailbox, flags, date_time, message)
-        if res!='OK':
+        (res, l) = self.imap.append(mailbox, flags, date_time, message)
+        if res != 'OK':
             raise ValueError(f"could not append to [{mailbox}]. error is [{l[0].decode()}]")
 
     def append_file(self, mailbox, flags, filename):
@@ -181,11 +191,11 @@ class IMAP:
         # now we try to delete a folder which does not exist.
         # this should raise an error. If it doesn't then we need to
         # error
-        have_error=False
+        have_error = False
         try:
             self.delete('dontexist')
         except ValueError:
-            have_error=True
+            have_error = True
         assert have_error
 
         # this works
@@ -216,8 +226,8 @@ class IMAP:
         assert self.have_fullpath('business/hinbit/projects/smartbuild')
 
         # this works
-        #filename='/home/mark/Mail/.hobbies.directory/blog/cur/1279466171.2097.5oTh7:2,S'
-        filename='support/test_mail_msg'
+        # filename='/home/mark/Mail/.hobbies.directory/blog/cur/1279466171.2097.5oTh7:2,S'
+        filename = 'support/test_mail_msg'
         self.create_fullpath('test/foo/bar/zoo')
         with open(filename, "rb") as f:
             content = f.read()
@@ -231,19 +241,19 @@ class IMAP:
             for file in files:
                 if not file.endswith(',S'):
                     continue
-                filename=os.path.join(root, file)
+                filename = os.path.join(root, file)
                 assert os.path.isfile(filename)
-                relpath=os.path.relpath(os.path.dirname(filename), folder)
+                relpath = os.path.relpath(os.path.dirname(filename), folder)
                 # calculate folder in gmail
-                parts=relpath.split(os.path.sep)
-                assert parts[-1]=='cur'
+                parts = relpath.split(os.path.sep)
+                assert parts[-1] == 'cur'
                 parts.pop()
                 # all but the last folder element are of the form [.folder.directory]
                 for i, part in enumerate(parts[:-1]):
                     assert part.endswith('.directory')
                     assert part.startswith('.')
-                    parts[i]=part[1:-10]
-                target_folder='/'.join([toplevel, '/'.join(parts)])
+                    parts[i] = part[1:-10]
+                target_folder = '/'.join([toplevel, '/'.join(parts)])
                 if doprogress:
                     print(f"filename is [{filename}]")
                     print(f"target_folder is [{target_folder}]")

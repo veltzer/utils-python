@@ -129,7 +129,7 @@ def main():
         else:
             # print(f"dont know how to build [{project_name}]...")
             print("MAKEFILE NOT FOUND")
-            event_makefile += 1
+            events["makefile"] += 1
 
     print(f"events [{events}]")
 

@@ -51,16 +51,16 @@ args = [
     "-oac",
     codec_audio,
     # without this sync will be lost
-    #'-of','mpeg',
+    # '-of','mpeg',
     # plug in the subtitles...
     "-sub",
     srt,
     # you can control subtitles but I rather let mencoder do it's
     # thing here. I hope it will get better with time.
-    #'-font','/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf',
-    #'-subfont-autoscale','0',
-    #'-subfont-text-scale','25',
-    #'-subpos','100',
+    # '-font','/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf',
+    # '-subfont-autoscale','0',
+    # '-subfont-text-scale','25',
+    # '-subpos','100',
     "-o",
     outfile,
 ]

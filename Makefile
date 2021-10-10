@@ -8,7 +8,7 @@ DO_SYNTAX:=1
 # do you want to lint python files?
 DO_LINT:=1
 # do you want to lint python files using flake8?
-DO_FLAKE8:=0
+DO_FLAKE8:=1
 
 ########
 # CODE #
@@ -71,6 +71,9 @@ clean:
 .PHONY: clean_hard
 clean_hard:
 	$(Q)git clean -qffxd
+
+.PHONY: part_flake8
+part_flake8: $(ALL_FLAKE8) $(ALL_DEP)
 
 ############
 # patterns #

@@ -19,9 +19,7 @@ do_numbers = False
 do_six = True
 do_same_names = False
 
-########
-# code #
-########
+
 def unite(filenames, out):
     print(f"creating [{out}] out of [{','.join(filenames)}]")
     args = [
@@ -56,45 +54,45 @@ if do_numbers:
         newx = f"{x:02d}"
         if doDebug:
             print(newx)
-        l = sorted(glob.glob(f"{newx}-*"))
+        file_list = sorted(glob.glob(f"{newx}-*"))
         if doDebug:
-            print(l)
-        assert len(l) == 6
-        name = l[0][5:]
+            print(file_list)
+        assert len(file_list) == 6
+        name = file_list[0][5:]
         res = f"{lect:02d} - {name}"
         if doDebug:
             print(f"new name is [{res}]")
-        unite(l, res)
+        unite(file_list, res)
         lect += 1
 
 if do_six:
-    l = []
+    file_list = []
     count = 1
     lect = 1
     for f in sorted(glob.glob("*.mp3")):
-        l.append(f)
+        file_list.append(f)
         if count % 6 == 0:
             name = f[5:]
             res = f"{lect:02d} - {name}"
             # res=f"{lect:02d}.mp3"
-            unite(l, res)
-            l = []
+            unite(file_list, res)
+            file_list = []
             count = 1
             lect += 1
         else:
             count += 1
 
 if do_same_names:
-    l = []
+    file_list = []
     count = 1
     lect = 1
     old_name = None
     for f in sorted(glob.glob("*.mp3")):
         name = f[15:]
-        if name != old_name and len(l) > 0:
+        if name != old_name and len(file_list) > 0:
             res = f"{lect:02d} - {old_name}"
-            unite(l, res)
+            unite(file_list, res)
             lect += 1
-            l = []
+            file_list = []
         old_name = name
-        l.append(f)
+        file_list.append(f)

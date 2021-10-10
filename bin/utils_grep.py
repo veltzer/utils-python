@@ -34,7 +34,7 @@ for root, dirs, files in os.walk(folder):
                 for num, line in enumerate(f):
                     for x in c.finditer(line):
                         if printOnlyFiles:
-                            if not full in printedFiles:
+                            if full not in printedFiles:
                                 print(full)
                                 printedFiles.add(full)
                         else:

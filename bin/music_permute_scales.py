@@ -21,6 +21,6 @@ import random  # for seed, shuffle
 ########
 # for deterministic behaviour
 # random.seed(7)
-l = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]
-random.shuffle(l)
-print(l)
+note_list = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]
+random.shuffle(note_list)
+print(note_list)
