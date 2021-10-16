@@ -2,6 +2,10 @@
 
 """
 This script creates a playlist from the current folder
+
+TODO:
+if a filename has special characters in it then the playlist will not work.
+Try to find a way around that...
 """
 
 import os.path
