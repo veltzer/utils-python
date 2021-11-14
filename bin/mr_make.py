@@ -86,7 +86,7 @@ def main():
     project_options_file = os.path.expanduser("~/.mroptions.yaml")
     if os.path.isfile(project_options_file):
         with open(project_options_file) as f:
-            opts = yaml.load(f)
+            opts = yaml.safe_load(f)
     else:
         opts = {}
 
