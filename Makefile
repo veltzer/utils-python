@@ -43,7 +43,6 @@ endif # DO_FLAKE8
 #########
 # RULES #
 #########
-.DEFAULT_GOAL=all
 .PHONY: all
 all: $(ALL)
 
