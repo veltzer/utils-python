@@ -9,6 +9,8 @@ DO_SYNTAX:=1
 DO_LINT:=1
 # do you want to lint python files using flake8?
 DO_FLAKE8:=1
+# do you want dependency on the Makefile itself ?
+DO_ALLDEP:=1
 
 ########
 # CODE #
@@ -22,9 +24,13 @@ Q:=@
 #.SILENT:
 endif # DO_MKDBG
 
+# dependency on the makefile itself
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif
+
 ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
 ALL:=
-ALL_DEP:=Makefile
 ALL_PY:=$(shell find bin python -name "*.py")
 ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
 ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
@@ -72,20 +78,20 @@ clean_hard:
 	$(Q)git clean -qffxd
 
 .PHONY: part_flake8
-part_flake8: $(ALL_FLAKE8) $(ALL_DEP)
+part_flake8: $(ALL_FLAKE8)
 
 ############
 # patterns #
 ############
-$(ALL_SYNTAX): out/%.syntax: %.py $(ALL_DEP)
+$(ALL_SYNTAX): out/%.syntax: %.py
 	$(info doing [$@])
 	$(Q)scripts/syntax_check.py $<
 	$(Q)pymakehelper touch_mkdir $@
-$(ALL_LINT): out/%.lint: %.py $(ALL_DEP)
+$(ALL_LINT): out/%.lint: %.py
 	$(info doing [$@])
 	$(Q)PYTHONPATH=python pylint --reports=n --score=n $<
 	$(Q)pymakehelper touch_mkdir $@
-$(ALL_FLAKE8): out/%.flake8: %.py $(ALL_DEP)
+$(ALL_FLAKE8): out/%.flake8: %.py
 	$(info doing [$@])
 	$(Q)PYTHONPATH=python flake8 $<
 	$(Q)pymakehelper touch_mkdir $@
