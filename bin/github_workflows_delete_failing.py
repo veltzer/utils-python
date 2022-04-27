@@ -31,6 +31,7 @@ def delete(workflow_run):
 g = github.Github(login_or_token=opt_personal_token)
 for repo in g.get_user(opt_username).get_repos():
     for workflow in repo.get_workflows():
+        existing = 0
         for run in workflow.get_runs():
             print(f"inspecting {repo.name} {workflow.name} {run.conclusion}")
             delete_it = False
@@ -40,6 +41,10 @@ for repo in g.get_user(opt_username).get_repos():
             # if it's not a paged build and it failed then delete it
             if workflow.name != "pages-build-deployment" and run.conclusion == "failure":
                 delete_it = True
+            if existing >= 4:
+                delete_it = True
             if delete_it:
                 print(f"deleting {repo.name} {workflow.name} {run.conclusion}")
                 delete(run)
+            else:
+                existing += 1
