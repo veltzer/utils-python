@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 https://medium.com/@ewertonjordao/github-actions-how-to-remove-all-failed-actions-pwsh-github-api-93de9c2cfe46
@@ -33,5 +33,5 @@ for repo in g.get_user(opt_username).get_repos():
     for workflow in repo.get_workflows():
         for run in workflow.get_runs():
             if run.conclusion != "success":
-                print(f"{repo.name}: {workflow.name}: {run.conclusion}")
+                print(f"{repo.name} {workflow.name} {run.conclusion}")
                 delete(run)
