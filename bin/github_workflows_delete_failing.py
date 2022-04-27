@@ -33,5 +33,5 @@ for repo in g.get_user(opt_username).get_repos():
     for workflow in repo.get_workflows():
         for run in workflow.get_runs():
             if run.conclusion != "success":
-                print(f"{repo.name}: {workflow.name}")
+                print(f"{repo.name}: {workflow.name}: {run.conclusion}")
                 delete(run)
