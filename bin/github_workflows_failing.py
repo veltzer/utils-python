@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """
 This script finds which workflows in you github accounts are failing.
@@ -26,4 +26,4 @@ for repo in g.get_user(opt_username).get_repos():
         else:
             continue
         if last_run.conclusion != "success":
-            print(f"{repo.name}: {workflow.name}")
+            print(f"{repo.name}: {workflow.name} {last_run.conclusion}")
