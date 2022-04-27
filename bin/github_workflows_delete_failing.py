@@ -35,7 +35,7 @@ for repo in g.get_user(opt_username).get_repos():
             print(f"inspecting {repo.name} {workflow.name} {run.conclusion}")
             delete_it = False
             # if it's a pages build delete it unless it's in mid work (run.conclusion is None)
-            if workflow.name == "pages-build-deployment" and run.conclusion is None:
+            if workflow.name == "pages-build-deployment" and run.conclusion is not None:
                 delete_it = True
             # if it's not a paged build and it failed then delete it
             if workflow.name != "pages-build-deployment" and run.conclusion == "failure":
