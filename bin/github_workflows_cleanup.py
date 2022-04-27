@@ -44,7 +44,7 @@ for repo in g.get_user(opt_username).get_repos():
             if existing >= 4:
                 delete_it = True
             if delete_it:
-                print(f"deleting {repo.name} {workflow.name} {run.conclusion}")
+                print(f"deleting {repo.name} {workflow.name} {run.conclusion} {run.url}")
                 delete(run)
             else:
                 existing += 1
