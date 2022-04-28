@@ -2,13 +2,6 @@
 
 """
 This script pulls all the projects from a github account.
-
-NOTES:
-- this script should be python2 because it relies on the github module which
-is python2 only
-
-TODO:
-- remove the username and password from this script.
 """
 
 import glob  # for glob
