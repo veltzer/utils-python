@@ -1,5 +1,0 @@
-# THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
-libdb5.3
-libdb-dev
-python3-pip
-python-apt-dev
