@@ -13,8 +13,8 @@ import config.deps
 
 do_sudo = len(sys.argv) > 1
 # make apt noninteractive
-os.environ['DEBIAN_FRONTEND']='noninteractive'
-args=[]
+os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+args = []
 if do_sudo:
     args.append("sudo")
 args.extend([
@@ -24,7 +24,7 @@ args.extend([
     "update",
 ])
 subprocess.check_call(args)
-args=[]
+args = []
 if do_sudo:
     args.append("sudo")
 args.extend([

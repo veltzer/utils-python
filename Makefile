@@ -55,27 +55,33 @@ all: $(ALL)
 
 .PHONY: install
 install:
+	$(info doing [$@])
 	$(Q)pymakehelper symlink_install --source_folder bin --target_folder ~/install/bin
 	$(Q)pymakehelper symlink_install --source_folder python --target_folder ~/install/python
 
 .PHONY: pylint
 pylint:
+	$(info doing [$@])
 	$(Q)PYTHONPATH=python pylint --reports=n --score=n $(ALL_PACKAGES)
 
 .PHONY: check_shebang
 check_shebang:
+	$(info doing [$@])
 	$(Q)head --lines=1 --quiet bin/*.py | sort -u
 
 .PHONY: debug
 debug:
 	$(info ALL_PY is $(ALL_PY))
+	$(info ALL is $(ALL))
 
 .PHONY: clean
 clean:
+	$(info doing [$@])
 	$(Q)rm -f $(ALL)
 
 .PHONY: clean_hard
 clean_hard:
+	$(info doing [$@])
 	$(Q)git clean -qffxd
 
 .PHONY: part_flake8
