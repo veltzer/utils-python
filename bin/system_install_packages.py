@@ -31,7 +31,6 @@ args.extend([
     "apt-get",
     "--yes",
     "--quiet",
-    "-y",
     "install",
 ])
 args.extend(config.deps.packages)
