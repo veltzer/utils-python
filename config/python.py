@@ -13,7 +13,8 @@ run_requires = [
     "bsddb3",
     "progressbar",
     "chardet",
-    # python-apt
+    # this does not work
+    # "python-apt",
 ]
 
 test_requires = [
