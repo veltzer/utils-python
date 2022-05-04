@@ -37,13 +37,13 @@ ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
 ALL_FLAKE8:=$(addprefix out/,$(addsuffix .flake8, $(basename $(ALL_PY))))
 
 ifeq ($(DO_SYNTAX),1)
-	ALL+=$(ALL_SYNTAX)
+ALL+=$(ALL_SYNTAX)
 endif # DO_SYNTAX
 ifeq ($(DO_LINT),1)
-	ALL+=$(ALL_LINT)
+ALL+=$(ALL_LINT)
 endif # DO_LINT
 ifeq ($(DO_FLAKE8),1)
-	ALL+=$(ALL_FLAKE8)
+ALL+=$(ALL_FLAKE8)
 endif # DO_FLAKE8
 
 #########
@@ -92,7 +92,7 @@ part_flake8: $(ALL_FLAKE8)
 ############
 $(ALL_SYNTAX): out/%.syntax: %.py
 	$(info doing [$@])
-	$(Q)scripts/syntax_check.py $<
+	$(Q)bin/syntax_check.py $<
 	$(Q)pymakehelper touch_mkdir $@
 $(ALL_LINT): out/%.lint: %.py
 	$(info doing [$@])
