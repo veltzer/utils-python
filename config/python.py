@@ -29,7 +29,6 @@ test_requires = [
 dev_requires = [
     "pyclassifiers",
     "pypitools",
-    "pydmt",
     "Sphinx",
     "pytest",
     "pytest-cov",
