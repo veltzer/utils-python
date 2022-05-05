@@ -19,6 +19,6 @@ jobs:
     - name: build_tools
       run: pydmt build_tools
     - name: build_reqs
-      run: pydmt build_reqs --verbose True
+      run: pydmt build_reqs
     - name: make
       run: pymakehelper run_make
