@@ -10,8 +10,7 @@ run_requires = [
     "pymakehelper",
     "jsonpickle",
     "PyGithub",
-    # this fails because of lack of native library
-    # "bsddb3",
+    "bsddb3",
     "progressbar",
     "chardet",
     # this does not work
