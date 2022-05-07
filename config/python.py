@@ -29,6 +29,7 @@ dev_requires = [
 make_requires = [
     "pymakehelper",
     "pylint",
+    "flake8",
 ]
 
 test_requires = [
