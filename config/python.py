@@ -2,6 +2,10 @@ import config.project
 
 package_name = config.project.project_name
 
+dev_requires = [
+    "pypitools",
+    "Sphinx",
+]
 install_requires = [
     "pymakehelper",
     "jsonpickle",
@@ -12,35 +16,22 @@ install_requires = [
     # this does not work
     # "python-apt",
 ]
-
 test_requires = [
     "pylint",
     "pytest",
     "pytest-cov",
     "flake8",
+    "pyflakes",
     "pylogconf",
+    "black",
 ]
-
-dev_requires = [
-    "pypitools",
-    "Sphinx",
-]
-
 make_requires = [
     "pymakehelper",
     "pylint",
     "flake8",
 ]
 
-test_requires = [
-    "pytest",
-    "pytest-cov",
-    "pylint",
-    "pyflakes",
-    "flake8",
-    "black",
-]
+python_requires = ">=3.10"
 
-python_requires = ">=3.9"
-test_os = ["ubuntu-20.04"]
-test_python = ["3.9"]
+test_os = ["ubuntu-22.04"]
+test_python = ["3.10"]
