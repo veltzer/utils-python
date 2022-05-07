@@ -2,7 +2,7 @@ import config.project
 
 package_name = config.project.project_name
 
-run_requires = [
+install_requires = [
     "pymakehelper",
     "jsonpickle",
     "PyGithub",
@@ -14,7 +14,6 @@ run_requires = [
 ]
 
 test_requires = [
-    "pymakehelper",
     "pylint",
     "pytest",
     "pytest-cov",
@@ -23,9 +22,15 @@ test_requires = [
 ]
 
 dev_requires = [
-    "pyclassifiers",
     "pypitools",
     "Sphinx",
+]
+
+make_requires = [
+    "pymakehelper",
+]
+
+test_requires = [
     "pytest",
     "pytest-cov",
     "pylint",
