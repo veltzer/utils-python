@@ -28,6 +28,7 @@ dev_requires = [
 
 make_requires = [
     "pymakehelper",
+    "pylint",
 ]
 
 test_requires = [
