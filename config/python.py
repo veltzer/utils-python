@@ -4,10 +4,11 @@ package_name = config.project.project_name
 
 dev_requires = [
     "pypitools",
-    "Sphinx",
+]
+make_requires = [
+    "pymakehelper",
 ]
 install_requires = [
-    "pymakehelper",
     "jsonpickle",
     "PyGithub",
     "bsddb3",
@@ -22,13 +23,7 @@ test_requires = [
     "pytest-cov",
     "flake8",
     "pyflakes",
-    "pylogconf",
     "black",
-]
-make_requires = [
-    "pymakehelper",
-    "pylint",
-    "flake8",
 ]
 
 python_requires = ">=3.10"
