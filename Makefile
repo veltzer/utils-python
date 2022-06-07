@@ -31,7 +31,7 @@ endif # DO_ALLDEP
 
 ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
 ALL:=
-ALL_PY:=$(shell find bin python -name "*.py")
+ALL_PY:=$(shell find src python -name "*.py")
 ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
 ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
 ALL_FLAKE8:=$(addprefix out/,$(addsuffix .flake8, $(basename $(ALL_PY))))
@@ -56,7 +56,7 @@ all: $(ALL)
 .PHONY: install
 install:
 	$(info doing [$@])
-	$(Q)pymakehelper symlink_install --source_folder bin --target_folder ~/install/bin
+	$(Q)pymakehelper symlink_install --source_folder src --target_folder ~/install/bin
 	$(Q)pymakehelper symlink_install --source_folder python --target_folder ~/install/python
 
 .PHONY: pylint
@@ -67,7 +67,7 @@ pylint:
 .PHONY: check_shebang
 check_shebang:
 	$(info doing [$@])
-	$(Q)head --lines=1 --quiet bin/*.py | sort -u
+	$(Q)head --lines=1 --quiet src/*.py | sort -u
 
 .PHONY: debug
 debug:
@@ -92,7 +92,7 @@ part_flake8: $(ALL_FLAKE8)
 ############
 $(ALL_SYNTAX): out/%.syntax: %.py
 	$(info doing [$@])
-	$(Q)bin/syntax_check.py $<
+	$(Q)src/syntax_check.py $<
 	$(Q)pymakehelper touch_mkdir $@
 $(ALL_LINT): out/%.lint: %.py
 	$(info doing [$@])
