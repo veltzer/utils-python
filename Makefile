@@ -100,6 +100,13 @@ clean_hard:
 .PHONY: part_flake8
 part_flake8: $(ALL_FLAKE8)
 
+.PHONY: stats
+stats:
+	$(Q)find out -name "*.syntax" | wc -l
+	$(Q)find out -name "*.lint" | wc -l
+	$(Q)find out -name "*.flake8" | wc -l
+	$(Q)find out -name "*.mypy" | wc -l
+
 ############
 # patterns #
 ############
