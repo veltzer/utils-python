@@ -43,5 +43,5 @@ for filename in sys.argv[1:]:
             continue
         new_content = b.decode(detect_charset)
         if write:
-            with codecs.open(filename, "w", to_charset) as f:
-                f.write(new_content)
+            with codecs.open(filename, "w", to_charset) as f2:
+                f2.write(new_content)

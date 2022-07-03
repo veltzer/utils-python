@@ -17,4 +17,7 @@ test_requires = [
     "flake8",
     "pyflakes",
     "black",
+    "mypy",
+    "types-chardet",
+    "types-PyYAML",
 ]

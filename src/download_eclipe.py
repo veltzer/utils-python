@@ -15,7 +15,7 @@ import os.path  # for isfile
 import hashlib  # for new
 import sys  # for exit
 
-import download.generic  # for get
+import download.generic  # type: ignore
 
 
 def hexdigest(filename, algo):

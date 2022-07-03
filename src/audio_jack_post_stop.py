@@ -2,7 +2,7 @@
 
 import os.path  # for expanduser
 import os  # for kill
-import jack_pulse.config  # for getConfig
+import jack_pulse.config  # type: ignore
 
 options = jack_pulse.config.getConfig()
 runfile = os.path.expanduser("~/.myjack_run")

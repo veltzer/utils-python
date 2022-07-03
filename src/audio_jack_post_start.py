@@ -20,7 +20,7 @@ TODO:
 import os.path  # for expanduser
 import subprocess  # for Popen, check_call
 import re  # for compile
-import jack_pulse.config
+import jack_pulse.config  # type: ignore
 
 
 def get_sinks():

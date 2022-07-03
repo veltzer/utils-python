@@ -10,7 +10,7 @@ import sys
 import time
 from imaplib import IMAP4_SSL
 import argparse
-import bsddb3
+import bsddb3  # type: ignore
 
 
 class Gmail:

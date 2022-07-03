@@ -9,6 +9,8 @@ DO_SYNTAX:=1
 DO_LINT:=1
 # do you want to lint python files using flake8?
 DO_FLAKE8:=1
+# do you wnat to lint python fies using mypy?
+DO_MYPY:=1
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
 
@@ -35,16 +37,23 @@ ALL_PY:=$(shell find src python -name "*.py")
 ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
 ALL_LINT:=$(addprefix out/,$(addsuffix .lint, $(basename $(ALL_PY))))
 ALL_FLAKE8:=$(addprefix out/,$(addsuffix .flake8, $(basename $(ALL_PY))))
+ALL_MYPY:=$(addprefix out/,$(addsuffix .mypy, $(basename $(ALL_PY))))
 
 ifeq ($(DO_SYNTAX),1)
 ALL+=$(ALL_SYNTAX)
 endif # DO_SYNTAX
+
 ifeq ($(DO_LINT),1)
 ALL+=$(ALL_LINT)
 endif # DO_LINT
+
 ifeq ($(DO_FLAKE8),1)
 ALL+=$(ALL_FLAKE8)
 endif # DO_FLAKE8
+
+ifeq ($(DO_MYPY),1)
+ALL+=$(ALL_MYPY)
+endif # DO_MYPY
 
 #########
 # RULES #
@@ -72,6 +81,10 @@ check_shebang:
 .PHONY: debug
 debug:
 	$(info ALL_PY is $(ALL_PY))
+	$(info ALL_SYNTAX is $(ALL_SYNTAX))
+	$(info ALL_LINT is $(ALL_LINT))
+	$(info ALL_FLAKE8 is $(ALL_FLAKE8))
+	$(info ALL_MYPY is $(ALL_MYPY))
 	$(info ALL is $(ALL))
 
 .PHONY: clean
@@ -101,4 +114,8 @@ $(ALL_LINT): out/%.lint: %.py
 $(ALL_FLAKE8): out/%.flake8: %.py
 	$(info doing [$@])
 	$(Q)PYTHONPATH=python flake8 $<
+	$(Q)pymakehelper touch_mkdir $@
+$(ALL_MYPY): out/%.mypy: %.py
+	$(info doing [$@])
+	$(Q)pymakehelper only_print_on_error mypy $<
 	$(Q)pymakehelper touch_mkdir $@

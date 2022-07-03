@@ -21,7 +21,7 @@ import configparser  # for ConfigParser
 import os.path  # for expanduser
 import argparse  # for ArgumentParser, ArgumentDefaultsHelpFormatter
 import sys  # for exit
-import imap.imap  # for IMAP
+import imap.imap  # type: ignore
 
 ########
 # code #

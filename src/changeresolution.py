@@ -24,7 +24,7 @@ if len(sys.argv) != 2 or (sys.argv[1] != "low" and sys.argv[1] != "high"):
 
 # first lets find the low mode line etc...
 # you can also call 'cvt(1' instead of 'gtf(1)'...
-out = subprocess.check_output(["gtf", str(width), str(height), str(refresh)])
+out = subprocess.check_output(["gtf", str(width), str(height), str(refresh)]).decode()
 line = out.strip().split("\n")[1].strip()
 modeline = line.split()[2:]
 if debug:

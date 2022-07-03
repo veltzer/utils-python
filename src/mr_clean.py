@@ -9,12 +9,13 @@ import os  # for chdir, system, getenv
 import subprocess  # for check_call
 
 home = os.getenv("HOME")
+assert home is not None
 
 projects = []
 filename = os.path.expanduser("~/.mrconfig")
 with open(filename) as f:
-    for line in f:
-        line = line.rstrip()
+    for line_b in f:
+        line = line_b.rstrip()
         if line.startswith("["):
             project_root = os.path.join(home, line[1:-1])
             project_name = line[1:-1].split("/")[-1]

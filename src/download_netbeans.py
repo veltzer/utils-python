@@ -11,7 +11,7 @@ http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-javaee-
 http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-javase-linux.sh
 """
 
-import download.generic  # for get
+import download.generic  # type: ignore
 
 products = [
     "",

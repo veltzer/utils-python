@@ -25,7 +25,7 @@ for gitfolder in glob.glob("*/.git"):
                 "status",
                 # '--short',
             ]
-        )
+        ).decode()
         for line in out.split("\n"):
             if line.find("ahead") != -1:
                 print(line)

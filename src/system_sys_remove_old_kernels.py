@@ -1,11 +1,33 @@
 #!/usr/bin/python3
 
 import sys
+from typing import List
 
 # import apt
 
+
+class PkgAttribs:
+    def __init__(self):
+        self.provides: List[str] = []
+
+
+class Package:
+    def __init__(self):
+        self.name: str = ""
+        self.is_installed: bool = False
+        self.versions: List[PkgAttribs] = []
+
+    def mark_delete(self, b: bool, purge: bool):
+        pass
+
+
+class MockCache(List[Package]):
+    def __getitem__(self, index:str):  # type: ignore
+        pass
+
+
 # cache = apt.Cache()
-cache = {}
+cache: MockCache = MockCache()
 keep = 2
 
 pkg_list = []
