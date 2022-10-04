@@ -31,7 +31,7 @@ def main():
         "yaml/video_features.yaml",
     ]
     inners = [
-        None,
+        "items",
         "items",
     ]
     for file_to_check, inner in zip(files_to_check, inners):
