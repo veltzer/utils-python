@@ -5,6 +5,7 @@ Check that .yaml files have correct names of movies
 """
 
 
+import sys
 import shelve
 from imdb import Cinemagoer  # type: ignore
 import yaml
@@ -26,20 +27,12 @@ def main():
     shelve_filename = "imdbid_to_object.shelve"
     cache = shelve.open(shelve_filename)
     cinemagoer = Cinemagoer()
-    files_to_check = [
-        "yaml/video_series.yaml",
-        "yaml/video_features.yaml",
-    ]
-    inners = [
-        "items",
-        "items",
-    ]
-    for file_to_check, inner in zip(files_to_check, inners):
+    files_to_check = sys.argv[1:]
+    for file_to_check in files_to_check:
         print(f"checking [{file_to_check}]")
         with open(file_to_check, encoding="utf-8") as stream:
             data = yaml.safe_load(stream)
-        if inner is not None:
-            data = data[inner]
+        data = data["items"]
         for datum in data:
             f_imdbid = datum["imdb_id"]
             f_name = datum["name"]
