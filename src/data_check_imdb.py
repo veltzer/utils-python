@@ -29,7 +29,7 @@ def main():
     cinemagoer = Cinemagoer()
     files_to_check = sys.argv[1:]
     for file_to_check in files_to_check:
-        print(f"checking [{file_to_check}]")
+        # print(f"checking [{file_to_check}]")
         with open(file_to_check, encoding="utf-8") as stream:
             data = yaml.safe_load(stream)
         data = data["items"]
