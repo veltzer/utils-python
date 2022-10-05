@@ -12,7 +12,7 @@ import requests
 import bs4  # type: ignore
 
 
-SAVE_TEMP = True
+SAVE_TEMP = False
 
 
 def get_goodreads_data(f_goodreads_id, session):
