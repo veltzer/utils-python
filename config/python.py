@@ -10,6 +10,7 @@ install_requires = [
     # this does not work
     # "python-apt",
     "cinemagoer",
+    "beautifulsoup4",
 ]
 test_requires = [
     "pylint",
@@ -21,4 +22,5 @@ test_requires = [
     "mypy",
     "types-chardet",
     "types-PyYAML",
+    "types-requests",
 ]

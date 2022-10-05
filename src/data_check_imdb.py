@@ -11,20 +11,20 @@ from imdb import Cinemagoer  # type: ignore
 import yaml
 
 
-def imdbid_to_title(f_imdbid, cache, cinemagoer):
+def imdb_id_to_imdb_data(f_imdb_id, cache, cinemagoer):
     """ cached version of getting title by imdb """
-    if f_imdbid in cache:
-        obj = cache[f_imdbid]
+    if f_imdb_id in cache:
+        obj = cache[f_imdb_id]
     else:
-        print(f"retrieving {f_imdbid}...")
-        obj = cinemagoer.get_movie(f_imdbid)
-        cache[f_imdbid] = obj
-    return obj["title"]
+        print(f"retrieving [{f_imdb_id}]...")
+        obj = cinemagoer.get_movie(f_imdb_id)
+        cache[f_imdb_id] = obj
+    return obj
 
 
 def main():
     """ main entry point """
-    shelve_filename = "imdbid_to_object.shelve"
+    shelve_filename = "imdb_id_to_imdb_data.shelve"
     cache = shelve.open(shelve_filename)
     cinemagoer = Cinemagoer()
     files_to_check = sys.argv[1:]
@@ -34,11 +34,12 @@ def main():
             data = yaml.safe_load(stream)
         data = data["items"]
         for datum in data:
-            f_imdbid = datum["imdb_id"]
+            f_imdb_id = datum["imdb_id"]
             f_name = datum["name"]
-            # print(f"doing [{f_name}] [{f_imdbid}]")
-            f_title = imdbid_to_title(f_imdbid, cache, cinemagoer)
-            assert f_title == f_name, f"{f_imdbid} {f_title} {f_name}"
+            # print(f"doing [{f_name}] [{f_imdb_id}]")
+            imdb_data = imdb_id_to_imdb_data(f_imdb_id, cache, cinemagoer)
+            f_title = imdb_data["title"]
+            assert f_title == f_name, f"{f_imdb_id} {f_title} {f_name}"
     cache.close()
 
 
