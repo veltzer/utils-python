@@ -82,6 +82,7 @@ def main():
             data = yaml.safe_load(stream)
         data = data["items"]
         for datum in data:
+            done = False
             for name in datum["names"]:
                 if "goodreads_id" in name:
                     f_goodreads_id = name["goodreads_id"]
@@ -89,12 +90,15 @@ def main():
                     goodreads_data = goodreads_id_to_goodreads_data(f_goodreads_id, cache_goodreads, session)
                     f_title = goodreads_data["title"]
                     assert f_title == f_name, f"{f_goodreads_id} {f_title} {f_name}"
+                    done = True
                 if "simania_id" in name:
                     f_simania_id = name["simania_id"]
                     f_name = name["name"]
                     simania_data = simania_id_to_simania_data(f_simania_id, cache_simania, session)
                     f_title = simania_data["title"]
                     assert f_title == f_name, f"{f_simania_id} {f_title} {f_name}"
+                    done = True
+            assert done is True, f"no id found for {datum['names']}..."
     cache_goodreads.close()
     cache_simania.close()
 
