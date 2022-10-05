@@ -12,6 +12,9 @@ import requests
 import bs4  # type: ignore
 
 
+CHEKC_ID_FOR_EVERY_BOOK = True
+
+
 def get_goodreads_data(f_goodreads_id, session):
     # print(f"retrieving {f_goodreads_id}...")
     url = f"https://www.goodreads.com/book/show/{f_goodreads_id}"
@@ -98,7 +101,8 @@ def main():
                     f_title = simania_data["title"]
                     assert f_title == f_name, f"{f_simania_id} {f_title} {f_name}"
                     done = True
-            assert done is True, f"no id found for {datum['names']}..."
+            if CHEKC_ID_FOR_EVERY_BOOK:
+                assert done is True, f"no id found for {datum['names']}..."
     cache_goodreads.close()
     cache_simania.close()
 
