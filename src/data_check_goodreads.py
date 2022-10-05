@@ -62,7 +62,7 @@ def main():
                 if "goodreads_id" in name:
                     f_goodreads_id = name["goodreads_id"]
                     f_name = name["name"]
-                    print(f"doing [{f_name}] [{f_goodreads_id}]")
+                    # print(f"doing [{f_name}] [{f_goodreads_id}]")
                     goodreads_data = goodreads_id_to_goodreads_data(f_goodreads_id, cache, session)
                     f_title = goodreads_data["title"]
                     assert f_title == f_name, f"{f_goodreads_id} {f_title} {f_name}"
