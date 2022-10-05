@@ -28,10 +28,9 @@ def get_goodreads_data(f_goodreads_id, session):
     f_title = soup.find(id="bookTitle")
     if f_title is None:
         f_title = soup.find("h1", {"data-testid":"bookTitle"})
-        # print("title is ", f_title)
     else:
-        # print(f_title)
         f_title = f_title.text.strip()
+    assert f_title is not None, "Could not find title"
     return {
         "title": f_title,
     }
