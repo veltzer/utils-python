@@ -19,6 +19,4 @@ test_requires = [
     "black",
     "mypy",
     "types-chardet",
-    "types-PyYAML",
-    "types-requests",
 ]
