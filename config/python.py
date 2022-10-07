@@ -9,8 +9,6 @@ install_requires = [
     "chardet",
     # this does not work
     # "python-apt",
-    "cinemagoer",
-    "beautifulsoup4",
 ]
 test_requires = [
     "pylint",
