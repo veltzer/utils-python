@@ -5,3 +5,8 @@ packages = [
     "python-apt-dev",
     # "libdb++-dev",
 ]
+
+dev_packages = [
+	"libgdbm-dev",
+	"libdb++-dev",
+]
