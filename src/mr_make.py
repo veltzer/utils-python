@@ -5,11 +5,11 @@ This script runs 'make' (make(1)) in every project
 that is mine.
 """
 
-import os  # for chdir, system
-import os.path  # for expanduser, isdir, isfile, join
-import subprocess  # for check_call
-import sys  # for exit
-import yaml  # for loads
+import os
+import os.path
+import subprocess
+import sys
+import yaml
 
 home = os.getenv("HOME")
 print_all = True

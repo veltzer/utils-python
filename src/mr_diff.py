@@ -11,7 +11,7 @@ reverse check as well: that all the repos that I have
 there are here too.
 """
 
-import os.path  # for expanduser, isdir, join
+import os.path
 
 
 def add_folder(base, have_folder):

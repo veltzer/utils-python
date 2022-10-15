@@ -10,12 +10,11 @@ References:
 http://www.linuxforums.org/forum/newbie/111044-change-order-files-directory.html
 """
 
-import sys  # for argv, exit, stderr
-import os  # for listdir
-import os.path  # for join, isfile
-import tempfile  # for TemporaryDirectory
+import sys
+import os
+import os.path
+import tempfile
 
-# command line usage...
 if len(sys.argv) != 1:
     print(f"usage: {sys.argv[0]}", file=sys.stderr)
     sys.exit(1)

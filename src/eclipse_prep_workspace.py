@@ -1,22 +1,18 @@
 #!/usr/bin/python3
 
-# this script will create a workspace where eclipse can be launched
-# this script also maximizes the eclipse window using the technique
-# described in:
-# http://unix.stackexchange.com/questions/103602/how-to-maximize-a-window-programmably-in-x-window
+"""
+this script will create a workspace where eclipse can be launched
+this script also maximizes the eclipse window using the technique
+described in:
+http://unix.stackexchange.com/questions/103602/how-to-maximize-a-window-programmably-in-x-window
+"""
 
-###########
-# imports #
-###########
 import shutil
 import os
 import os.path
 import subprocess
 import sys
 
-##############
-# parameters #
-##############
 # project
 project = os.getcwd().split("/")[-1]
 # where to put the workspace

@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
 """
-implemting grep in python
+implementing grep in python
 """
 
-import re  # for compile, finditer
-import sys  # for argv, exit
-import os.path  # for join
-import os  # for walk
+import re
+import sys
+import os
+import os.path
 
 # command line usage...
 if len(sys.argv) != 4:

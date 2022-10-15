@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import os.path  # for expanduser
-import os  # for kill
+import os.path
+import os
 import jack_pulse.config  # type: ignore
 
 options = jack_pulse.config.getConfig()

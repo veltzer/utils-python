@@ -4,9 +4,9 @@
 say whether any several files have the same content or not.
 """
 
-import sys  # for argv, exit
-import os.path  # for isfile
-import hashlib  # for md5
+import sys
+import os.path
+import hashlib
 
 if len(sys.argv) == 1:
     print("{sys.argv[0]}: usage: {sys.argv[0]} [files...]")

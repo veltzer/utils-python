@@ -4,8 +4,8 @@
 This script will change from one commiter to another in a git repository...
 """
 
-import subprocess  # for check_call
-import sys  # for argv
+import subprocess
+import sys
 
 if len(sys.argv) != 2:
     raise ValueError("usage: git_change_commiter.py [oldname]")

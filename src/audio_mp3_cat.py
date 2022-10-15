@@ -5,10 +5,10 @@ This script will catenate mp3 files correctly using ffmpeg.
 see: http://superuser.com/questions/314239/how-to-join-merge-many-mp3-files
 """
 
-import subprocess  # for check_call
+import subprocess
 import argparse
-import os.path  # for isfile
-import sys  # for exit
+import os.path
+import sys
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", help="output file")

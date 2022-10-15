@@ -4,8 +4,8 @@
 This is a wrapper for gnome-open(1) which does not pollute the screen.
 """
 
-import sys  # for argv
-import subprocess  # for call, DEVNULL
+import sys
+import subprocess
 
 args = ["/usr/bin/gnome-open"]
 args.extend(sys.argv[1:])

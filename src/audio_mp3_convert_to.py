@@ -6,9 +6,9 @@ The idea is to do something like this:
 $ for x in *.m4b; do ffmpeg -i "$x" "`basename "$x" .m4b`.mp3"; done
 """
 
-import subprocess  # for check_call, DEVNULL
-import sys  # for argv
-import os.path  # for splitext
+import subprocess
+import sys
+import os.path
 
 doRun = True
 doDebug = True

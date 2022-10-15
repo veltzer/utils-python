@@ -4,21 +4,12 @@
 This script runs a browser on the output of the current project
 """
 
-###########
-# imports #
-###########
-import subprocess  # for check_call
-import os  # for getcwd
+import subprocess
+import os
 
-##############
-# parameters #
-##############
 # project
 project = os.getcwd().split("/")[-1]
 
-########
-# code #
-########
 subprocess.check_call(
     [
         "gnome-open",

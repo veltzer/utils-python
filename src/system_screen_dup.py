@@ -22,11 +22,10 @@ NOTES:
 (did not work without it).
 """
 
-import subprocess  # for check_output
-import re  # for compile
+import subprocess
+import re
 
 # parameters
-
 res = [
     (1280, 1024),
     (1280, 960),

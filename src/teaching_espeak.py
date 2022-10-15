@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-import sys  # for argv
-import subprocess  # for check_call
-import time  # for sleep
+import sys
+import subprocess
+import time
 
 if len(sys.argv) != 3:
     raise ValueError("usage: num dec")

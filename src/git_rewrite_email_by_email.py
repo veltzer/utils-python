@@ -4,8 +4,8 @@
 This will allow you to update your email in a git repository.
 """
 
-import subprocess  # for check_call
-import sys  # for argv, stderr, exit
+import subprocess
+import sys
 
 if len(sys.argv) != 1:
     print(f"{sys.argv[0]}: usage: {sys.argv[0]}", file=sys.stderr)

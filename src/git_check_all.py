@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-import glob  # for glob
-import os.path  # for split, join, isfile
-import os  # for chdir
-import subprocess  # for check_call
+import glob
+import os
+import os.path
+import subprocess
 
 for gitfolder in glob.glob("*/.git"):
     folder = os.path.split(gitfolder)[0]

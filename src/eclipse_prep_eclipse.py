@@ -13,13 +13,10 @@ the version of a specific eclipse without running it and remove
 this hardcoding.
 """
 
-###########
-# imports #
-###########
-import subprocess  # for check_call, DEVNULL
-import os.path  # for isfile
-import os  # for access, X_OK
-import sys  # for exit, stderr
+import subprocess
+import os
+import os.path
+import sys
 
 
 def die(*args, **kwargs):

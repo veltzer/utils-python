@@ -4,9 +4,9 @@
 This script uses git to clean all of my projects.
 """
 
-import os.path  # for expanduser, join, isdir
-import os  # for chdir, system, getenv
-import subprocess  # for check_call
+import os
+import os.path
+import subprocess
 
 home = os.getenv("HOME")
 assert home is not None

@@ -9,12 +9,12 @@ Avconv supports many codecs. See "avconv -codecs".
 we will use libmp3lame.
 """
 
-import subprocess  # for check_call, call, DEVNULL
-import sys  # for argv
-import tempfile  # for NamedTemporaryFile
-import shutil  # for move
-import os  # for unlink
-import os.path  # for isfile
+import subprocess
+import sys
+import tempfile
+import shutil
+import os
+import os.path
 
 doRun = True
 doDebug = False

@@ -7,18 +7,8 @@ This could be used to help in training on playing pieces in all these scales
 and avoiding going through them always in the same cycle of fifths.
 """
 
-###########
-# imports #
-###########
-import random  # for seed, shuffle
+import random
 
-#############
-# functions #
-#############
-
-########
-# code #
-########
 # for deterministic behaviour
 # random.seed(7)
 note_list = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]

@@ -10,10 +10,10 @@ this will require that the workspace created will be unique (say tmpfile or some
 this will also require that we signal the zoom of the window with that tmpfile id.
 """
 
-import os.path  # for isdir, expanduser
-import os  # for getcwd
-import subprocess  # for check_call, DEVNULL
-import time  # for sleep
+import os.path
+import os
+import subprocess
+import time
 
 # project
 project = os.getcwd().split("/")[-1]

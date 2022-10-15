@@ -6,9 +6,9 @@ It auto-detects the current encoding, reads using the current
 encoding and writes using the utf-encoding.
 """
 
-import sys  # for argv, stderr
-import codecs  # for open
-import chardet  # for detect
+import sys
+import codecs
+import chardet
 
 # to which charset to translate to? the -sig is what causes codecs to emit the
 # utf-8 BOM at the begining of the output file (these are 3 characters)

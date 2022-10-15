@@ -17,15 +17,12 @@ TODO:
     (make it in this executable using subcommands of argparser).
 """
 
-import configparser  # for ConfigParser
-import os.path  # for expanduser
-import argparse  # for ArgumentParser, ArgumentDefaultsHelpFormatter
-import sys  # for exit
+import configparser
+import os.path
+import argparse
+import sys
 import imap.imap  # type: ignore
 
-########
-# code #
-########
 cp = configparser.ConfigParser()
 cp.read(os.path.expanduser("~/.details.ini"))
 opt_username = cp.get("google", "username")

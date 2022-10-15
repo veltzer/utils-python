@@ -4,12 +4,9 @@
 Script to be used to catenate many mp3 files.
 """
 
-import subprocess  # for check_call, call, DEVNULL
-import glob  # for glob
+import subprocess
+import glob
 
-##############
-# parameters #
-##############
 doRun = True
 doDebug = False
 doCheck = False
