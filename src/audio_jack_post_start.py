@@ -14,12 +14,9 @@ TODO:
 - make a post about it...
 """
 
-########
-# path #
-########
-import os.path  # for expanduser
-import subprocess  # for Popen, check_call
-import re  # for compile
+import os.path
+import subprocess
+import re
 import jack_pulse.config  # type: ignore
 
 
