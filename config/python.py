@@ -2,6 +2,9 @@ make_requires = [
     "pymakehelper",
     "pydmt",
 ]
+dev_requires = [
+    "black",
+]
 install_requires = [
     "jsonpickle",
     "PyGithub",
@@ -17,7 +20,6 @@ test_requires = [
     "pytest-cov",
     "flake8",
     "pyflakes",
-    "black",
     "mypy",
     "types-chardet",
     "types-PyYAML",
