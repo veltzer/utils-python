@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 """
 A script to change the resolution of the screen on my DELL LATITUDE laptop

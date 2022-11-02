@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 """
 This script re-encodes mp3 files. The idea is that this re-encoding

@@ -112,7 +112,7 @@ stats:
 ############
 $(ALL_SYNTAX): out/%.syntax: %.py
 	$(info doing [$@])
-	$(Q)src/syntax_check.py $<
+	$(Q)src/python_syntax_check.py $<
 	$(Q)pymakehelper touch_mkdir $@
 $(ALL_LINT): out/%.lint: %.py
 	$(info doing [$@])
