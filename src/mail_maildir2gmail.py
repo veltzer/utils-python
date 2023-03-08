@@ -87,7 +87,7 @@ class Gmail:
     def imap(self):
         if self.__imap is None:
             if not self.username or not self.password:
-                raise Exception("Username/password not supplied")
+                raise LookupError("Username/password not supplied")
 
             self.__imap = IMAP4_SSL("imap.gmail.com")
             self.__imap.login(self.username, self.password)
