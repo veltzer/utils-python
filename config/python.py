@@ -1,6 +1,7 @@
 make_requires = [
     "pymakehelper",
     "pydmt",
+    "pycmdtools",
 ]
 dev_requires = [
     "black",
