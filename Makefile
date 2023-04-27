@@ -9,7 +9,7 @@ DO_SYNTAX:=1
 DO_LINT:=1
 # do you want to lint python files using flake8?
 DO_FLAKE8:=1
-# do you wnat to lint python fies using mypy?
+# do you want to lint python files using mypy?
 DO_MYPY:=1
 # do you want dependency on the Makefile itself ?
 DO_ALLDEP:=1
