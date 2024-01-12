@@ -14,7 +14,7 @@ install_requires: List[str] = [
     # this does not work
     # "python-apt",
 ]
-make_requires: List[str] = [
+build_requires: List[str] = [
     "pymakehelper",
     "pydmt",
     "pycmdtools",
@@ -29,4 +29,4 @@ test_requires: List[str] = [
     "types-chardet",
     "types-PyYAML",
 ]
-requires = config_requires + install_requires + make_requires + test_requires
+requires = config_requires + install_requires + build_requires + test_requires
