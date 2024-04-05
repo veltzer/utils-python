@@ -1,0 +1,17 @@
+# THIS IS AN AUTO-GENERATED FILE. DO NOT EDIT!
+jsonpickle
+PyGithub
+bsddb3
+progressbar
+chardet
+pymakehelper
+pydmt
+pycmdtools
+pylint
+pytest
+pytest-cov
+flake8
+pyflakes
+mypy
+types-chardet
+types-PyYAML
