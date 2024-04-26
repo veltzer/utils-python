@@ -11,3 +11,5 @@ Another thing is that now ubuntu has python3 as /usr/bin/python.
 
 so the verdict?
 /usr/bin/python
+
+* Note: some special scripts, like pip_upgrade.py may need #!/usr/bin/env python

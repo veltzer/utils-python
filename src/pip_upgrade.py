@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 This script upgrades just one pip module.
@@ -8,14 +8,15 @@ It is very useful if you have a ton of repos and want to upgrade some module in 
 
 import sys
 import subprocess
-from pkg_resources import get_distribution, DistributionNotFound
+import importlib
 
 
 def upgrade_module(module_name):
     try:
-        module_dist = get_distribution(module_name)
-        print(f"{module_name} version {module_dist.version} is installed.")
-    except DistributionNotFound:
+        importlib.import_module(module_name)
+        # module_version = module.__version__
+        print(f"{module_name} is installed.")
+    except ImportError:
         print(f"{module_name} is not installed, skipping upgrade.")
         return
 
