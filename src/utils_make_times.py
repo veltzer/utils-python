@@ -25,7 +25,7 @@ def make_hour(e, v, add=0):
 
 def print_time(t):
     # print(t)
-    print(f"{int(t//60)}:{int(t%60):02d}", end="")
+    print(f"{int(t // 60)}:{int(t % 60):02d}", end="")
 
 
 for i in range(days):

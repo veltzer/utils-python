@@ -20,7 +20,7 @@ for i, filename in enumerate(sys.argv[1:]):
         [
             "id3v2",
             "-T",
-            f"{i+1}/{set_size}",
+            f"{i + 1}/{set_size}",
             filename,
         ]
     )
