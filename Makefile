@@ -1,5 +1,5 @@
 ##############
-# PARAMETERS #
+# parameters #
 ##############
 # do you want to see the commands executed ?
 DO_MKDBG:=0
@@ -15,7 +15,7 @@ DO_MYPY:=1
 DO_ALLDEP:=1
 
 ########
-# CODE #
+# code #
 ########
 # silent stuff
 ifeq ($(DO_MKDBG),1)
@@ -25,11 +25,6 @@ else # DO_MKDBG
 Q:=@
 #.SILENT:
 endif # DO_MKDBG
-
-# dependency on the makefile itself
-ifeq ($(DO_ALLDEP),1)
-.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
-endif # DO_ALLDEP
 
 ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
 ALL:=
@@ -56,7 +51,7 @@ ALL+=$(ALL_MYPY)
 endif # DO_MYPY
 
 #########
-# RULES #
+# rules #
 #########
 .PHONY: all
 all: $(ALL)
@@ -126,3 +121,10 @@ $(ALL_MYPY): out/%.mypy: %.py
 	$(info doing [$@])
 	$(Q)pymakehelper only_print_on_error mypy $<
 	$(Q)pymakehelper touch_mkdir $@
+
+##########
+# alldep #
+##########
+ifeq ($(DO_ALLDEP),1)
+.EXTRA_PREREQS+=$(foreach mk, ${MAKEFILE_LIST},$(abspath ${mk}))
+endif # DO_ALLDEP
