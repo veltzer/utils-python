@@ -11,6 +11,7 @@ install_requires: List[str] = [
     "bsddb3",
     "progressbar",
     "chardet",
+    "python-pptx",
     # this does not work
     # "python-apt",
 ]
