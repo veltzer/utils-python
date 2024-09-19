@@ -4,6 +4,7 @@ PyGithub
 bsddb3
 progressbar
 chardet
+python-pptx
 pymakehelper
 pydmt
 pycmdtools
