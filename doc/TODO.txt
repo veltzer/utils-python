@@ -1,0 +1,1 @@
+when doing "make install" stop installed __pycache__ and *.pyc files
