@@ -66,7 +66,7 @@ install:
 .PHONY: pylint
 pylint:
 	$(info doing [$@])
-	$(Q)python -m pylint --reports=n --score=n $(ALL_PACKAGES)
+	$(Q)PYTHONPATH=python python -m pylint --reports=n --score=n $(ALL_PACKAGES)
 
 .PHONY: check_shebang
 check_shebang:
