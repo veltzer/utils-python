@@ -8,6 +8,7 @@ python-pptx
 pymakehelper
 pydmt
 pycmdtools
+pyclassifiers
 pylint
 pytest
 pytest-cov
