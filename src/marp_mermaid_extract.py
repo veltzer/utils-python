@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 I need a python script that accepts marp/markdown files as input
 and searches for mermaid inlined diagrams in them. When it finds
@@ -62,7 +64,7 @@ def extract_mermaid_diagrams(file_path:str):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py <path_to_marp_file>")
+        print(f"Usage: {sys.argv[0]} <path_to_marp_file>")
         sys.exit(1)
 
     file_path = sys.argv[1]
