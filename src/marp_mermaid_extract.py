@@ -14,9 +14,11 @@ You must process the matches in reverse order in order not to screw up the "star
 
 import re
 import sys
+import os
+import os.path
 
 
-def extract_mermaid_diagrams(file_path:str):
+def extract_mermaid_diagrams(mermaid_folder:str, file_path:str):
     with open(file_path, "r") as file:
         content = file.read()
 
@@ -43,19 +45,14 @@ def extract_mermaid_diagrams(file_path:str):
         # Extract the current slide content
         # slide_content = content[slide_start:slide_end].strip()
 
-        # Prompt user for diagram name
-        # print("\nCurrent slide content:")
-        # print(slide_content)
-        # diagram_name = input("Enter a name for this diagram: ").strip()
-        diagram_name = str(num)
-
         # Create .mmd file
-        mmd_filename = f"{diagram_name}.mmd"
-        with open(mmd_filename, "w") as mmd_file:
+        mmd_filename = f"{num}.mmd"
+        with open(os.path.join(mermaid_folder,mmd_filename), "w") as mmd_file:
             mmd_file.write(diagram)
 
         # Replace the diagram with a link in the original content
-        replace = f"![{diagram_name}]({mmd_filename})"
+        replace = f"![{num}](../../../out/{mermaid_folder}/{num}.png)"
+        # replace = f"![{diagram_name}]({mmd_filename})"
         content = content[:start] + replace + content[end:]
 
     # Write the modified content back to the file
@@ -64,13 +61,12 @@ def extract_mermaid_diagrams(file_path:str):
 
 
 def main():
-    if len(sys.argv) <= 2:
-        print(f"Usage: {sys.argv[0]} [marp files...]")
+    if len(sys.argv) != 3:
+        print(f"Usage: {sys.argv[0]} [mermaid_folder] [marp files...]")
         sys.exit(1)
 
-    for file_path in sys.argv[1:]:
-        print(f"Processing file: {file_path}")
-        extract_mermaid_diagrams(file_path)
+    os.makedirs(sys.argv[1])
+    extract_mermaid_diagrams(sys.argv[1], sys.argv[2])
 
 
 if __name__ == "__main__":
