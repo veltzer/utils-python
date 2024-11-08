@@ -61,12 +61,13 @@ def extract_mermaid_diagrams(mermaid_folder:str, file_path:str):
 
 
 def main():
-    if len(sys.argv) != 3:
-        print(f"Usage: {sys.argv[0]} [mermaid_folder] [marp files...]")
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} [marpfile]")
         sys.exit(1)
 
-    os.makedirs(sys.argv[1])
-    extract_mermaid_diagrams(sys.argv[1], sys.argv[2])
+    mermaid = os.path.join("mermaid", sys.argv[1])
+    os.makedirs(mermaid)
+    extract_mermaid_diagrams(mermaid, sys.argv[1])
 
 
 if __name__ == "__main__":
