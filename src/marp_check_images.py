@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import sys
 import re
@@ -42,14 +44,14 @@ def validate_image_links(root_dir: str) -> bool:
         print("No Marp files found!")
         return False
 
-    print(f"Found {len(marp_files)} Marp files")
+    # print(f"Found {len(marp_files)} Marp files")
 
     for marp_file in marp_files:
-        print(f"\nChecking {marp_file}...")
+        # print(f"Checking {marp_file}...")
         image_links = extract_image_links(marp_file)
 
         if not image_links:
-            print("  No image links found")
+            # print("  No image links found")
             continue
 
         for image_path, line_num in image_links:
@@ -57,10 +59,11 @@ def validate_image_links(root_dir: str) -> bool:
             abs_image_path = (marp_file.parent / Path(image_path)).resolve()
 
             if not abs_image_path.exists():
-                print(f"  ❌ Line {line_num}: Image not found: {image_path}")
+                print(f"{marp_file}: {line_num}: {image_path}")
                 all_valid = False
             else:
-                print(f"  ✓ Line {line_num}: Found {image_path}")
+                pass
+                # print(f"  ✓ Line {line_num}: Found {image_path}")
 
     return all_valid
 
@@ -75,10 +78,11 @@ def main():
         sys.exit(1)
     success = validate_image_links(root_dir)
     if not success:
-        print("\n⚠️ Some images are missing!")
+        # print("\n⚠️ Some images are missing!")
         sys.exit(1)
     else:
-        print("\n✓ All images exist!")
+        pass
+        # print("\n✓ All images exist!")
 
 
 if __name__ == "__main__":
