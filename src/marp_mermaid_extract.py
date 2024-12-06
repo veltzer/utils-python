@@ -67,7 +67,7 @@ def main():
 
     for a in sys.argv[1:]:
         mermaid = os.path.join("mermaid", a)
-        os.makedirs(mermaid)
+        os.makedirs(mermaid, exist_ok=True)
         extract_mermaid_diagrams(mermaid, a)
 
 
