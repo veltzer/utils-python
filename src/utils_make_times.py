@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+Build random times of day
+"""
+
 import random
 
 days = 1

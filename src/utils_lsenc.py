@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+List encdings of files
+"""
+
 import os
 import chardet
 
