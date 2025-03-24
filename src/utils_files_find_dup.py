@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+Find duplicate files
+"""
+
 import os
 import hashlib
 from collections import defaultdict
