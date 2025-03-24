@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+teaching_hours_sum
+"""
+
 import sys
 import re
 

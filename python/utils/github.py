@@ -1,3 +1,8 @@
+"""
+github utilities
+"""
+
+
 import configparser
 import os.path
 import github

@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+utils_python_filetype
+"""
+
 import sys
 import os
 import shelve

@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+audio_jack_post_stop
+"""
+
 import os.path
 import os
 import jack_pulse.config  # type: ignore

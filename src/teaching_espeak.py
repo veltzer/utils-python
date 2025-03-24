@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+teaching_espeak
+"""
+
 import sys
 import subprocess
 import time

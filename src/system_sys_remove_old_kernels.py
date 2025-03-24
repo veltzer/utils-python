@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+system_sys_remove_old_kernels
+"""
+
 import sys
 from typing import List
 

@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+git_check_all
+"""
+
 import glob
 import os
 import os.path

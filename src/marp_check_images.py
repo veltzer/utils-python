@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+marp_check_images
+"""
+
 import os
 import sys
 import re
