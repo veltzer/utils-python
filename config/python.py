@@ -14,6 +14,9 @@ install_requires: List[str] = [
     "python-pptx",
     # this does not work
     # "python-apt",
+    "pyyaml",
+    "pytz",
+    "python-dateutil",
 ]
 build_requires: List[str] = [
     "pymakehelper",
