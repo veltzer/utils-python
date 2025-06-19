@@ -23,6 +23,8 @@ build_requires: List[str] = [
     "pydmt",
     "pycmdtools",
     "pyclassifiers",
+    "types-pytz",
+    "types-python-dateutil",
 ]
 test_requires: List[str] = [
     "pylint",

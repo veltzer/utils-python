@@ -5,10 +5,15 @@ bsddb3
 progressbar
 chardet
 python-pptx
+pyyaml
+pytz
+python-dateutil
 pymakehelper
 pydmt
 pycmdtools
 pyclassifiers
+types-pytz
+types-python-dateutil
 pylint
 pytest
 pytest-cov
