@@ -17,6 +17,7 @@ install_requires: List[str] = [
     "pyyaml",
     "pytz",
     "python-dateutil",
+    "ruamel.yaml",
 ]
 build_requires: List[str] = [
     "pymakehelper",

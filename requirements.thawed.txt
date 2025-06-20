@@ -8,6 +8,7 @@ python-pptx
 pyyaml
 pytz
 python-dateutil
+ruamel.yaml
 pymakehelper
 pydmt
 pycmdtools

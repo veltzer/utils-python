@@ -1,153 +1,175 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
-Convert date/time fields in YAML from local time format to UTC timestamp and timezone.
+A script for converting date strings within YAML files to UTC 'Z' format.
+
+This script is idempotent and targets only YAML elements with a specific key.
+Running it multiple times on the same files will not produce further changes.
+
+It processes a list of YAML files provided as command-line arguments.
+It recursively finds a specific key (e.g., 'start_date') and converts its
+string value to a UTC date. It then inserts a new 'timezone' key
+immediately following it.
+
+Example transformation:
+Given the key 'start_date', this YAML:
+  start_date: Fri Oct 13 11:19:22 IDT 2017
+Becomes:
+  start_date: "2017-10-13T08:19:22Z"
+  timezone: "Asia/Jerusalem"
+
+It uses `ruamel.yaml` to preserve the overall file structure and comments.
 
 Usage:
-    python convert_yaml_dates.py file1.yaml file2.yaml ...
-    python convert_yaml_dates.py *.yaml
+    python your_script_name.py <key_name> <file1.yaml> [file2.yaml] ...
 
-Example:
-    python convert_yaml_dates.py events.yaml meetings.yaml
-    python convert_yaml_dates.py data/*.yaml
+Requirements:
+    pip install ruamel.yaml python-dateutil
 """
 
-import re
 import sys
-from typing import Tuple
+from datetime import timezone
+from typing import Any, Dict, Optional, Tuple
 
-import pytz
-import yaml
-from dateutil import parser
+# ruamel.yaml is a library specifically designed for round-trip YAML
+# processing, which preserves comments and formatting.
+from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import DoubleQuotedScalarString
+
+# dateutil is a powerful third-party library for parsing dates.
+from dateutil.parser import parse
+from dateutil.parser._parser import ParserError
+
+# --- Configuration ---
+
+# Maps common timezone abbreviations from your data to IANA timezone names.
+TIMEZONE_MAP: Dict[str, str] = {
+    "IDT": "Asia/Jerusalem",
+    "IST": "Asia/Jerusalem",
+    # Add other mappings here if needed, e.g., "PST": "America/Los_Angeles"
+}
 
 
-class DateTimeParseError(ValueError):
-    """Raised when datetime string cannot be parsed"""
-
-
-class TimezoneError(ValueError):
-    """Raised when timezone is unknown or invalid"""
-
-
-def parse_datetime_string(dt_string: str) -> Tuple[str, str]:
+def parse_date_and_tz(date_string: str) -> Optional[Tuple[str, Optional[str]]]:
     """
-    Parse datetime string like "Sat 07 Jun 2025 22:57:54 IDT"
-    Returns: (utc_timestamp, timezone_name)
+    Parse a date string and return the UTC string and IANA timezone.
     """
+    if not isinstance(date_string, str):
+        return None
+
     try:
-        # Use dateutil.parser which handles many formats and timezones automatically
-        dt = parser.parse(dt_string)
+        dt_original = parse(date_string)
+    except (ParserError, ValueError):
+        return None
 
-        # Check if timezone was parsed
-        if dt.tzinfo is None:
-            raise TimezoneError(f"No timezone information found in: {dt_string}")
+    original_tz_name = dt_original.tzname()
+    iana_timezone = TIMEZONE_MAP.get(original_tz_name, original_tz_name) if original_tz_name else None
 
-        # Get the timezone name
-        if hasattr(dt.tzinfo, 'zone'):
-            timezone_name = dt.tzinfo.zone
-        elif hasattr(dt.tzinfo, 'tzname'):
-            timezone_name = dt.tzinfo.tzname(dt)
-        else:
-            # For offset-based timezones, create a name from the offset
-            utc_offset = dt.utcoffset()
-            if utc_offset:
-                total_seconds = int(utc_offset.total_seconds())
-                hours = total_seconds // 3600
-                minutes = (total_seconds % 3600) // 60
-                timezone_name = f"UTC{hours:+03d}:{minutes:02d}"
-            else:
-                timezone_name = "UTC"
+    if dt_original.tzinfo is None:
+        dt_utc = dt_original.replace(tzinfo=timezone.utc)
+    else:
+        dt_utc = dt_original.astimezone(timezone.utc)
 
-        # Convert to UTC
-        dt_utc = dt.astimezone(pytz.UTC)
+    utc_string = dt_utc.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-        # Format as ISO 8601 with Z suffix
-        utc_timestamp = dt_utc.strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
-
-        return utc_timestamp, timezone_name
-    except parser.ParserError as e:
-        raise DateTimeParseError(f"Cannot parse datetime '{dt_string}': {e}") from e
-    except ValueError as e:
-        raise DateTimeParseError(f"Invalid datetime format '{dt_string}': {e}") from e
-    except Exception as e:
-        raise TimezoneError(f"Error processing timezone for '{dt_string}': {e}") from e
+    return (utc_string, iana_timezone)
 
 
-def is_datetime_field(value) -> bool:
-    """Check if a value looks like our datetime format"""
-    if not isinstance(value, str):
-        return False
-    # Pattern for "Sat 07 Jun 2025 22:57:54 IDT"
-    pattern = r'^[A-Za-z]{3}\s+\d{2}\s+[A-Za-z]{3}\s+\d{4}\s+\d{2}:\d{2}:\d{2}\s+[A-Z]{3,4}$'
-    return bool(re.match(pattern, value))
-
-
-def convert_datetime_fields(data):
+def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
     """
-    Recursively convert datetime fields in the data structure.
-    For each datetime field found, create two new fields:
-    - original_field_name + '_timestamp_utcz'
-    - original_field_name + '_timezone'
-    And remove the original field.
+    Recursively traverse a data structure and convert the value of a specific
+    key, inserting a new 'timezone' key after it.
+
+    This function is idempotent.
     """
     if isinstance(data, dict):
-        keys_to_remove = []
-        items_to_add = {}
+        # Use a static list of keys to iterate over, as we may modify the dict
+        keys = list(data.keys())
+        for i, key in enumerate(keys):
+            # Check if the current key matches the target key
+            if key == key_name:
+                # IDEMPOTENCY CHECK: If the next key is 'timezone',
+                # assume this has already been converted and skip.
+                is_last_key = (i + 1) == len(keys)
+                if not is_last_key and keys[i + 1] == 'timezone':
+                    continue
 
-        for key, value in data.items():
-            if is_datetime_field(value):
-                try:
-                    utc_timestamp, timezone = parse_datetime_string(value)
-                    keys_to_remove.append(key)
-                    items_to_add[f"{key}_timestamp_utcz"] = utc_timestamp
-                    items_to_add[f"{key}_timezone"] = timezone
-                    print(f"  Converted {key}: {value} -> {utc_timestamp} ({timezone})")
-                except (DateTimeParseError, TimezoneError) as e:
-                    print(f"  Warning: Skipping {key}: {e}")
-            elif isinstance(value, (dict, list)):
-                convert_datetime_fields(value)
+                value = data[key]
+                if isinstance(value, str):
+                    parsed_info = parse_date_and_tz(value)
+                    if parsed_info:
+                        utc_string, iana_timezone = parsed_info
+                        print(f"      - Converted value for key '{key}'")
+                        # Update the original key's value
+                        data[key] = DoubleQuotedScalarString(utc_string)
+                        # Insert the new 'timezone' key after the current key
+                        if iana_timezone:
+                            data.insert(i + 1, 'timezone', DoubleQuotedScalarString(iana_timezone))  # type: ignore[attr-defined]
+            else:
+                # If the key doesn't match, recurse into the value.
+                data[key] = find_and_convert_dates_in_data(data[key], key_name)
+        return data
 
-        # Apply changes
-        for key in keys_to_remove:
-            del data[key]
-        data.update(items_to_add)
+    if isinstance(data, list):
+        for i, item in enumerate(data):
+            data[i] = find_and_convert_dates_in_data(item, key_name)
+        return data
 
-    elif isinstance(data, list):
-        for item in data:
-            if isinstance(item, (dict, list)):
-                convert_datetime_fields(item)
-
-
-def process_file(file_path: str):
-    """Process a single YAML file."""
-    print(f"Processing: {file_path}")
-
-    # Load YAML
-    with open(file_path, 'r', encoding='utf-8') as f:
-        data = yaml.safe_load(f)
-
-    # Convert datetime fields
-    convert_datetime_fields(data)
-
-    # Save converted YAML
-    with open(file_path, 'w', encoding='utf-8') as f:
-        yaml.dump(data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
-    print("Done")
+    # Return any other data type unchanged.
+    return data
 
 
-def main():
-    if len(sys.argv) < 2:
-        print(__doc__)
+def process_yaml_file(file_path: str, key_name: str) -> None:
+    """
+    Read a YAML file, convert specified keys, and write it back.
+    """
+    print(f"\nProcessing file: {file_path}")
+
+    ryaml = YAML()
+    ryaml.preserve_quotes = True
+    # This is the key change: Set the indentation to match common styles.
+    # `mapping` is the indent for dictionary keys.
+    # `sequence` is the indent for list items content.
+    # `offset` is the indent for the list item dash ('-').
+    ryaml.indent(mapping=2, sequence=4, offset=2)
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            yaml_content = ryaml.load(f)
+
+        find_and_convert_dates_in_data(yaml_content, key_name)
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            ryaml.dump(yaml_content, f)
+
+        print(f"  -> Successfully processed and saved: {file_path}")
+
+    except FileNotFoundError:
+        print(f"  -> Error: File not found at [{file_path}]")
+
+
+def main() -> None:
+    """
+    Entry point of the script.
+    """
+    if len(sys.argv) < 3:
+        print("--- YAML Date Conversion (Structure-Preserving by Key) ---")
+        print(f"Usage: python {sys.argv[0]} <key_name> <file1.yaml> [file2.yaml] ...")
+        print("\nExample: To convert fields with the key [date], use:")
+        print(f"         python {sys.argv[0]} date file.yaml")
         sys.exit(1)
 
-    # Expand file patterns
-    file_paths = sys.argv[1:]
-    if not file_paths:
-        print("No files found")
-        sys.exit(1)
+    key_to_find = sys.argv[1]
+    files_to_process = sys.argv[2:]
 
-    # Process files
-    for file_path in file_paths:
-        process_file(file_path)
+    print(f"--- Starting YAML Date Conversion for key '{key_to_find}' in {len(files_to_process)} file(s) ---")
+
+    for file_path in files_to_process:
+        if file_path.endswith(('.yml', '.yaml')):
+            process_yaml_file(file_path, key_to_find)
+        else:
+            print(f"\nSkipping non-YAML file: {file_path}")
+
+    print("\n--- Script finished ---")
 
 
 if __name__ == "__main__":
