@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 """
-A script for converting date strings within YAML files to UTC 'Z' format.
+A script for converting date strings within YAML files to UTC "Z" format.
 
 This script is idempotent and targets only YAML elements with a specific key.
 Running it multiple times on the same files will not produce further changes.
 
 It processes a list of YAML files provided as command-line arguments.
-It recursively finds a specific key (e.g., 'start_date') and converts its
-string value to a UTC date. It then inserts a new 'timezone' key
+It recursively finds a specific key (e.g., "start_date") and converts its
+string value to a UTC date. It then inserts a new "timezone" key
 immediately following it.
 
 Example transformation:
-Given the key 'start_date', this YAML:
+Given the key "start_date", this YAML:
   start_date: Fri Oct 13 11:19:22 IDT 2017
 Becomes:
   start_date: "2017-10-13T08:19:22Z"
@@ -69,7 +69,7 @@ def parse_date_and_tz(date_string: str) -> Optional[Tuple[str, Optional[str]]]:
     else:
         dt_utc = dt_original.astimezone(timezone.utc)
 
-    utc_string = dt_utc.strftime('%Y-%m-%dT%H:%M:%SZ')
+    utc_string = dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
     return (utc_string, iana_timezone)
 
@@ -77,7 +77,7 @@ def parse_date_and_tz(date_string: str) -> Optional[Tuple[str, Optional[str]]]:
 def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
     """
     Recursively traverse a data structure and convert the value of a specific
-    key, inserting a new 'timezone' key after it.
+    key, inserting a new "timezone" key after it.
 
     This function is idempotent.
     """
@@ -87,10 +87,11 @@ def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
         for i, key in enumerate(keys):
             # Check if the current key matches the target key
             if key == key_name:
-                # IDEMPOTENCY CHECK: If the next key is 'timezone',
+                tz_key = f"{key}_timezone"
+                # IDEMPOTENCY CHECK: If the next key is "timezone",
                 # assume this has already been converted and skip.
                 is_last_key = (i + 1) == len(keys)
-                if not is_last_key and keys[i + 1] == 'timezone':
+                if not is_last_key and keys[i + 1] == tz_key:
                     continue
 
                 value = data[key]
@@ -98,14 +99,14 @@ def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
                     parsed_info = parse_date_and_tz(value)
                     if parsed_info:
                         utc_string, iana_timezone = parsed_info
-                        print(f"      - Converted value for key '{key}'")
-                        # Update the original key's value
+                        print(f"Converted value for key [{key}]")
+                        # Update the original keys value
                         data[key] = DoubleQuotedScalarString(utc_string)
-                        # Insert the new 'timezone' key after the current key
+                        # Insert the new "timezone" key after the current key
                         if iana_timezone:
-                            data.insert(i + 1, 'timezone', DoubleQuotedScalarString(iana_timezone))  # type: ignore[attr-defined]
+                            data.insert(i + 1, tz_key, DoubleQuotedScalarString(iana_timezone))  # type: ignore[attr-defined]
             else:
-                # If the key doesn't match, recurse into the value.
+                # If the key doesnt match, recurse into the value.
                 data[key] = find_and_convert_dates_in_data(data[key], key_name)
         return data
 
@@ -129,7 +130,7 @@ def process_yaml_file(file_path: str, key_name: str) -> None:
     # This is the key change: Set the indentation to match common styles.
     # `mapping` is the indent for dictionary keys.
     # `sequence` is the indent for list items content.
-    # `offset` is the indent for the list item dash ('-').
+    # `offset` is the indent for the list item dash ("-").
     ryaml.indent(mapping=2, sequence=4, offset=2)
 
     try:
@@ -161,15 +162,10 @@ def main() -> None:
     key_to_find = sys.argv[1]
     files_to_process = sys.argv[2:]
 
-    print(f"--- Starting YAML Date Conversion for key '{key_to_find}' in {len(files_to_process)} file(s) ---")
+    print(f"--- Starting YAML Date Conversion for key [{key_to_find}] in {len(files_to_process)} file(s) ---")
 
     for file_path in files_to_process:
-        if file_path.endswith(('.yml', '.yaml')):
-            process_yaml_file(file_path, key_to_find)
-        else:
-            print(f"\nSkipping non-YAML file: {file_path}")
-
-    print("\n--- Script finished ---")
+        process_yaml_file(file_path, key_to_find)
 
 
 if __name__ == "__main__":
