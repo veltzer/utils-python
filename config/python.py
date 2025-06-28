@@ -3,7 +3,6 @@ from typing import List
 
 config_requires: List[str] = []
 dev_requires: List[str] = [
-    "black",
 ]
 install_requires: List[str] = [
     "jsonpickle",
@@ -20,21 +19,20 @@ install_requires: List[str] = [
     "ruamel.yaml",
 ]
 build_requires: List[str] = [
-    "pymakehelper",
     "pydmt",
+    "pymakehelper",
     "pycmdtools",
     "pyclassifiers",
-    "types-pytz",
-    "types-python-dateutil",
 ]
 test_requires: List[str] = [
     "pylint",
     "pytest",
     "pytest-cov",
-    "flake8",
-    "pyflakes",
     "mypy",
+    # types
     "types-chardet",
     "types-PyYAML",
+    "types-pytz",
+    "types-python-dateutil",
 ]
 requires = config_requires + install_requires + build_requires + test_requires
