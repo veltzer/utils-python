@@ -5,28 +5,27 @@ system_sys_remove_old_kernels
 """
 
 import sys
-from typing import List
 
 # import apt
 
 
 class PkgAttribs:
     def __init__(self):
-        self.provides: List[str] = []
+        self.provides: list[str] = []
 
 
 class Package:
     def __init__(self):
         self.name: str = ""
         self.is_installed: bool = False
-        self.versions: List[PkgAttribs] = []
+        self.versions: list[PkgAttribs] = []
 
     def mark_delete(self, b: bool, purge: bool):
         pass
 
 
-class MockCache(List[Package]):
-    def __getitem__(self, index:str):  # type: ignore
+class MockCache(list[Package]):
+    def __getitem__(self, index: str):  # type: ignore
         pass
 
 

@@ -27,8 +27,8 @@ Requirements:
 """
 
 import sys
+from typing import Any
 from datetime import timezone
-from typing import Any, Dict, Optional, Tuple
 
 # ruamel.yaml is a library specifically designed for round-trip YAML
 # processing, which preserves comments and formatting.
@@ -42,14 +42,14 @@ from dateutil.parser._parser import ParserError
 # --- Configuration ---
 
 # Maps common timezone abbreviations from your data to IANA timezone names.
-TIMEZONE_MAP: Dict[str, str] = {
+TIMEZONE_MAP: dict[str, str] = {
     "IDT": "Asia/Jerusalem",
     "IST": "Asia/Jerusalem",
     # Add other mappings here if needed, e.g., "PST": "America/Los_Angeles"
 }
 
 
-def parse_date_and_tz(date_string: str) -> Optional[Tuple[str, Optional[str]]]:
+def parse_date_and_tz(date_string: str) -> tuple[str, str | None] | None:
     """
     Parse a date string and return the UTC string and IANA timezone.
     """

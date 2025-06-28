@@ -8,10 +8,9 @@ import os
 import sys
 import re
 from pathlib import Path
-from typing import List, Tuple
 
 
-def find_marp_files(root_dir: str) -> List[Path]:
+def find_marp_files(root_dir: str) -> list[Path]:
     """Find all markdown files that might be Marp presentations recursively."""
     root_path = Path(root_dir)
     marp_files = []
@@ -21,7 +20,7 @@ def find_marp_files(root_dir: str) -> List[Path]:
     return marp_files
 
 
-def extract_image_links(file_path: Path) -> List[Tuple[str, int]]:
+def extract_image_links(file_path: Path) -> list[tuple[str, int]]:
     """Extract all image links from a markdown file with their line numbers."""
     image_links = []
 
