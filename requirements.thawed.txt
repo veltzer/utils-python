@@ -11,12 +11,12 @@ pydmt
 pylint
 pymakehelper
 pytest
-pytest-cov
 python-dateutil
 python-pptx
 pytz
 pyyaml
 ruamel.yaml
+ruff
 types-PyYAML
 types-chardet
 types-python-dateutil
