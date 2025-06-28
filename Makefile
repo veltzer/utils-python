@@ -39,10 +39,6 @@ ifeq ($(DO_LINT),1)
 ALL+=$(ALL_LINT)
 endif # DO_LINT
 
-ifeq ($(DO_FLAKE8),1)
-ALL+=$(ALL_FLAKE8)
-endif # DO_FLAKE8
-
 ifeq ($(DO_MYPY),1)
 ALL+=$(ALL_MYPY)
 endif # DO_MYPY
@@ -75,7 +71,6 @@ debug:
 	$(info ALL_PY is $(ALL_PY))
 	$(info ALL_SYNTAX is $(ALL_SYNTAX))
 	$(info ALL_LINT is $(ALL_LINT))
-	$(info ALL_FLAKE8 is $(ALL_FLAKE8))
 	$(info ALL_MYPY is $(ALL_MYPY))
 	$(info ALL is $(ALL))
 
