@@ -1,3 +1,5 @@
+""" python deps for this project """
+
 install_requires: list[str] = [
     "jsonpickle",
     "PyGithub",
