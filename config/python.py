@@ -18,7 +18,6 @@ build_requires: list[str] = [
     "pydmt",
     "pymakehelper",
     "pycmdtools",
-    "pyclassifiers",
 ]
 test_requires: list[str] = [
     "pylint",
