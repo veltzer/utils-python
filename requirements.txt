@@ -41,7 +41,7 @@ progressbar==2.5
 pyclassifiers==0.0.19
 pycmdtools==0.0.85
 pycparser==2.22
-pydmt==0.3.23
+pydmt==0.3.26
 pyfakeuse==0.0.9
 PyGithub==2.6.1
 Pygments==2.19.2
