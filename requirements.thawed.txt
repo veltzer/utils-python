@@ -5,6 +5,7 @@ chardet
 jsonpickle
 mypy
 progressbar
+pyclassifiers
 pycmdtools
 pydmt
 pylint
