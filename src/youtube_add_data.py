@@ -2,13 +2,14 @@
 
 """
 Add youtube data (currently only title) to a list of youtube videos.
-This version can resume an interrupted job by skipping IDs already present
-in the output file and flushes data to disk after each video.
+This version can resume an interrupted job, handles commas in titles correctly
+by using the standard csv library, and flushes data to disk after each video.
 """
 
 import sys
 import os
 import argparse
+import csv  # --- MODIFICATION: Import the csv module ---
 import yt_dlp
 from yt_dlp.utils import DownloadError
 
@@ -23,11 +24,6 @@ def get_video_title(video_id: str) -> str | None:
         The video title as a string, or None if it cannot be found.
     """
     video_url = f"https://www.youtube.com/watch?v={video_id}"
-
-    # yt-dlp options:
-    # 'quiet': Suppresses console output from the library.
-    # 'no_warnings': Suppresses warnings.
-    # 'extract_flat': Only extracts basic info, making it faster.
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
@@ -36,26 +32,20 @@ def get_video_title(video_id: str) -> str | None:
 
     try:
         print(f"Fetching data for ID: {video_id}...")
-        # The 'with' statement ensures resources are properly handled.
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            # Fetch the video's metadata without downloading.
             info_dict = ydl.extract_info(video_url, download=False)
-
-            # Extract the title from the returned dictionary.
             title = info_dict.get('title', None)
 
+            # --- MODIFICATION: No longer replacing commas. Return the original title. ---
             if title:
-                # Replace commas to avoid breaking CSV format
-                return title.replace(',', ';').strip()
+                return title.strip()
             return None
 
     except DownloadError as e:
-        # This error is triggered for unavailable videos, private videos, etc.
         print(f"Error fetching ID {video_id} with yt-dlp: {e}")
         return None
     # pylint: disable=broad-except
     except Exception as e:
-        # Catch any other unexpected errors.
         print(f"An unexpected error occurred for ID {video_id}: {e}")
         return None
 
@@ -79,25 +69,22 @@ def main():
     input_path = args.input_file
     output_path = args.output_file
 
-    # Check if the input file exists
     if not os.path.exists(input_path):
         print(f"Error: The file '{input_path}' was not found.")
         sys.exit(1)
 
-    # --- MODIFICATION: Read existing output file to find processed IDs ---
     processed_ids = set()
     output_file_exists = os.path.exists(output_path)
 
     if output_file_exists:
         print(f"Output file '{output_path}' found. Reading existing IDs to avoid re-processing.")
         try:
-            with open(output_path, 'r', encoding='utf-8') as f_out_read:
-                next(f_out_read, None)  # Skip header row
-                for line in f_out_read:
-                    if ',' in line:
-                        video_id = line.split(',')[0].strip()
-                        if video_id:
-                            processed_ids.add(video_id)
+            with open(output_path, 'r', encoding='utf-8', newline='') as f_out_read:
+                reader = csv.reader(f_out_read)
+                next(reader, None)  # Skip header row
+                for row in reader:
+                    if row:
+                        processed_ids.add(row[0])
             print(f"Found {len(processed_ids)} previously processed IDs.")
         except IOError as e:
             print(f"Warning: Could not read from '{output_path}'. Proceeding without skipping. Error: {e}")
@@ -107,30 +94,32 @@ def main():
     print(f"Appending new data to: {output_path}")
 
     try:
-        # --- MODIFICATION: Open the output file in append mode ('a') ---
-        with open(input_path, 'r') as infile, open(output_path, 'a', encoding='utf-8') as outfile:
-            # --- MODIFICATION: Write header only if the file is new ---
+        # --- MODIFICATION: Open file with newline='' for the csv module ---
+        with open(input_path, 'r') as infile, open(output_path, 'a', encoding='utf-8', newline='') as outfile:
+            # --- MODIFICATION: Create a csv.writer to handle writing ---
+            writer = csv.writer(outfile)
+
             if not output_file_exists:
-                outfile.write("video_id,video_title\n")
-                outfile.flush()  # Also flush the header
+                # --- MODIFICATION: Write header row using the csv writer ---
+                writer.writerow(["video_id", "video_title"])
+                outfile.flush()
 
             for line in infile:
                 video_id = line.strip()
                 if not video_id:
                     continue
 
-                # --- MODIFICATION: Skip IDs that are already processed ---
                 if video_id in processed_ids:
                     print(f"Skipping already processed ID: {video_id}")
                     continue
 
                 title = get_video_title(video_id)
-                if title:
-                    outfile.write(f"{video_id},{title}\n")
-                else:
-                    outfile.write(f"{video_id},TITLE_NOT_FOUND\n")
 
-                # --- MODIFICATION: Flush the buffer to disk after each write ---
+                # --- MODIFICATION: Write data row using the csv writer ---
+                if title:
+                    writer.writerow([video_id, title])
+                else:
+                    writer.writerow([video_id, "TITLE_NOT_FOUND"])
                 outfile.flush()
 
     except IOError as e:
