@@ -9,7 +9,7 @@ by using the standard csv library, and flushes data to disk after each video.
 import sys
 import os
 import argparse
-import csv  # --- MODIFICATION: Import the csv module ---
+import csv
 import yt_dlp
 from yt_dlp.utils import DownloadError
 
@@ -36,7 +36,6 @@ def get_video_title(video_id: str) -> str | None:
             info_dict = ydl.extract_info(video_url, download=False)
             title = info_dict.get('title', None)
 
-            # --- MODIFICATION: No longer replacing commas. Return the original title. ---
             if title:
                 return title.strip()
             return None
@@ -94,13 +93,10 @@ def main():
     print(f"Appending new data to: {output_path}")
 
     try:
-        # --- MODIFICATION: Open file with newline='' for the csv module ---
         with open(input_path, 'r') as infile, open(output_path, 'a', encoding='utf-8', newline='') as outfile:
-            # --- MODIFICATION: Create a csv.writer to handle writing ---
             writer = csv.writer(outfile)
 
             if not output_file_exists:
-                # --- MODIFICATION: Write header row using the csv writer ---
                 writer.writerow(["video_id", "video_title"])
                 outfile.flush()
 
@@ -114,8 +110,6 @@ def main():
                     continue
 
                 title = get_video_title(video_id)
-
-                # --- MODIFICATION: Write data row using the csv writer ---
                 if title:
                     writer.writerow([video_id, title])
                 else:
