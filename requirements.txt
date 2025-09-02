@@ -90,3 +90,4 @@ venv-run==0.2.0
 webencodings==0.5.1
 xlsxwriter==3.2.5
 yattag==1.16.1
+yt-dlp==2025.8.27
