@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 """
-Add youtube data (currently only title) to a list of youtube videos
+Add youtube data (currently only title) to a list of youtube videos.
+This version can resume an interrupted job by skipping IDs already present
+in the output file and flushes data to disk after each video.
 """
 
 import sys
@@ -82,23 +84,55 @@ def main():
         print(f"Error: The file '{input_path}' was not found.")
         sys.exit(1)
 
+    # --- MODIFICATION: Read existing output file to find processed IDs ---
+    processed_ids = set()
+    output_file_exists = os.path.exists(output_path)
+
+    if output_file_exists:
+        print(f"Output file '{output_path}' found. Reading existing IDs to avoid re-processing.")
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f_out_read:
+                next(f_out_read, None)  # Skip header row
+                for line in f_out_read:
+                    if ',' in line:
+                        video_id = line.split(',')[0].strip()
+                        if video_id:
+                            processed_ids.add(video_id)
+            print(f"Found {len(processed_ids)} previously processed IDs.")
+        except IOError as e:
+            print(f"Warning: Could not read from '{output_path}'. Proceeding without skipping. Error: {e}")
+            processed_ids.clear()
+
     print(f"Reading IDs from: {input_path}")
-    print(f"Output will be saved to: {output_path}")
+    print(f"Appending new data to: {output_path}")
 
     try:
-        with open(input_path, 'r') as infile, open(output_path, 'w', encoding='utf-8') as outfile:
-            # Write a header for the CSV file
-            outfile.write("video_id,video_title\n")
+        # --- MODIFICATION: Open the output file in append mode ('a') ---
+        with open(input_path, 'r') as infile, open(output_path, 'a', encoding='utf-8') as outfile:
+            # --- MODIFICATION: Write header only if the file is new ---
+            if not output_file_exists:
+                outfile.write("video_id,video_title\n")
+                outfile.flush()  # Also flush the header
 
             for line in infile:
                 video_id = line.strip()
-                if video_id:  # Ensure the line is not empty
-                    title = get_video_title(video_id)
-                    if title:
-                        outfile.write(f"{video_id},{title}\n")
-                    else:
-                        # Write the ID with a placeholder if title fetch fails
-                        outfile.write(f"{video_id},TITLE_NOT_FOUND\n")
+                if not video_id:
+                    continue
+
+                # --- MODIFICATION: Skip IDs that are already processed ---
+                if video_id in processed_ids:
+                    print(f"Skipping already processed ID: {video_id}")
+                    continue
+
+                title = get_video_title(video_id)
+                if title:
+                    outfile.write(f"{video_id},{title}\n")
+                else:
+                    outfile.write(f"{video_id},TITLE_NOT_FOUND\n")
+
+                # --- MODIFICATION: Flush the buffer to disk after each write ---
+                outfile.flush()
+
     except IOError as e:
         print(f"Error reading or writing file: {e}")
         sys.exit(1)
