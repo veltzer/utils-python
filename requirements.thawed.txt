@@ -21,3 +21,4 @@ types-PyYAML
 types-chardet
 types-python-dateutil
 types-pytz
+yt-dlp

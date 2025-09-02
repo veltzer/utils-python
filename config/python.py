@@ -15,6 +15,7 @@ install_requires: list[str] = [
     "pytz",
     "python-dateutil",
     "ruamel.yaml",
+    "yt-dlp",
 ]
 build_requires: list[str] = config.shared.BUILD
 test_requires: list[str] = config.shared.TEST
