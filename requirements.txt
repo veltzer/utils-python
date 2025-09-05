@@ -20,7 +20,7 @@ iniconfig==2.1.0
 isort==6.0.1
 jinja2==3.1.6
 jsonpickle==5.0.0rc1
-jsonschema==4.25.0
+jsonschema==4.25.1
 jsonschema-specifications==2025.4.1
 logging-tree==1.10
 lxml==6.0.0
@@ -40,7 +40,7 @@ progressbar==2.5
 pyclassifiers==0.0.20
 pycmdtools==0.0.85
 pycparser==2.22
-pydmt==0.3.27
+pydmt==0.3.32
 pyfakeuse==0.0.9
 pygithub==2.7.0
 pygments==2.19.2
@@ -59,7 +59,7 @@ pyyaml==6.0.2
 referencing==0.36.2
 requests==2.32.5
 roman-numerals-py==3.1.0
-rpds-py==0.27.0
+rpds-py==0.27.1
 ruamel-yaml==0.18.14
 ruamel-yaml-clib==0.2.12
 ruff==0.12.8
