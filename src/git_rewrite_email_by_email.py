@@ -24,7 +24,7 @@ for old_email in old_emails:
     else
             git commit-tree "$@";
     fi"""
-    # --force is there to override old backup of 'git filter-branch'
+    # --force is there to override old backup of "git filter-branch"
     args = ["git", "filter-branch", "--force", "--commit-filter", expr]
     subprocess.check_call(args)
 

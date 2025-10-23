@@ -18,7 +18,7 @@ do_same_names = False
 
 
 def unite(filenames, out):
-    print(f"creating [{out}] out of [{','.join(filenames)}]")
+    print(f"creating [{out}] out of [{filenames}]")
     args = [
         # "ffmpeg",
         "avconv",

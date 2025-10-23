@@ -25,15 +25,15 @@ def extract_image_links(file_path: Path) -> list[tuple[str, int]]:
     image_links = []
 
     # Regex for both ![]() and ![alt](url "title") formats
-    image_pattern = r'!\[([^\]]*)\]\(([^)"]+)(?:"[^"]*")?\)'
+    image_pattern = r"!\[([^\]]*)\]\(([^)\"]+)(?:\"[^\"]*\")?\)"
 
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             matches = re.finditer(image_pattern, line)
             for match in matches:
                 image_path = match.group(2)
                 # Skip URLs
-                if not image_path.startswith(('http://', 'https://', 'data:')):
+                if not image_path.startswith(("http://", "https://", "data:")):
                     image_links.append((image_path, line_num))
     return image_links
 

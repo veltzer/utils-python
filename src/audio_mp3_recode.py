@@ -22,7 +22,7 @@ doCheck = True
 # do you want to redirect standard output?
 doRedirect = False
 opt_codec = "copy"
-# opt_codec='libmp3lame'
+# opt_codec="libmp3lame"
 
 
 def fix(filename):
@@ -37,7 +37,7 @@ def fix(filename):
     #    opt_codec,
     #    out,
     #    "-loglevel",
-    #    'quiet'
+    #    "quiet"
     # ]
     args = [
         "lame",

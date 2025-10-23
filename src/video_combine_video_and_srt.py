@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-This script will combine a movie with it's subtitles.
+This script will combine a movie with its subtitles.
 
 References:
 https://vanalboom.org/node/11
@@ -41,26 +41,26 @@ if debug:
 args = [
     "mencoder",
     movie,
-    # with copy you don't get the subtitles inserted, you have
+    # with copy you dont get the subtitles inserted, you have
     # to encode in order to get the subtitles in...
     "-ovc",
     codec_video,
     # audio can just be copied in theory. In practice you want
-    # to encode it with the same encoder since if you don't you
+    # to encode it with the same encoder since if you dont you
     # will get video and audio out of sync...
     "-oac",
     codec_audio,
     # without this sync will be lost
-    # '-of','mpeg',
+    # "-of","mpeg",
     # plug in the subtitles...
     "-sub",
     srt,
-    # you can control subtitles but I rather let mencoder do it's
+    # you can control subtitles but I rather let mencoder do its
     # thing here. I hope it will get better with time.
-    # '-font','/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf',
-    # '-subfont-autoscale','0',
-    # '-subfont-text-scale','25',
-    # '-subpos','100',
+    # "-font","/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf",
+    # "-subfont-autoscale","0",
+    # "-subfont-text-scale","25",
+    # "-subpos","100",
     "-o",
     outfile,
 ]

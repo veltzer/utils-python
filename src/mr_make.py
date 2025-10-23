@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-This script runs 'make' (make(1)) in every project
+This script runs "make" (make(1)) in every project
 that is mine.
 """
 
@@ -57,7 +57,7 @@ def run_empty_output(args, string_to_print=None, do_exit=False, do_print=False):
 
 
 def get_projects():
-    # projects=[(repo.name, os.path.join(home,'git',repo.name)) for repo in utils.github.get_nonforked_repos_list()]
+    # projects=[(repo.name, os.path.join(home,"git",repo.name)) for repo in utils.github.get_nonforked_repos_list()]
     projects = []
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
@@ -116,7 +116,7 @@ def main():
             else:
                 code = run_check_string(["make"], string="warning")
                 do_stats(code, events)
-            # os.system('make')
+            # os.system("make")
         elif os.path.isfile(bootstrap):
             os.chdir(project_root)
             code = run_empty_output(["./bootstrap"])

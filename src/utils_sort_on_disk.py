@@ -2,7 +2,7 @@
 
 """
 this script sorts file on disk. it does so by moving them around so that the order of creation seems right.
-to see its effect use 'ls -f' before and after the sort.
+to see its effect use "ls -f" before and after the sort.
 this script will only run on linux and only on filesystems where create order is the naturl order
 of files on them.
 

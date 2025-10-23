@@ -30,7 +30,7 @@ def hexdigest(filename, algo):
 
 
 protocol = "http"
-# mirror='http://ftp.jaist.ac.jp/pub/eclipse/technology/epp/downloads/release'
+# mirror="http://ftp.jaist.ac.jp/pub/eclipse/technology/epp/downloads/release"
 mirror = (
     "http://mirror.netcologne.de/"
     "eclipse/technology/epp/downloads/release"
@@ -50,13 +50,13 @@ products = [
     ("parallel", False),
     ("testing", False),
     ("scout", False),
-    #    ('automotive', True),
+    #    ("automotive", True),
 ]
 version = "R"
 release = "2018-12"
 platforms = [
     "-x86_64",  # x64
-    #    '', # i386
+    #    "", # i386
 ]
 cs_type = "sha512"
 

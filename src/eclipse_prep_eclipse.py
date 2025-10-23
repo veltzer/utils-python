@@ -8,7 +8,7 @@ TODO:
 - check if the features we install exist before we install them.
 This will save time (see my eclipse notes about how to do that)
 and only install the feature if it is missing.
-- the name 'neon' is hardcoded in this script. find out how to find
+- the name "neon" is hardcoded in this script. find out how to find
 the version of a specific eclipse without running it and remove
 this hardcoding.
 """

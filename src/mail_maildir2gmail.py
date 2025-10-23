@@ -21,7 +21,7 @@ class Gmail:
         if self.folder == "inbox":
             self.folder = "INBOX"
         else:
-            # self.folder = '[Gmail]/%s' % self.folder
+            # self.folder = "[Gmail]/%s" % self.folder
             pass
 
         self.__database = None
@@ -122,7 +122,8 @@ def encode_unicode(value):
 
 
 def log(message):
-    print(f"[{time.strftime('%H:%M:%S')}]: {encode_unicode(message)}")
+    t=time.strftime("%H:%M:%S")
+    print(f"[{t}]: {encode_unicode(message)}")
 
 
 def main():

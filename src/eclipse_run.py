@@ -45,7 +45,7 @@ def max_output(out):
             "-r",
             found_id,
             "-b",
-            # 'toggle,maximized_vert,maximized_horz',
+            # "toggle,maximized_vert,maximized_horz",
             "add,maximized_vert,maximized_horz",
         ]
         if debug:
@@ -61,8 +61,8 @@ def main():
     pid = os.fork()
     if pid == 0:
         # child
-        # we MUST launch with '-nosplash' so that the trick of sending
-        # a 'maximize' event to the window will work...
+        # we MUST launch with "-nosplash" so that the trick of sending
+        # a "maximize" event to the window will work...
         subprocess.check_call(
             [
                 eclipse,

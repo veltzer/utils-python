@@ -22,12 +22,12 @@ for gitfolder in glob.glob("*/.git"):
                 "--name-only",
             ]
         )
-        # the --short flag is no good, it doesn't tell you if you are ahead...
+        # the --short flag is no good, it doesnt tell you if you are ahead...
         out = subprocess.check_output(
             [
                 "git",
                 "status",
-                # '--short',
+                # "--short",
             ]
         ).decode()
         for line in out.split("\n"):

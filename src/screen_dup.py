@@ -13,12 +13,12 @@ has improved.
 TODO
 - add a feature by which I could supply a desired resolution and it
 will be picked if supported by the two screens.
-- blog about this (I don't think people know how to do this
+- blog about this (I dont think people know how to do this
 programmatically...)
 
 NOTES:
 - If you want to see something similar, look at /usr/bin/xrandr-tool.
-- I found that the 'crtc' parameter to xrandr was essential
+- I found that the "crtc" parameter to xrandr was essential
 (did not work without it).
 """
 
@@ -155,7 +155,7 @@ def invert_the_screen():
             "xrandr",
             "--output",
             "VGA1",
-            # this can be 'normal', 'left', 'right' or 'inverted'
+            # this can be "normal", "left", "right" or "inverted"
             # see the xrandr(1) manual page
             "--rotate",
             "inverted",
@@ -170,7 +170,7 @@ def main():
     if doPrint:
         print("found two screens")
     if doUseResolution:
-        # check that the two outputs support 'resolutionToUse'
+        # check that the two outputs support "resolutionToUse"
         # if so set them
         # if not issue error message
         if outputs[0].supports(resolutionToUse) and outputs[1].supports(
