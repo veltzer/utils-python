@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-Add youtube data (currently only title) to a list of youtube videos.
-This version can resume an interrupted job, handles commas in titles correctly
+Add youtube data (extensive metadata) to a list of youtube videos.
+This version can resume an interrupted job, handles commas and special characters correctly
 by using the standard csv library, and flushes data to disk after each video.
 """
 
@@ -13,32 +13,70 @@ import csv
 import yt_dlp
 from yt_dlp.utils import DownloadError
 
-def get_video_title(video_id: str) -> str | None:
+def get_video_metadata(video_id: str) -> dict | None:
     """
-    Fetches the title of a YouTube video given its ID using the yt-dlp library.
+    Fetches extensive metadata of a YouTube video given its ID using the yt-dlp library.
 
     Args:
         video_id: The 11-character ID of the YouTube video.
 
     Returns:
-        The video title as a string, or None if it cannot be found.
+        A dictionary containing video metadata, or None if it cannot be found.
     """
     video_url = f"https://www.youtube.com/watch?v={video_id}"
     ydl_opts = {
         "quiet": True,
         "no_warnings": True,
-        "extract_flat": True,
+        "extract_flat": False,  # Changed to False to get full metadata
     }
 
     try:
         print(f"Fetching data for ID: {video_id}...")
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(video_url, download=False)
-            title = info_dict.get("title", None)
 
-            if title:
-                return title.strip()
-            return None
+            if not info_dict:
+                return None
+
+            # Extract comprehensive metadata
+            metadata = {
+                "video_id": video_id,
+                "title": info_dict.get("title", ""),
+                "description": info_dict.get("description", ""),
+                "duration": info_dict.get("duration", ""),
+                "upload_date": info_dict.get("upload_date", ""),
+                "uploader": info_dict.get("uploader", ""),
+                "uploader_id": info_dict.get("uploader_id", ""),
+                "channel": info_dict.get("channel", ""),
+                "channel_id": info_dict.get("channel_id", ""),
+                "view_count": info_dict.get("view_count", ""),
+                "like_count": info_dict.get("like_count", ""),
+                "comment_count": info_dict.get("comment_count", ""),
+                "average_rating": info_dict.get("average_rating", ""),
+                "age_limit": info_dict.get("age_limit", ""),
+                "categories": ", ".join(info_dict.get("categories", [])) if info_dict.get("categories") else "",
+                "tags": ", ".join(info_dict.get("tags", [])) if info_dict.get("tags") else "",
+                "is_live": info_dict.get("is_live", ""),
+                "was_live": info_dict.get("was_live", ""),
+                "live_status": info_dict.get("live_status", ""),
+                "resolution": info_dict.get("resolution", ""),
+                "fps": info_dict.get("fps", ""),
+                "vcodec": info_dict.get("vcodec", ""),
+                "acodec": info_dict.get("acodec", ""),
+                "width": info_dict.get("width", ""),
+                "height": info_dict.get("height", ""),
+                "thumbnail": info_dict.get("thumbnail", ""),
+                "webpage_url": info_dict.get("webpage_url", ""),
+                "availability": info_dict.get("availability", ""),
+                "playable_in_embed": info_dict.get("playable_in_embed", ""),
+                "channel_follower_count": info_dict.get("channel_follower_count", ""),
+                "language": info_dict.get("language", ""),
+                "subtitles_available": ", ".join(info_dict.get("subtitles", {}).keys()) if info_dict.get("subtitles") else "",
+                "automatic_captions_available":
+                    ", ".join(info_dict.get("automatic_captions", {}).keys()) if info_dict.get("automatic_captions") else "",
+            }
+
+            return metadata
 
     except DownloadError as e:
         print(f"Error fetching ID {video_id} with yt-dlp: {e}")
@@ -72,6 +110,18 @@ def main():
         print(f"Error: The file [{input_path}] was not found.")
         sys.exit(1)
 
+    # Define all fields we want to extract
+    fieldnames = [
+        "video_id", "title", "description", "duration", "upload_date",
+        "uploader", "uploader_id", "channel", "channel_id",
+        "view_count", "like_count", "comment_count", "average_rating",
+        "age_limit", "categories", "tags", "is_live", "was_live", "live_status",
+        "resolution", "fps", "vcodec", "acodec", "width", "height",
+        "thumbnail", "webpage_url", "availability", "playable_in_embed",
+        "channel_follower_count", "language", "subtitles_available",
+        "automatic_captions_available"
+    ]
+
     processed_ids = set()
     output_file_exists = os.path.exists(output_path)
 
@@ -79,11 +129,10 @@ def main():
         print(f"Output file [{output_path}] found. Reading existing IDs to avoid re-processing.")
         try:
             with open(output_path, "r", encoding="utf-8", newline="") as f_out_read:
-                reader = csv.reader(f_out_read)
-                next(reader, None)  # Skip header row
+                reader = csv.DictReader(f_out_read)
                 for row in reader:
-                    if row:
-                        processed_ids.add(row[0])
+                    if row and "video_id" in row:
+                        processed_ids.add(row["video_id"])
             print(f"Found {len(processed_ids)} previously processed IDs.")
         except IOError as e:
             print(f"Warning: Could not read from [{output_path}]. Proceeding without skipping. Error: {e}")
@@ -93,10 +142,10 @@ def main():
     print(f"Appending new data to [{output_path}]")
 
     with open(input_path, "r") as infile, open(output_path, "a", encoding="utf-8", newline="") as outfile:
-        writer = csv.writer(outfile)
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
 
         if not output_file_exists:
-            writer.writerow(["video_id", "video_title"])
+            writer.writeheader()
             outfile.flush()
 
         for line in infile:
@@ -108,11 +157,15 @@ def main():
                 print(f"Skipping already processed ID: [{video_id}]")
                 continue
 
-            title = get_video_title(video_id)
-            if title:
-                writer.writerow([video_id, title])
+            metadata = get_video_metadata(video_id)
+            if metadata:
+                writer.writerow(metadata)
             else:
-                writer.writerow([video_id, "TITLE_NOT_FOUND"])
+                # Write a row with just the video_id and error indicator
+                error_row = {field: "" for field in fieldnames}
+                error_row["video_id"] = video_id
+                error_row["title"] = "METADATA_NOT_FOUND"
+                writer.writerow(error_row)
             outfile.flush()
 
     print("Processing complete")
