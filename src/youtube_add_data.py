@@ -10,12 +10,13 @@ import sys
 import os
 import argparse
 import csv
-import yt_dlp
-from yt_dlp.utils import DownloadError
+import json
+import subprocess
 
 def get_video_metadata(video_id: str) -> dict | None:
     """
-    Fetches extensive metadata of a YouTube video given its ID using the yt-dlp library.
+    Fetches extensive metadata of a YouTube video given its ID using yt-dlp via subprocess.
+    This avoids format selection issues by using the command line interface directly.
 
     Args:
         video_id: The 11-character ID of the YouTube video.
@@ -24,62 +25,93 @@ def get_video_metadata(video_id: str) -> dict | None:
         A dictionary containing video metadata, or None if it cannot be found.
     """
     video_url = f"https://www.youtube.com/watch?v={video_id}"
-    ydl_opts = {
-        "quiet": True,
-        "no_warnings": True,
-        "extract_flat": False,  # Changed to False to get full metadata
-    }
 
     try:
         print(f"Fetching data for ID: {video_id}...")
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info_dict = ydl.extract_info(video_url, download=False)
 
-            if not info_dict:
-                return None
+        # Use yt-dlp command line to get JSON metadata without downloading
+        # The -j flag outputs JSON without downloading
+        # --no-warnings suppresses warnings
+        cmd = [
+            "yt-dlp",
+            "-j",  # Dump JSON metadata only
+            "--no-warnings",
+            "--skip-download",
+            video_url
+        ]
 
-            # Extract comprehensive metadata
-            metadata = {
-                "video_id": video_id,
-                "title": info_dict.get("title", ""),
-                "description": info_dict.get("description", ""),
-                "duration": info_dict.get("duration", ""),
-                "upload_date": info_dict.get("upload_date", ""),
-                "uploader": info_dict.get("uploader", ""),
-                "uploader_id": info_dict.get("uploader_id", ""),
-                "channel": info_dict.get("channel", ""),
-                "channel_id": info_dict.get("channel_id", ""),
-                "view_count": info_dict.get("view_count", ""),
-                "like_count": info_dict.get("like_count", ""),
-                "comment_count": info_dict.get("comment_count", ""),
-                "average_rating": info_dict.get("average_rating", ""),
-                "age_limit": info_dict.get("age_limit", ""),
-                "categories": ", ".join(info_dict.get("categories", [])) if info_dict.get("categories") else "",
-                "tags": ", ".join(info_dict.get("tags", [])) if info_dict.get("tags") else "",
-                "is_live": info_dict.get("is_live", ""),
-                "was_live": info_dict.get("was_live", ""),
-                "live_status": info_dict.get("live_status", ""),
-                "resolution": info_dict.get("resolution", ""),
-                "fps": info_dict.get("fps", ""),
-                "vcodec": info_dict.get("vcodec", ""),
-                "acodec": info_dict.get("acodec", ""),
-                "width": info_dict.get("width", ""),
-                "height": info_dict.get("height", ""),
-                "thumbnail": info_dict.get("thumbnail", ""),
-                "webpage_url": info_dict.get("webpage_url", ""),
-                "availability": info_dict.get("availability", ""),
-                "playable_in_embed": info_dict.get("playable_in_embed", ""),
-                "channel_follower_count": info_dict.get("channel_follower_count", ""),
-                "language": info_dict.get("language", ""),
-                "subtitles_available": ", ".join(info_dict.get("subtitles", {}).keys()) if info_dict.get("subtitles") else "",
-                "automatic_captions_available":
-                    ", ".join(info_dict.get("automatic_captions", {}).keys()) if info_dict.get("automatic_captions") else "",
-            }
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
 
-            return metadata
+        if result.returncode != 0:
+            # Check if it's a format error and try with --ignore-no-formats-error
+            if "format" in result.stderr.lower():
+                cmd_fallback = [
+                    "yt-dlp",
+                    "-j",
+                    "--no-warnings",
+                    "--skip-download",
+                    "--ignore-no-formats-error",  # Ignore format errors
+                    video_url
+                ]
+                result = subprocess.run(cmd_fallback, capture_output=True, text=True, timeout=30)
 
-    except DownloadError as e:
-        print(f"Error fetching ID {video_id} with yt-dlp: {e}")
+                if result.returncode != 0:
+                    print(f"Error fetching ID {video_id}: {result.stderr}")
+                    return None
+
+        if result.stdout:
+            info_dict = json.loads(result.stdout)
+        else:
+            return None
+
+        if not info_dict:
+            return None
+
+        # Extract comprehensive metadata
+        metadata = {
+            "video_id": video_id,
+            "title": info_dict.get("title", ""),
+            "description": info_dict.get("description", ""),
+            "duration": info_dict.get("duration", ""),
+            "upload_date": info_dict.get("upload_date", ""),
+            "uploader": info_dict.get("uploader", ""),
+            "uploader_id": info_dict.get("uploader_id", ""),
+            "channel": info_dict.get("channel", ""),
+            "channel_id": info_dict.get("channel_id", ""),
+            "view_count": info_dict.get("view_count", ""),
+            "like_count": info_dict.get("like_count", ""),
+            "comment_count": info_dict.get("comment_count", ""),
+            "average_rating": info_dict.get("average_rating", ""),
+            "age_limit": info_dict.get("age_limit", ""),
+            "categories": ", ".join(info_dict.get("categories", [])) if info_dict.get("categories") else "",
+            "tags": ", ".join(info_dict.get("tags", [])) if info_dict.get("tags") else "",
+            "is_live": info_dict.get("is_live", ""),
+            "was_live": info_dict.get("was_live", ""),
+            "live_status": info_dict.get("live_status", ""),
+            "resolution": info_dict.get("resolution", ""),
+            "fps": info_dict.get("fps", ""),
+            "vcodec": info_dict.get("vcodec", ""),
+            "acodec": info_dict.get("acodec", ""),
+            "width": info_dict.get("width", ""),
+            "height": info_dict.get("height", ""),
+            "thumbnail": info_dict.get("thumbnail", ""),
+            "webpage_url": info_dict.get("webpage_url", ""),
+            "availability": info_dict.get("availability", ""),
+            "playable_in_embed": info_dict.get("playable_in_embed", ""),
+            "channel_follower_count": info_dict.get("channel_follower_count", ""),
+            "language": info_dict.get("language", ""),
+            "subtitles_available": ", ".join(info_dict.get("subtitles", {}).keys()) if info_dict.get("subtitles") else "",
+            "automatic_captions_available":
+                ", ".join(info_dict.get("automatic_captions", {}).keys()) if info_dict.get("automatic_captions") else "",
+        }
+
+        return metadata
+
+    except subprocess.TimeoutExpired:
+        print(f"Timeout fetching ID {video_id}")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON for ID {video_id}: {e}")
         return None
     # pylint: disable=broad-except
     except Exception as e:
