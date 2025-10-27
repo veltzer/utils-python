@@ -40,7 +40,7 @@ def get_video_metadata(video_id: str) -> dict | None:
             video_url
         ]
 
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=True)
 
         if result.returncode != 0:
             # Check if it's a format error and try with --ignore-no-formats-error
@@ -53,7 +53,7 @@ def get_video_metadata(video_id: str) -> dict | None:
                     "--ignore-no-formats-error",  # Ignore format errors
                     video_url
                 ]
-                result = subprocess.run(cmd_fallback, capture_output=True, text=True, timeout=30)
+                result = subprocess.run(cmd_fallback, capture_output=True, text=True, timeout=30, check=True)
 
                 if result.returncode != 0:
                     print(f"Error fetching ID {video_id}: {result.stderr}")
