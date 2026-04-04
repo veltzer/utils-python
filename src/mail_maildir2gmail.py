@@ -39,8 +39,8 @@ class Gmail:
         if self.__imap is not None:
             # pylint: disable=broad-except
             try:
-                self.__imap.logout()
                 self.__imap.close()
+                self.__imap.logout()
             except Exception:
                 pass
             self.__imap = None
@@ -52,11 +52,11 @@ class Gmail:
         with open(filename, "rb") as f:
             content = f.read()
 
-        if content.endswith("\x00\x00\x00"):
+        if content.endswith(b"\x00\x00\x00"):
             log(f"Skipping [{os.path.basename(filename)}] - corrupted")
             return
 
-        message = email.message_from_string(content)
+        message = email.message_from_bytes(content)
         timestamp = parsedate(message["date"])
         if not timestamp:
             log(f"Skipping [{os.path.basename(filename)}] - no date")
@@ -98,6 +98,9 @@ class Gmail:
 def decode_header(value):
     result = []
     for v, c in email.header.decode_header(value):
+        if isinstance(v, str):
+            result.append(v)
+            continue
         try:
             if c is None:
                 v = v.decode()
@@ -137,8 +140,6 @@ def main():
     parser.add_argument(
         "--username", help="Username to log into Gamil", default="username"
     )
-    args = parser.parse_args()
-
     args, dirnames = parser.parse_known_args()
 
     gmail = Gmail(args)

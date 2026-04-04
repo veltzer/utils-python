@@ -20,7 +20,10 @@ for root, dirs, files in os.walk(folder):
     for file in files:
         full = os.path.join(root, file)
         # print(f"doing {full}")
-        with open(full) as f:
-            content = f.read()
-            if pattern in content:
-                print(f"{full}")
+        try:
+            with open(full) as f:
+                content = f.read()
+                if pattern in content:
+                    print(f"{full}")
+        except (UnicodeDecodeError, PermissionError):
+            pass

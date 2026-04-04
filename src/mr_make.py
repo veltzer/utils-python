@@ -12,6 +12,7 @@ import sys
 import yaml
 
 home = os.getenv("HOME")
+assert home is not None, "HOME environment variable is not set"
 print_all = True
 stop_on_fail = False
 
@@ -26,7 +27,7 @@ def run_check_string(args, string, string_to_print=None, do_exit=False, do_print
     error_code = p.returncode
     if p.returncode:
         error = True
-    if any(line.find(string) > 0 for line in res_err.split()):
+    if any(line.find(string) != -1 for line in res_err.split("\n")):
         error = True
         error_code = 1
     if error:

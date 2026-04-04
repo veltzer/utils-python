@@ -20,7 +20,7 @@ def get_latest_zoom_version():
 
         # Try Ubuntu/Debian client URL
         url = "https://zoom.us/client/latest/zoom_amd64.deb"
-        response = requests.head(url, headers=headers, allow_redirects=True, timeout=500)
+        response = requests.head(url, headers=headers, allow_redirects=True, timeout=30)
 
         # The version is usually in the redirect URL
         final_url = response.url

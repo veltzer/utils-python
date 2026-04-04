@@ -26,6 +26,7 @@ def get_sinks():
     ) as pout:
         myre = re.compile(r"^\s+index: (\d+)\n$")
         for line in pout.stdout:
+            line = line.decode()
             mymatch = myre.match(line)
             if mymatch:
                 yield int(mymatch.group(1))
@@ -46,7 +47,7 @@ if options["do_midi_bridge"]:
             stderr=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
         )
-if options["config.do_route_jack"]:
+if options["do_route_jack"]:
     subprocess.check_call(
         ["pacmd", "set-default-sink", "jack_out"],
         stderr=subprocess.DEVNULL,

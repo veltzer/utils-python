@@ -4,6 +4,7 @@
 This script will change from one commiter to another in a git repository...
 """
 
+import shlex
 import subprocess
 import sys
 
@@ -12,7 +13,7 @@ if len(sys.argv) != 2:
 
 
 def main():
-    oldname = sys.argv[1]
+    oldname = shlex.quote(sys.argv[1])
     commiter_name = "Mark Veltzer"
     author_name = "Mark Veltzer"
     commiter_email = "mark.veltzer@gmail.com"

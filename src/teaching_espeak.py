@@ -13,6 +13,8 @@ if len(sys.argv) != 3:
 
 num = int(sys.argv[1])
 dec = int(sys.argv[2])
+if dec <= 0:
+    raise ValueError("dec must be positive")
 
 while num > 0:
     subprocess.check_call(

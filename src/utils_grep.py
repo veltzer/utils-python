@@ -32,15 +32,18 @@ def main():
             if cf.match(full):
                 if debug:
                     print(f"doing file [{full}]")
-                with open(full) as f:
-                    for num, line in enumerate(f):
-                        for _ in c.finditer(line):
-                            if printOnlyFiles:
-                                if full not in printedFiles:
-                                    print(full)
-                                    printedFiles.add(full)
-                            else:
-                                print(f"{full}, {num}: {line[:-1]}")
+                try:
+                    with open(full) as f:
+                        for num, line in enumerate(f):
+                            for _ in c.finditer(line):
+                                if printOnlyFiles:
+                                    if full not in printedFiles:
+                                        print(full)
+                                        printedFiles.add(full)
+                                else:
+                                    print(f"{full}, {num}: {line[:-1]}")
+                except (UnicodeDecodeError, PermissionError):
+                    pass
 
 
 if __name__ == "__main__":

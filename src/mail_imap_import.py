@@ -66,7 +66,6 @@ subparser_import.add_argument(
     "--toplevel",
     help="tag to import",
     default="imap_import",
-    action="store_true",
 )
 
 subparser_test = subparsers.add_parser(
@@ -82,14 +81,13 @@ subparser_rmdir.add_argument(
     "--toplevel",
     help="tag which to remove",
     default="imap_import",
-    action="store_true",
 )
 
 args = parser.parse_args()
 
 if args.debug:
     print("opt_username:", opt_username)
-    print("opt_password:", opt_password)
+    print("opt_password:", "****")
     print("opt_hostname:", opt_hostname)
     print("opt_port:", opt_port)
     print(args)

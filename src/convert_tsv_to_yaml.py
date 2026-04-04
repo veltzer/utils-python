@@ -94,7 +94,8 @@ def _write_yaml_file(records, output_file):
                     else:
                         yamlfile.write(f"{key}: []\n")
                 else:
-                    yamlfile.write(f"{key}: \"{value}\"\n")
+                    escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+                    yamlfile.write(f"{key}: \"{escaped}\"\n")
                 is_first_item = False
 
 def convert_tsv_to_yaml(input_file, output_file, array_columns_str=""):

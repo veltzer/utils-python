@@ -40,7 +40,7 @@ if remove_and_recreate:
         progress(f"removing the old folder ([{folder}])")
         shutil.rmtree(folder)
     # create the new folder
-    progress("making the new folder ([{folder}])")
+    progress(f"making the new folder ([{folder}])")
     os.mkdir(folder)
 
 if do_import:
@@ -60,4 +60,4 @@ if do_import:
         stderr=subprocess.DEVNULL,
     )
 
-progress(f"eclipse workspace is ready ([{format}])")
+progress(f"eclipse workspace is ready ([{folder}])")

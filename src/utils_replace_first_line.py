@@ -26,6 +26,5 @@ for file in sys.argv[2:]:
                 first = False
             else:
                 new_stream.write(line)
-    # switch old and new versions
-    os.unlink(file)
+    # atomic replace (rename overwrites the target on POSIX)
     os.rename(new_file, file)

@@ -27,7 +27,7 @@ extensions = {
     ".rmvb",
     ".qt",
     ".mp4",
-    ".VOB",
+    ".vob",
     ".vid",
 }
 filenames = []
@@ -35,7 +35,7 @@ for root, dirs, files in os.walk("."):
     for file in files:
         full = os.path.join(root, file)
         _, extension = os.path.splitext(file)
-        if extension not in extensions:
+        if extension.lower() not in extensions:
             continue
         filenames.append(full)
 # sort according to basename

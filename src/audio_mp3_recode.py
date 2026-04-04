@@ -27,7 +27,7 @@ opt_codec = "copy"
 
 def fix(filename):
     print(f"fixing [{filename}]...")
-    with tempfile.NamedTemporaryFile(suffix=".mp3") as f:
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
         out = f.name
     # args=[
     #    "ffmpeg",

@@ -8,6 +8,7 @@ import os
 import chardet
 
 for n in os.listdir(".".encode()):
-    encoding = chardet.detect(n)["encoding"]
-    confidence = chardet.detect(n)["confidence"]
+    result = chardet.detect(n)
+    encoding = result["encoding"]
+    confidence = result["confidence"]
     print(f"{n.decode()} => {encoding} ({confidence})")

@@ -47,6 +47,9 @@ def db_close(opt_database):
 def decode_header(value):
     result = []
     for v, c in email.header.decode_header(value):
+        if isinstance(v, str):
+            result.append(v)
+            continue
         try:
             if c is None:
                 v = v.decode()
@@ -174,7 +177,7 @@ class IMAP:
     def append_file(self, mailbox, flags, filename):
         with open(filename, "rb") as f:
             content = f.read()
-        message = email.message_from_string(content)
+        message = email.message_from_bytes(content)
         timestamp = parsedate(message['date'])
         # subject = decode_header(message['subject'])
         self.append(mailbox, flags, timestamp, content)

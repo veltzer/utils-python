@@ -35,13 +35,13 @@ for filename in sys.argv[1:]:
         print(f"doing file [{filename}]")
     with open(filename, "rb") as f:
         b = f.read()
-        h = chardet.detect(b)
-        detect_charset = h["encoding"]
-        if detect_charset is None:
-            if debug:
-                print("could not detect charset, continuing to next file...")
-            continue
-        new_content = b.decode(detect_charset)
-        if write:
-            with codecs.open(filename, "w", to_charset) as f2:
-                f2.write(new_content)
+    h = chardet.detect(b)
+    detect_charset = h["encoding"]
+    if detect_charset is None:
+        if debug:
+            print("could not detect charset, continuing to next file...")
+        continue
+    new_content = b.decode(detect_charset)
+    if write:
+        with codecs.open(filename, "w", to_charset) as f2:
+            f2.write(new_content)

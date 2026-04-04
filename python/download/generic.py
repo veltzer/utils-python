@@ -21,20 +21,27 @@ def get(url, file):
         os.makedirs(os.path.dirname(file), exist_ok=True)
     with open(file, "wb") as f, urllib.request.urlopen(url) as u:
         meta = u.info()
-        file_size = int(meta['Content-Length'])
+        content_length = meta['Content-Length']
+        file_size = int(content_length) if content_length else None
         block_sz = 8192
 
-        maxval = file_size // block_sz
-        if file_size % block_sz > 0:
-            maxval += 1
+        if file_size is not None:
+            maxval = file_size // block_sz
+            if file_size % block_sz > 0:
+                maxval += 1
+            pbar = progressbar.ProgressBar(maxval=maxval)
+            pbar.start()
+        else:
+            pbar = None
 
-        pbar = progressbar.ProgressBar(maxval=maxval)
-        pbar.start()
+        blocks_read = 0
         while True:
             buffer = u.read(block_sz)
             if not buffer:
                 break
             f.write(buffer)
-            pbar.update(pbar.currval + 1)
-        pbar.finish()
-        f.close()
+            blocks_read += 1
+            if pbar is not None:
+                pbar.update(blocks_read)
+        if pbar is not None:
+            pbar.finish()
