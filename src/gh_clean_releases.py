@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Delete only the last N GitHub releases (oldest) for a repository.
+Keep only the latest N GitHub releases and delete all others.
 
 Uses the `gh` CLI for authentication and API calls.
 """
@@ -56,12 +56,12 @@ def main():
     total = len(release_ids)
     print(f"Found {total} releases.")
 
-    to_delete = release_ids[-count:] if total > count else release_ids
+    to_delete = release_ids[count:]
     if not to_delete:
-        print("Nothing to delete.")
+        print(f"Only {total} releases found, keeping all.")
         sys.exit(0)
 
-    print(f"Deleting {len(to_delete)} oldest releases...")
+    print(f"Keeping {count} latest releases, deleting {len(to_delete)} older releases...")
     for i, release_id in enumerate(to_delete, 1):
         print(f"  [{i}/{len(to_delete)}] Deleting release {release_id}...")
         delete_release(repo, release_id)
