@@ -23,12 +23,21 @@ def gh_api(endpoint, method="GET"):
 
 
 def get_all_workflow_runs(repo):
-    """Fetch all workflow run IDs, newest first."""
+    """Fetch all workflow runs as (id, conclusion) pairs, newest first."""
     result = subprocess.run(
-        ["gh", "api", f"repos/{repo}/actions/runs", "--paginate", "--jq", ".workflow_runs[].id"],
+        ["gh", "api", f"repos/{repo}/actions/runs", "--paginate",
+         "--jq", '.workflow_runs[] | "\(.id) \(.conclusion // "")"'],
         capture_output=True, text=True, check=True,
     )
-    return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
+    runs = []
+    for line in result.stdout.strip().splitlines():
+        if not line.strip():
+            continue
+        parts = line.split(" ", 1)
+        run_id = int(parts[0])
+        conclusion = parts[1] if len(parts) > 1 else ""
+        runs.append((run_id, conclusion))
+    return runs
 
 
 def delete_workflow_run(repo, run_id):
@@ -52,11 +61,21 @@ def main():
         keep = int(sys.argv[1])
 
     print(f"Fetching workflow runs for {repo}...")
-    run_ids = get_all_workflow_runs(repo)
-    total = len(run_ids)
-    print(f"Found {total} workflow runs, keeping {keep} most recent.")
+    runs = get_all_workflow_runs(repo)
+    total = len(runs)
+    print(f"Found {total} workflow runs, keeping {keep} most recent (non-failed).")
 
-    to_delete = run_ids[keep:]
+    kept = []
+    to_delete = []
+    failed_conclusions = {"failure", "cancelled", "timed_out", "startup_failure", "action_required"}
+    for run_id, conclusion in runs:
+        if conclusion in failed_conclusions:
+            to_delete.append(run_id)
+        elif len(kept) < keep:
+            kept.append(run_id)
+        else:
+            to_delete.append(run_id)
+
     if not to_delete:
         print("Nothing to delete.")
         sys.exit(0)

@@ -34,6 +34,17 @@ def get_all_deployments(repo):
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
 
+def get_latest_deployment_state(repo, deployment_id):
+    """Return the most recent status state for a deployment, or None if none exist."""
+    result = subprocess.run(
+        ["gh", "api", f"repos/{repo}/deployments/{deployment_id}/statuses",
+         "--jq", ".[0].state"],
+        capture_output=True, text=True, check=True,
+    )
+    state = result.stdout.strip()
+    return state or None
+
+
 def deactivate_deployment(repo, deployment_id):
     """Set deployment status to inactive so it can be deleted."""
     gh_api(
@@ -66,9 +77,20 @@ def main():
     print(f"Fetching deployments for {repo}...")
     deployment_ids = get_all_deployments(repo)
     total = len(deployment_ids)
-    print(f"Found {total} deployments, keeping {keep} most recent.")
+    print(f"Found {total} deployments, keeping {keep} most recent (non-failed).")
 
-    to_delete = deployment_ids[keep:]
+    kept = []
+    to_delete = []
+    failed_states = {"failure", "error"}
+    for dep_id in deployment_ids:
+        state = get_latest_deployment_state(repo, dep_id)
+        if state in failed_states:
+            to_delete.append(dep_id)
+        elif len(kept) < keep:
+            kept.append(dep_id)
+        else:
+            to_delete.append(dep_id)
+
     if not to_delete:
         print("Nothing to delete.")
         sys.exit(0)
