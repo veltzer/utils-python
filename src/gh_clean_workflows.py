@@ -26,7 +26,7 @@ def get_all_workflow_runs(repo):
     """Fetch all workflow runs as (id, conclusion) pairs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/actions/runs", "--paginate",
-         "--jq", '.workflow_runs[] | "\(.id) \(.conclusion // "")"'],
+         "--jq", r'.workflow_runs[] | "\(.id) \(.conclusion // "")"'],
         capture_output=True, text=True, check=True,
     )
     runs = []
