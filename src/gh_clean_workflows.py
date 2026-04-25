@@ -82,8 +82,8 @@ def main():
 
     print(f"Deleting {len(to_delete)} workflow runs...")
     for i, run_id in enumerate(to_delete, 1):
-        print(f"  [{i}/{len(to_delete)}] Deleting run {run_id}...")
         delete_workflow_run(repo, run_id)
+        print(f"  [{i}/{len(to_delete)}] Deleted workflow run {run_id}")
 
     print("Done.")
 

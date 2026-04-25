@@ -54,17 +54,17 @@ def main():
     print(f"Fetching releases for {repo}...")
     release_ids = get_all_release_ids(repo)
     total = len(release_ids)
-    print(f"Found {total} releases.")
+    print(f"Found {total} releases, keeping {count} most recent.")
 
     to_delete = release_ids[count:]
     if not to_delete:
-        print(f"Only {total} releases found, keeping all.")
+        print("Nothing to delete.")
         sys.exit(0)
 
-    print(f"Keeping {count} latest releases, deleting {len(to_delete)} older releases...")
+    print(f"Deleting {len(to_delete)} releases...")
     for i, release_id in enumerate(to_delete, 1):
-        print(f"  [{i}/{len(to_delete)}] Deleting release {release_id}...")
         delete_release(repo, release_id)
+        print(f"  [{i}/{len(to_delete)}] Deleted release {release_id}")
 
     print("Done.")
 

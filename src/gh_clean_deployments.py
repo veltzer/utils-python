@@ -97,9 +97,9 @@ def main():
 
     print(f"Deleting {len(to_delete)} deployments...")
     for i, dep_id in enumerate(to_delete, 1):
-        print(f"  [{i}/{len(to_delete)}] Deactivating and deleting {dep_id}...")
         deactivate_deployment(repo, dep_id)
         delete_deployment(repo, dep_id)
+        print(f"  [{i}/{len(to_delete)}] Deleted deployment {dep_id}")
 
     print("Done.")
 
