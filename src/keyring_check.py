@@ -32,14 +32,14 @@ except ImportError:
 def main() -> int:
     try:
         conn = secretstorage.dbus_init()
-    except Exception as e:
+    except secretstorage.exceptions.SecretStorageException as e:
         print(f"ERROR: could not connect to D-Bus secret service: {e}")
         print("Is gnome-keyring-daemon or kwalletd running?")
         return 2
 
     try:
         collection = secretstorage.get_default_collection(conn)
-    except Exception as e:
+    except secretstorage.exceptions.SecretStorageException as e:
         print(f"ERROR: could not get default collection: {e}")
         return 2
 
@@ -57,7 +57,7 @@ def main() -> int:
         # This will pop a dialog ONLY if a real password is required.
         # If the keyring has an empty password, it unlocks silently.
         was_dismissed = collection.unlock()
-    except Exception as e:
+    except secretstorage.exceptions.SecretStorageException as e:
         print(f"ERROR while unlocking: {e}")
         return 2
 
