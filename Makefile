@@ -25,6 +25,7 @@ Q:=@
 endif # DO_MKDBG
 
 ALL_PACKAGES:=$(dir $(wildcard */__init__.py))
+LOCAL_PACKAGES:=$(shell python3 -c 'import site; print(site.getusersitepackages())')
 ALL:=
 ALL_PY:=$(shell find src python -type f -and -name "*.py")
 ALL_SYNTAX:=$(addprefix out/,$(addsuffix .syntax, $(basename $(ALL_PY))))
@@ -53,8 +54,8 @@ all: $(ALL)
 .PHONY: install
 install:
 	$(info doing [$@])
-	$(Q)pymakehelper symlink_install --source_folder src --target_folder ~/install/bin
-	$(Q)pymakehelper symlink_install --source_folder python --target_folder ~/install/python
+	$(Q)pymakehelper symlink_install --source_folder src --target_folder ~/.local/bin
+	$(Q)pymakehelper symlink_install --source_folder python --target_folder $(LOCAL_PACKAGES)
 
 .PHONY: pylint
 pylint:
@@ -73,6 +74,7 @@ debug:
 	$(info ALL_LINT is $(ALL_LINT))
 	$(info ALL_MYPY is $(ALL_MYPY))
 	$(info ALL is $(ALL))
+	$(info LOCAL_PACKAGES is $(LOCAL_PACKAGES))
 
 .PHONY: clean
 clean:

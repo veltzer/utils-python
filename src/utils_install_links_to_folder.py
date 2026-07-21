@@ -70,4 +70,4 @@ def install(root_folder, target_folder, recurse):
             do_install(source, target)
 
 
-install("src", "~/install/bin", False)
+install("src", "~/.local/bin", False)
