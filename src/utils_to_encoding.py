@@ -7,10 +7,9 @@ encoding and writes using the utf-encoding.
 """
 
 import sys
-import codecs
 import chardet
 
-# to which charset to translate to? the -sig is what causes codecs to emit the
+# to which charset to translate to? the -sig is what causes python to emit the
 # utf-8 BOM at the begining of the output file (these are 3 characters)
 to_charset = "utf-8-sig"
 # from which charset to translate from?
@@ -43,5 +42,5 @@ for filename in sys.argv[1:]:
         continue
     new_content = b.decode(detect_charset)
     if write:
-        with codecs.open(filename, "w", to_charset) as f2:
+        with open(filename, "w", encoding=to_charset) as f2:
             f2.write(new_content)
