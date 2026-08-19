@@ -5,9 +5,11 @@ chardet
 download
 imap
 jack_pulse
+jsonschema
 python-dateutil
 python-pptx
 pytz
+referencing
 requests
 ruamel
 secretstorage
