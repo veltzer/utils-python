@@ -17,4 +17,7 @@ pip = [
     "ruamel.yaml",
     "pyyaml",
     "types-PyYAML",
+    "types-python-dateutil",
+    "types-jsonschema",
+    "types-pytz",
 ]
