@@ -1,1 +1,20 @@
 # Repo-specific overlay. Deep-merged over the canonical rsconstruct.toml.
+
+# Runtime deps so CI installs what the code imports (pylint/mypy resolve
+# them) -- the demos-cloud-aws pattern.
+[dependencies]
+pip = [
+    "chardet",
+    "python-dateutil",
+    "PyGithub",
+    "jsonschema",
+    "python-pptx",
+    "progressbar2",
+    "pytz",
+    "referencing",
+    "requests",
+    "types-requests",
+    "ruamel.yaml",
+    "pyyaml",
+    "types-PyYAML",
+]
