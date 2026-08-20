@@ -2,6 +2,7 @@
 
 """Upload email messages from a list of Maildir to Google Mail."""
 
+import argparse
 import email
 import email.header
 import email.utils
@@ -9,7 +10,7 @@ import os
 import sys
 import time
 from imaplib import IMAP4_SSL
-import argparse
+
 import bsddb3  # type: ignore
 
 
@@ -32,7 +33,7 @@ class Gmail:
             # pylint: disable=broad-except
             try:
                 self.__database.close()
-            except Exception:
+            except Exception:  # noqa: BLE001, S110
                 pass
             self.__database = None
 
@@ -41,7 +42,7 @@ class Gmail:
             try:
                 self.__imap.close()
                 self.__imap.logout()
-            except Exception:
+            except Exception:  # noqa: BLE001, S110
                 pass
             self.__imap = None
 
@@ -151,7 +152,7 @@ def main():
                     gmail.append(filename)
                 except Exception as e:
                     log(f"Unable to send [{filename}]")
-                    raise e
+                    raise e  # noqa: TRY201
 
 
 def parsedate(value):

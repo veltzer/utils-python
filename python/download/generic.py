@@ -5,9 +5,10 @@ References:
 - http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
 """
 
-import urllib.request
 import os
 import os.path
+import urllib.request
+
 import progressbar  # type: ignore
 
 

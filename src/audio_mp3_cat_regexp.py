@@ -4,8 +4,8 @@
 Script to be used to catenate many mp3 files.
 """
 
-import subprocess
 import glob
+import subprocess
 
 doRun = True
 doDebug = False

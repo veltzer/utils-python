@@ -7,6 +7,7 @@ encoding and writes using the utf-encoding.
 """
 
 import sys
+
 import chardet
 
 # to which charset to translate to? the -sig is what causes python to emit the

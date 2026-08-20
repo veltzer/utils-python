@@ -13,9 +13,9 @@ the version of a specific eclipse without running it and remove
 this hardcoding.
 """
 
-import subprocess
 import os
 import os.path
+import subprocess
 import sys
 
 

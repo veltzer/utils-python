@@ -4,10 +4,10 @@
 implementing grep in python
 """
 
-import re
-import sys
 import os
 import os.path
+import re
+import sys
 
 
 def main():

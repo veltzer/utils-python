@@ -10,8 +10,8 @@ this will require that the workspace created will be unique (say tmpfile or some
 this will also require that we signal the zoom of the window with that tmpfile id.
 """
 
-import os.path
 import os
+import os.path
 import subprocess
 import time
 

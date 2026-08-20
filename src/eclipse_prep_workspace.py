@@ -7,9 +7,9 @@ described in:
 http://unix.stackexchange.com/questions/103602/how-to-maximize-a-window-programmably-in-x-window
 """
 
-import shutil
 import os
 import os.path
+import shutil
 import subprocess
 import sys
 

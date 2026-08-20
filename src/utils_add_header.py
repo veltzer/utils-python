@@ -4,10 +4,10 @@ This script adds a header with the base name of the file to Python files
 if they dont already have it.
 """
 
-import sys
 import os
-import tempfile
 import shutil
+import sys
+import tempfile
 
 
 def add_header_to_file(filename):

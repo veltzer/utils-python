@@ -4,9 +4,9 @@
 replace first line of many files
 """
 
-import sys
 import os
 import os.path
+import sys
 
 # command line usage...
 me = os.path.basename(sys.argv[0])

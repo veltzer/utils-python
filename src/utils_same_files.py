@@ -4,9 +4,9 @@
 say whether any several files have the same content or not.
 """
 
-import sys
-import os.path
 import hashlib
+import os.path
+import sys
 
 prog = os.path.basename(sys.argv[0])
 if len(sys.argv) == 1:

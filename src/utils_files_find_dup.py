@@ -4,8 +4,8 @@
 Find duplicate files
 """
 
-import os
 import hashlib
+import os
 from collections import defaultdict
 
 

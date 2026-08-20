@@ -17,8 +17,8 @@ Args:
                            treated as arrays (e.g., "Genre,Tags").
 """
 
-import csv
 import argparse
+import csv
 
 # Define recognizable boolean string values
 BOOLEAN_TRUE_STRS = {"true", "yes", "t", "y"}
@@ -89,8 +89,7 @@ def _write_yaml_file(records, output_file):
                 elif isinstance(value, list):
                     if value:
                         yamlfile.write(f"{key}:\n")
-                        for item in value:
-                            yamlfile.write(f"      - \"{item}\"\n")
+                        yamlfile.writelines(f"      - \"{item}\"\n" for item in value)
                     else:
                         yamlfile.write(f"{key}: []\n")
                 else:

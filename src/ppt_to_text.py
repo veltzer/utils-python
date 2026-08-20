@@ -5,6 +5,7 @@ script to convert ppt files to text
 """
 
 import sys
+
 from pptx import Presentation
 
 

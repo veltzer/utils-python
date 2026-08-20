@@ -4,13 +4,14 @@
 Validate a yaml file including order of elements
 """
 
-import sys
 import argparse
+import sys
+
 import requests
-from ruamel.yaml import YAML
-from jsonschema import validate, Draft7Validator
+from jsonschema import Draft7Validator, validate
 from referencing import Registry, Resource
 from referencing.jsonschema import DRAFT7
+from ruamel.yaml import YAML
 
 ROOT="root"
 SCHEMA_CACHE : dict[str, None] = {}

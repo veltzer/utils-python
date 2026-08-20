@@ -5,8 +5,8 @@ marp_check_images
 """
 
 import os
-import sys
 import re
+import sys
 from pathlib import Path
 
 
@@ -16,7 +16,7 @@ def find_marp_files(root_dir: str) -> list[Path]:
     marp_files = []
 
     for path in root_path.rglob("*.md"):
-        marp_files.append(path)
+        marp_files.append(path)  # noqa: PERF402
     return marp_files
 
 

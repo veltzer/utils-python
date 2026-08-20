@@ -9,6 +9,7 @@ import os
 import os.path
 import subprocess
 import sys
+
 import yaml
 
 home = os.getenv("HOME")
@@ -108,7 +109,7 @@ def main():
         if os.path.isfile(makefile):
             os.chdir(project_root)
             check_empty_output = True
-            if project_name in opts:
+            if project_name in opts:  # noqa: SIM102
                 if "dont_check_empty_output" in opts[project_name]:
                     check_empty_output = False
             if check_empty_output:

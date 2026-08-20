@@ -56,5 +56,5 @@ try:
     # cache.commit()
     # cache.close()
     pass
-except Exception as e:
+except Exception as e:  # noqa: BLE001
     print(f"Sorry, package removal failed [{e}]")

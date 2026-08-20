@@ -17,10 +17,11 @@ TODO:
     (make it in this executable using subcommands of argparser).
 """
 
+import argparse
 import configparser
 import os.path
-import argparse
 import sys
+
 import imap.imap  # type: ignore
 
 cp = configparser.ConfigParser()

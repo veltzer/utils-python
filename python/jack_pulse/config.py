@@ -5,7 +5,6 @@ This is the config object for the jack+pulse scripts
 import configparser
 import os.path
 
-
 mysection = 'jack_pulse'
 
 

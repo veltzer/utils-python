@@ -10,9 +10,9 @@ References:
 http://www.linuxforums.org/forum/newbie/111044-change-order-files-directory.html
 """
 
-import sys
 import os
 import os.path
+import sys
 import tempfile
 
 if len(sys.argv) != 1:

@@ -5,6 +5,7 @@ A simple script to download stuff from ted.com via the command line
 """
 
 import sys
+
 import download.ted  # type: ignore
 
 if len(sys.argv) != 3:

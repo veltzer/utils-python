@@ -6,9 +6,9 @@ This script upgrades just one pip module.
 It is very useful if you have a ton of repos and want to upgrade some module in all of them.
 """
 
-import sys
-import subprocess
 import importlib
+import subprocess
+import sys
 
 
 def upgrade_module(module_name):

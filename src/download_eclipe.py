@@ -11,8 +11,8 @@ TODO:
 - make this script convert the files to .xz storage.
 """
 
-import os.path
 import hashlib
+import os.path
 import sys
 
 import download.generic  # type: ignore

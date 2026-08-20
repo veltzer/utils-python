@@ -8,8 +8,8 @@ if a filename has special characters in it then the playlist will not work.
 Try to find a way around that...
 """
 
-import os.path
 import os
+import os.path
 
 extensions = {
     ".avi",

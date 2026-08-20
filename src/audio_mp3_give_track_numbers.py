@@ -8,8 +8,8 @@ It works using id3v2 something like this:
 let y=1; for x in *; do id3v2 -T $y/36 "$x" ; let "y=y+1"; done
 """
 
-import subprocess
 import os.path
+import subprocess
 import sys
 
 # first check that all files are there

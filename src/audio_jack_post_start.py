@@ -15,8 +15,9 @@ TODO:
 """
 
 import os.path
-import subprocess
 import re
+import subprocess
+
 import jack_pulse.config  # type: ignore
 
 
@@ -37,10 +38,9 @@ runfile = os.path.expanduser("~/.myjack_run")
 if options["do_midi_bridge"]:
     with subprocess.Popen("a2jmidi_bridge") as p1, subprocess.Popen(
         "j2amidi_bridge"
-    ) as p2:
-        with open(runfile, "w") as f:
-            f.write(str(p1.pid) + "\n")
-            f.write(str(p2.pid) + "\n")
+    ) as p2, open(runfile, "w") as f:
+        f.write(str(p1.pid) + "\n")
+        f.write(str(p2.pid) + "\n")
     if options["do_load_jack_module"]:
         subprocess.check_call(
             ["pactl", "load-module", "module-jack-sink", "channels=2"],

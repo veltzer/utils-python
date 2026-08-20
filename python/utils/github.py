@@ -5,8 +5,8 @@ github utilities
 
 import configparser
 import os.path
-import github
 
+import github
 
 inifile = os.path.expanduser('~/.details.ini')
 config = configparser.ConfigParser()

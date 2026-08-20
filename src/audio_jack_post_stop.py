@@ -4,8 +4,9 @@
 audio_jack_post_stop
 """
 
-import os.path
 import os
+import os.path
+
 import jack_pulse.config  # type: ignore
 
 options = jack_pulse.config.getConfig()

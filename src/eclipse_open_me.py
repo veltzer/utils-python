@@ -4,8 +4,8 @@
 This script runs a browser on the output of the current project
 """
 
-import subprocess
 import os
+import subprocess
 
 project = os.getcwd().split("/")[-1]
 

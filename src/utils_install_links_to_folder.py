@@ -19,9 +19,8 @@ force = True
 
 
 def do_install(source, target):
-    if force:
-        if os.path.islink(target):
-            os.unlink(target)
+    if force and os.path.islink(target):
+        os.unlink(target)
     if doit:
         if debug:
             print(f"symlinking [{source}], [{target}]")
@@ -52,11 +51,10 @@ def install(root_folder, target_folder, recurse):
             full = os.path.join(target_folder, file)
             if os.path.islink(full):
                 link_target = os.path.realpath(full)
-                if link_target.startswith(cwd):
-                    if doit:
-                        if debug:
-                            print(f"unlinking [{full}]")
-                        os.unlink(full)
+                if link_target.startswith(cwd) and doit:
+                    if debug:
+                        print(f"unlinking [{full}]")
+                    os.unlink(full)
     else:
         os.mkdir(target_folder)
     for root, directories, files in file_gen(root_folder, recurse):

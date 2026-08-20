@@ -27,17 +27,17 @@ Requirements:
 """
 
 import sys
-from typing import Any
 from datetime import timezone
+from typing import Any
+
+# dateutil is a powerful third-party library for parsing dates.
+from dateutil.parser import parse
+from dateutil.parser._parser import ParserError
 
 # ruamel.yaml is a library specifically designed for round-trip YAML
 # processing, which preserves comments and formatting.
 from ruamel.yaml import YAML
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString
-
-# dateutil is a powerful third-party library for parsing dates.
-from dateutil.parser import parse
-from dateutil.parser._parser import ParserError
 
 # --- Configuration ---
 

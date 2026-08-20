@@ -12,10 +12,10 @@ It continues to do this until all mermaid diagrams have been removed from the fi
 You must process the matches in reverse order in order not to screw up the "start" and "end" positions
 """
 
-import re
-import sys
 import os
 import os.path
+import re
+import sys
 
 
 def extract_mermaid_diagrams(mermaid_folder:str, file_path:str):

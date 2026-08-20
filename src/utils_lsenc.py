@@ -5,9 +5,10 @@ List encdings of files
 """
 
 import os
+
 import chardet
 
-for n in os.listdir(".".encode()):
+for n in os.listdir(b"."):
     result = chardet.detect(n)
     encoding = result["encoding"]
     confidence = result["confidence"]

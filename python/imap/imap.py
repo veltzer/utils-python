@@ -11,14 +11,13 @@ Refrences:
 http://stackoverflow.com/questions/3180891/imap-deleting-messages
 """
 
-import imaplib
 import dbm.gnu
-
-import os.path
-import os
 import email
-import email.utils
 import email.header
+import email.utils
+import imaplib
+import os
+import os.path
 import time
 
 # db functions
@@ -103,9 +102,7 @@ class IMAP:
         (res, l) = self.imap.list(name)
         if res != 'OK':
             raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
-        if len(l) == 1 and l[0] is None:
-            return False
-        return True
+        return not (len(l) == 1 and l[0] is None)
 
     def create(self, name):
         """

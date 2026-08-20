@@ -4,8 +4,8 @@
 teaching_hours_sum
 """
 
-import sys
 import re
+import sys
 
 c = re.compile(r"^.* \((\d+) hours\)$")
 

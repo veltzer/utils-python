@@ -4,10 +4,10 @@
 utils_python_filetype
 """
 
-import sys
 import os
-import shelve
 import pickle
+import shelve
+import sys
 
 
 def check_file_type(file_path):
@@ -20,7 +20,7 @@ def check_file_type(file_path):
         with shelve.open(file_path, "r"):
             # If we can open it as a shelf, its likely a shelf file
             return "Shelf file"
-    except Exception:
+    except Exception:  # noqa: BLE001, S110
         # Not a shelf file, continue to check if its a pickle file
         pass
 
@@ -32,7 +32,7 @@ def check_file_type(file_path):
         return "Pickle file"
     except pickle.UnpicklingError:
         return "Pickle file (but corrupted or incomplete)"
-    except Exception:
+    except Exception:  # noqa: BLE001
         return "Not a shelf or pickle file"
 
 

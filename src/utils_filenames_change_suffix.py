@@ -5,8 +5,8 @@ An app to help to you change suffix of files
 """
 
 import logging
-import os.path
 import os
+import os.path
 import sys
 
 logging.basicConfig()

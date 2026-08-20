@@ -5,8 +5,9 @@ References:
 http://pranavashok.com/blog/2009/12/script-to-download-ted-videos-in-bulk/
 """
 
-import urllib.request
 import re
+import urllib.request
+
 import download.generic
 
 

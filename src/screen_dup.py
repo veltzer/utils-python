@@ -22,8 +22,8 @@ NOTES:
 (did not work without it).
 """
 
-import subprocess
 import re
+import subprocess
 
 # parameters
 res = [
