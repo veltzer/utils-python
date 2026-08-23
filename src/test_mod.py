@@ -17,7 +17,9 @@ import subprocess
 import sys
 import tomllib
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# realpath, not abspath: these scripts are installed as symlinks into
+# ~/.local/bin, and the checks are about the checkout they point back into.
+ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 SRC = os.path.join(ROOT, "src")
 SCRIPTS = os.path.join(ROOT, "scripts")
 SHEBANG = "#!/usr/bin/env python"

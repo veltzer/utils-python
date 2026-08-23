@@ -15,7 +15,8 @@ non-zero when a check fails, so it is usable from a build.
 import os.path
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# realpath so this works when run through the symlink in ~/.local/bin
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 
 import test_mod  # pylint: disable=wrong-import-position
 
