@@ -13,19 +13,24 @@ http://download.netbeans.org/netbeans/8.0.2/final/bundles/netbeans-8.0.2-javase-
 
 import download.generic  # type: ignore
 
-products = [
-    "",
-    "php-",
-    "cpp-",
-    "javaee-",
-    "javase-",
-]
-version = "8.0.2"
 
-for product in products:
-    url = (
-        f"http://download.netbeans.org/netbeans/"
-        f"{version}/final/bundles/netbeans-{version}-{product}linux.sh"
-    )
-    filename = f"netbeans-{version}-{product}linux.sh"
-    download.generic.get(url, filename)
+def main() -> None:
+    products = [
+        "",
+        "php-",
+        "cpp-",
+        "javaee-",
+        "javase-",
+    ]
+    version = "8.0.2"
+    for product in products:
+        url = (
+            f"http://download.netbeans.org/netbeans/"
+            f"{version}/final/bundles/netbeans-{version}-{product}linux.sh"
+        )
+        filename = f"netbeans-{version}-{product}linux.sh"
+        download.generic.get(url, filename)
+
+
+if __name__ == "__main__":
+    main()

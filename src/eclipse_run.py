@@ -92,4 +92,5 @@ def main():
             print("in end of script")
 
 
-main()
+if __name__ == "__main__":
+    main()

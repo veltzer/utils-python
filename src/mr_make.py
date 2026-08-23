@@ -136,4 +136,5 @@ def main():
     print(f"events [{events}]")
 
 
-main()
+if __name__ == "__main__":
+    main()

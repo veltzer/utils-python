@@ -18,5 +18,10 @@ def odp_to_text(source, target):
                     stream.write(shape.text + "\n")
 
 
+def main() -> None:
+    if __name__ == "__main__":
+        odp_to_text(sys.argv[1], sys.argv[2])
+
+
 if __name__ == "__main__":
-    odp_to_text(sys.argv[1], sys.argv[2])
+    main()

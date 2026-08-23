@@ -8,22 +8,26 @@ import os
 import os.path
 import sys
 
-if len(sys.argv) != 2:
-    print(f"usage: {sys.argv[0]} [folder]")
-    sys.exit(1)
 
-times = 3
-pattern = "\n" * times
-folder = sys.argv[1]
+def main() -> None:
+    if len(sys.argv) != 2:
+        print(f"usage: {sys.argv[0]} [folder]")
+        sys.exit(1)
+    times = 3
+    pattern = "\n" * times
+    folder = sys.argv[1]
+    for root, _dirs, files in os.walk(folder):
+        for file in files:
+            full = os.path.join(root, file)
+            # print(f"doing {full}")
+            try:
+                with open(full) as f:
+                    content = f.read()
+                    if pattern in content:
+                        print(f"{full}")
+            except (UnicodeDecodeError, PermissionError):
+                pass
 
-for root, dirs, files in os.walk(folder):
-    for file in files:
-        full = os.path.join(root, file)
-        # print(f"doing {full}")
-        try:
-            with open(full) as f:
-                content = f.read()
-                if pattern in content:
-                    print(f"{full}")
-        except (UnicodeDecodeError, PermissionError):
-            pass
+
+if __name__ == "__main__":
+    main()

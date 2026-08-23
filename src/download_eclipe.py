@@ -105,4 +105,5 @@ def main():
                     print(f"checksum for [{filename}] is good...")
 
 
-main()
+if __name__ == "__main__":
+    main()

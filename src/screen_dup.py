@@ -190,4 +190,5 @@ def main():
         set_outputs(outputs, mode)
 
 
-main()
+if __name__ == "__main__":
+    main()

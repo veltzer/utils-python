@@ -11,6 +11,13 @@ import random
 
 # for deterministic behaviour
 # random.seed(7)
-note_list = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]
-random.shuffle(note_list)
-print(note_list)
+
+
+def main() -> None:
+    note_list = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]
+    random.shuffle(note_list)
+    print(note_list)
+
+
+if __name__ == "__main__":
+    main()

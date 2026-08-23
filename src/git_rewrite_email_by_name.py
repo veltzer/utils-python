@@ -8,11 +8,10 @@ import shlex
 import subprocess
 import sys
 
-if len(sys.argv) != 2:
-    raise ValueError("usage: git_change_commiter.py [oldname]")
-
 
 def main():
+    if len(sys.argv) != 2:
+        raise ValueError("usage: git_change_commiter.py [oldname]")
     oldname = shlex.quote(sys.argv[1])
     commiter_name = "Mark Veltzer"
     author_name = "Mark Veltzer"

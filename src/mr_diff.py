@@ -46,4 +46,5 @@ def main():
         print(f"all ok with {len(have_mrconfig)} entries...")
 
 
-main()
+if __name__ == "__main__":
+    main()

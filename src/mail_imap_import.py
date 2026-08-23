@@ -24,87 +24,81 @@ import sys
 
 import imap.imap  # type: ignore
 
-cp = configparser.ConfigParser()
-cp.read(os.path.expanduser("~/.details.ini"))
-opt_username = cp.get("google", "username")
-opt_password = cp.get("google_imap", "password")
-opt_hostname = cp.get("google_imap", "hostname")
-opt_port = cp.get("google_imap", "port")
-opt_database = None
 
-parser = argparse.ArgumentParser(
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-parser.add_argument(
-    "--debug",
-    help="do you want to debug the script?",
-    default=False,
-    action="store_true",
-)
-parser.add_argument(
-    "--exit", help="exif after debug?", default=False, action="store_true"
-)
-parser.add_argument(
-    "--noprogress",
-    help="dont report progress",
-    default=False,
-    action="store_true",
-)
-
-subparsers = parser.add_subparsers(
-    title="subcommands",
-    dest="subcommand",
-)
-
-subparser_import = subparsers.add_parser(
-    "import",
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-subparser_import.add_argument(
-    "--mailfolder", help="folder where the mail is", default="~/Mail"
-)
-subparser_import.add_argument(
-    "--toplevel",
-    help="tag to import",
-    default="imap_import",
-)
-
-subparser_test = subparsers.add_parser(
-    "test",
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-
-subparser_rmdir = subparsers.add_parser(
-    "rmdir",
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-)
-subparser_rmdir.add_argument(
-    "--toplevel",
-    help="tag which to remove",
-    default="imap_import",
-)
-
-args = parser.parse_args()
-
-if args.debug:
-    print("opt_username:", opt_username)
-    print("opt_password:", "****")
-    print("opt_hostname:", opt_hostname)
-    print("opt_port:", opt_port)
-    print(args)
-if args.exit:
-    sys.exit(0)
-
-imp = imap.imap.IMAP()
-
-imp.connect(opt_hostname, opt_port)
-imp.login(opt_username, opt_password)
-
-if args.subcommand == "import":
-    imp.import_folder(
-        os.path.expanduser(args.mailfolder), args.toplevel, not args.noprogress
+def main() -> None:
+    cp = configparser.ConfigParser()
+    cp.read(os.path.expanduser("~/.details.ini"))
+    opt_username = cp.get("google", "username")
+    opt_password = cp.get("google_imap", "password")
+    opt_hostname = cp.get("google_imap", "hostname")
+    opt_port = cp.get("google_imap", "port")
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-if args.subcommand == "test":
-    imp.test()
+    parser.add_argument(
+        "--debug",
+        help="do you want to debug the script?",
+        default=False,
+        action="store_true",
+    )
+    parser.add_argument(
+        "--exit", help="exif after debug?", default=False, action="store_true"
+    )
+    parser.add_argument(
+        "--noprogress",
+        help="dont report progress",
+        default=False,
+        action="store_true",
+    )
+    subparsers = parser.add_subparsers(
+        title="subcommands",
+        dest="subcommand",
+    )
+    subparser_import = subparsers.add_parser(
+        "import",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    subparser_import.add_argument(
+        "--mailfolder", help="folder where the mail is", default="~/Mail"
+    )
+    subparser_import.add_argument(
+        "--toplevel",
+        help="tag to import",
+        default="imap_import",
+    )
+    subparsers.add_parser(
+        "test",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    subparser_rmdir = subparsers.add_parser(
+        "rmdir",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    subparser_rmdir.add_argument(
+        "--toplevel",
+        help="tag which to remove",
+        default="imap_import",
+    )
+    args = parser.parse_args()
+    if args.debug:
+        print("opt_username:", opt_username)
+        print("opt_password:", "****")
+        print("opt_hostname:", opt_hostname)
+        print("opt_port:", opt_port)
+        print(args)
+    if args.exit:
+        sys.exit(0)
+    imp = imap.imap.IMAP()
+    imp.connect(opt_hostname, opt_port)
+    imp.login(opt_username, opt_password)
+    if args.subcommand == "import":
+        imp.import_folder(
+            os.path.expanduser(args.mailfolder), args.toplevel, not args.noprogress
+        )
+    if args.subcommand == "test":
+        imp.test()
+    imp.logout()
 
-imp.logout()
+
+if __name__ == "__main__":
+    main()

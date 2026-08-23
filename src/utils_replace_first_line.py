@@ -9,22 +9,28 @@ import os.path
 import sys
 
 # command line usage...
-me = os.path.basename(sys.argv[0])
-if len(sys.argv) < 3:
-    print(f"usage: {me} [firstline] [file] ...", file=sys.stderr)
-    print("firstline should come with no newline")
-    sys.exit(1)
 
-replacement = sys.argv[1]
-for file in sys.argv[2:]:
-    new_file = file + ".tmp"
-    first = True
-    with open(file, "r") as old_stream, open(new_file, "w") as new_stream:
-        for line in old_stream:
-            if first:
-                new_stream.write(replacement + "\n")
-                first = False
-            else:
-                new_stream.write(line)
-    # atomic replace (rename overwrites the target on POSIX)
-    os.rename(new_file, file)
+
+def main() -> None:
+    me = os.path.basename(sys.argv[0])
+    if len(sys.argv) < 3:
+        print(f"usage: {me} [firstline] [file] ...", file=sys.stderr)
+        print("firstline should come with no newline")
+        sys.exit(1)
+    replacement = sys.argv[1]
+    for file in sys.argv[2:]:
+        new_file = file + ".tmp"
+        first = True
+        with open(file, "r") as old_stream, open(new_file, "w") as new_stream:
+            for line in old_stream:
+                if first:
+                    new_stream.write(replacement + "\n")
+                    first = False
+                else:
+                    new_stream.write(line)
+        # atomic replace (rename overwrites the target on POSIX)
+        os.rename(new_file, file)
+
+
+if __name__ == "__main__":
+    main()

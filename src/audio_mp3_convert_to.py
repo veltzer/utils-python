@@ -10,29 +10,34 @@ import os.path
 import subprocess
 import sys
 
-doRun = True
-doDebug = True
-doRedirect = False
 
-for filename in sys.argv[1:]:
-    assert os.path.isfile(filename)
-    base, suffix = os.path.splitext(filename)
-    if suffix == ".mp3":
-        print(f"skipping {filename}...")
-        continue
-    new_name = base + ".mp3"
-    args = [
-        "ffmpeg",
-        "-i",
-        filename,
-        new_name,
-    ]
-    if doDebug:
-        print(f"arguments are [{args}]")
-    if doRun:
-        if doRedirect:
-            subprocess.check_call(
-                args, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
-            )
-        else:
-            subprocess.check_call(args)
+def main() -> None:
+    doRun = True
+    doDebug = True
+    doRedirect = False
+    for filename in sys.argv[1:]:
+        assert os.path.isfile(filename)
+        base, suffix = os.path.splitext(filename)
+        if suffix == ".mp3":
+            print(f"skipping {filename}...")
+            continue
+        new_name = base + ".mp3"
+        args = [
+            "ffmpeg",
+            "-i",
+            filename,
+            new_name,
+        ]
+        if doDebug:
+            print(f"arguments are [{args}]")
+        if doRun:
+            if doRedirect:
+                subprocess.check_call(
+                    args, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
+                )
+            else:
+                subprocess.check_call(args)
+
+
+if __name__ == "__main__":
+    main()

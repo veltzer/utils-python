@@ -15,21 +15,27 @@ import os.path
 import sys
 import tempfile
 
-if len(sys.argv) != 1:
-    print(f"usage: {sys.argv[0]}", file=sys.stderr)
-    sys.exit(1)
-
 # this iterates in disk order
-file_list = [x for x in os.listdir(".") if os.path.isfile(x)]
-sorted_file_list = sorted(file_list)
-if file_list == sorted_file_list:
-    print("in this folder natural order is already sort order", file=sys.stderr)
-    sys.exit(0)
 # create a temporary directory
-with tempfile.TemporaryDirectory(dir=".") as tmpdir:
-    # move everything to the temp folder
-    for file in file_list:
-        os.rename(file, os.path.join(tmpdir, file))
-    # move back in sorted order
-    for file in sorted_file_list:
-        os.rename(os.path.join(tmpdir, file), file)
+
+
+def main() -> None:
+    if len(sys.argv) != 1:
+        print(f"usage: {sys.argv[0]}", file=sys.stderr)
+        sys.exit(1)
+    file_list = [x for x in os.listdir(".") if os.path.isfile(x)]
+    sorted_file_list = sorted(file_list)
+    if file_list == sorted_file_list:
+        print("in this folder natural order is already sort order", file=sys.stderr)
+        sys.exit(0)
+    with tempfile.TemporaryDirectory(dir=".") as tmpdir:
+        # move everything to the temp folder
+        for file in file_list:
+            os.rename(file, os.path.join(tmpdir, file))
+        # move back in sorted order
+        for file in sorted_file_list:
+            os.rename(os.path.join(tmpdir, file), file)
+
+
+if __name__ == "__main__":
+    main()

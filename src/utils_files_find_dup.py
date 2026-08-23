@@ -55,11 +55,16 @@ def get_user_choice(duplicates):
                 print(f"Deleted: {file}")
 
 
-if __name__ == "__main__":
-    current_directory = os.getcwd()
-    dups = find_duplicates(current_directory)
+def main() -> None:
+    if __name__ == "__main__":
+        current_directory = os.getcwd()
+        dups = find_duplicates(current_directory)
 
-    if dups:
-        get_user_choice(dups)
-    else:
-        print("No duplicate files found.")
+        if dups:
+            get_user_choice(dups)
+        else:
+            print("No duplicate files found.")
+
+
+if __name__ == "__main__":
+    main()

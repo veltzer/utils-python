@@ -104,20 +104,25 @@ def convert_tsv_to_yaml(input_file, output_file, array_columns_str=""):
     print(f"Successfully converted [{input_file}] to [{output_file}]")
 
 
+def main() -> None:
+    if __name__ == "__main__":
+        parser = argparse.ArgumentParser(
+            description="Converts a Tab-Separated Values (TSV) file to a YAML file.",
+            formatter_class=argparse.RawTextHelpFormatter
+        )
+        parser.add_argument("input_file", help="The path to the input TSV file.")
+        parser.add_argument("output_file", help="The path for the output YAML file.")
+        parser.add_argument(
+            "--array-columns",
+            dest="array_columns_str",
+            default="",
+            help="Optional. A comma-separated string of column headers to be treated as arrays (e.g., \"Genre,Tags\")."
+        )
+
+        args = parser.parse_args()
+
+        convert_tsv_to_yaml(args.input_file, args.output_file, args.array_columns_str)
+
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Converts a Tab-Separated Values (TSV) file to a YAML file.",
-        formatter_class=argparse.RawTextHelpFormatter
-    )
-    parser.add_argument("input_file", help="The path to the input TSV file.")
-    parser.add_argument("output_file", help="The path for the output YAML file.")
-    parser.add_argument(
-        "--array-columns",
-        dest="array_columns_str",
-        default="",
-        help="Optional. A comma-separated string of column headers to be treated as arrays (e.g., \"Genre,Tags\")."
-    )
-
-    args = parser.parse_args()
-
-    convert_tsv_to_yaml(args.input_file, args.output_file, args.array_columns_str)
+    main()

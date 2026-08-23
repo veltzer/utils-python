@@ -61,3 +61,7 @@ def main():
             subprocess.check_call(
                 args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
             )
+
+
+if __name__ == "__main__":
+    main()

@@ -27,7 +27,12 @@ def upgrade_module(module_name):
         print(f"Error upgrading {module_name}: {e}")
 
 
-if len(sys.argv) != 2:
-    print("usage: pip_upgrade [module_name]", file=sys.stderr)
-    sys.exit(1)
-upgrade_module(sys.argv[1])
+def main() -> None:
+    if len(sys.argv) != 2:
+        print("usage: pip_upgrade [module_name]", file=sys.stderr)
+        sys.exit(1)
+    upgrade_module(sys.argv[1])
+
+
+if __name__ == "__main__":
+    main()

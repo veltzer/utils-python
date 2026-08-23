@@ -33,30 +33,35 @@ def get_sinks():
                 yield int(mymatch.group(1))
 
 
-options = jack_pulse.config.getConfig()
-runfile = os.path.expanduser("~/.myjack_run")
-if options["do_midi_bridge"]:
-    with subprocess.Popen("a2jmidi_bridge") as p1, subprocess.Popen(
-        "j2amidi_bridge"
-    ) as p2, open(runfile, "w") as f:
-        f.write(str(p1.pid) + "\n")
-        f.write(str(p2.pid) + "\n")
-    if options["do_load_jack_module"]:
+def main() -> None:
+    options = jack_pulse.config.getConfig()
+    runfile = os.path.expanduser("~/.myjack_run")
+    if options["do_midi_bridge"]:
+        with subprocess.Popen("a2jmidi_bridge") as p1, subprocess.Popen(
+            "j2amidi_bridge"
+        ) as p2, open(runfile, "w") as f:
+            f.write(str(p1.pid) + "\n")
+            f.write(str(p2.pid) + "\n")
+        if options["do_load_jack_module"]:
+            subprocess.check_call(
+                ["pactl", "load-module", "module-jack-sink", "channels=2"],
+                stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+            )
+    if options["do_route_jack"]:
         subprocess.check_call(
-            ["pactl", "load-module", "module-jack-sink", "channels=2"],
+            ["pacmd", "set-default-sink", "jack_out"],
             stderr=subprocess.DEVNULL,
             stdout=subprocess.DEVNULL,
         )
-if options["do_route_jack"]:
-    subprocess.check_call(
-        ["pacmd", "set-default-sink", "jack_out"],
-        stderr=subprocess.DEVNULL,
-        stdout=subprocess.DEVNULL,
-    )
-if options["do_route_apps"]:
-    for index in get_sinks():
-        subprocess.check_call(
-            ["pacmd", "move-sink-input", str(index), "jack_out"],
-            stderr=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-        )
+    if options["do_route_apps"]:
+        for index in get_sinks():
+            subprocess.check_call(
+                ["pacmd", "move-sink-input", str(index), "jack_out"],
+                stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+            )
+
+
+if __name__ == "__main__":
+    main()

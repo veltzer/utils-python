@@ -9,5 +9,11 @@ To install, run: pip install pytz
 
 import pytz
 
-for tz in sorted(pytz.all_timezones):
-    print(tz)
+
+def main() -> None:
+    for tz in sorted(pytz.all_timezones):
+        print(tz)
+
+
+if __name__ == "__main__":
+    main()
