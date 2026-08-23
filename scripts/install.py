@@ -3,17 +3,11 @@
 """
 Install this repo into the user account using symlinks.
 
-This is the recovered "make install" target from the old (pydmt era) Makefile,
-which did exactly two things:
-
-    pymakehelper symlink_install --source_folder src --target_folder ~/.local/bin
-    pymakehelper symlink_install --source_folder python --target_folder $(LOCAL_PACKAGES)
-
-where LOCAL_PACKAGES is python3 -c 'import site; print(site.getusersitepackages())'.
-
-The scripts in "src" become commands in ~/.local/bin and the packages in
-"python" become importable packages, both as symlinks back into the git
-checkout, so editing a file here changes the installed version immediately.
+Everything lives under "src": the .py files there are standalone scripts and
+the directories there are support packages they import. The scripts become
+commands in ~/.local/bin and the packages become importable packages in the
+user site-packages folder, both as symlinks back into the git checkout, so
+editing a file here changes the installed version immediately.
 
 Old symlinks in the target folders that point back into this checkout are
 removed first, so files deleted from the repo do not linger as dead links.
@@ -26,7 +20,7 @@ import site
 import sys
 
 
-def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool) -> None:
+def unlink_stale(target_folder: str, source_folder: str, want_dirs: bool, doit: bool, debug: bool) -> None:
     """remove links in target_folder which point back into source_folder"""
     if not os.path.isdir(target_folder):
         return
@@ -35,6 +29,8 @@ def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool
         if not os.path.islink(full):
             continue
         if not os.path.realpath(full).startswith(source_folder):
+            continue
+        if os.path.isdir(os.path.realpath(full)) != want_dirs:
             continue
         if debug:
             print(f"unlinking [{full}]")
@@ -60,14 +56,18 @@ def do_install(source: str, target: str, doit: bool, debug: bool) -> None:
         os.symlink(source, target)
 
 
-def install(source_folder: str, target_folder: str, doit: bool, debug: bool) -> None:
-    """symlink every entry of source_folder into target_folder"""
+def install(source_folder: str, target_folder: str, want_dirs: bool, doit: bool, debug: bool) -> None:
+    """symlink entries of source_folder into target_folder
+
+    want_dirs selects which kind of entry to install: the directories in
+    src are packages, the files are scripts.
+    """
     source_folder = os.path.abspath(os.path.expanduser(source_folder))
     target_folder = os.path.abspath(os.path.expanduser(target_folder))
     if not os.path.isdir(source_folder):
         print(f"no such source folder [{source_folder}]", file=sys.stderr)
         sys.exit(1)
-    unlink_stale(target_folder, source_folder, doit, debug)
+    unlink_stale(target_folder, source_folder, want_dirs, doit, debug)
     if not os.path.isdir(target_folder):
         if debug:
             print(f"mkdir [{target_folder}]")
@@ -77,6 +77,8 @@ def install(source_folder: str, target_folder: str, doit: bool, debug: bool) -> 
         if entry in {"__init__.py", "__pycache__"}:
             continue
         source = os.path.join(source_folder, entry)
+        if os.path.isdir(source) != want_dirs:
+            continue
         do_install(source, os.path.join(target_folder, entry), doit, debug)
 
 
@@ -94,7 +96,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--source_packages",
-        default="python",
+        default="src",
         help="folder of python packages to install (default: %(default)s)",
     )
     parser.add_argument(
@@ -115,8 +117,8 @@ def main() -> None:
     args = parser.parse_args()
     doit = not args.dry_run
     debug = not args.quiet
-    install(args.source_scripts, args.target_scripts, doit, debug)
-    install(args.source_packages, args.target_packages, doit, debug)
+    install(args.source_scripts, args.target_scripts, False, doit, debug)
+    install(args.source_packages, args.target_packages, True, doit, debug)
 
 
 if __name__ == "__main__":
