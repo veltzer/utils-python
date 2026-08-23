@@ -27,7 +27,7 @@ Requirements:
 """
 
 import sys
-from datetime import timezone
+from datetime import UTC
 from typing import Any
 
 # dateutil is a powerful third-party library for parsing dates.
@@ -65,9 +65,9 @@ def parse_date_and_tz(date_string: str) -> tuple[str, str | None] | None:
     iana_timezone = TIMEZONE_MAP.get(original_tz_name, original_tz_name) if original_tz_name else None
 
     if dt_original.tzinfo is None:
-        dt_utc = dt_original.replace(tzinfo=timezone.utc)
+        dt_utc = dt_original.replace(tzinfo=UTC)
     else:
-        dt_utc = dt_original.astimezone(timezone.utc)
+        dt_utc = dt_original.astimezone(UTC)
 
     utc_string = dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 

@@ -4,12 +4,14 @@
 # This repo is not a distribution: it is standalone scripts under src/, plus
 # local support packages that sit beside them. There is nothing to build a
 # wheel from, hence `package = false` and no [build-system] table. The
-# [project] table exists only because uv requires name and version to resolve.
+# [project] table exists only because uv requires name, version and
+# requires-python to resolve.
 
 
 [project]
 name = "utils-python"
 version = "0.0.0"
+requires-python = ">=3.14"
 dependencies = [
     "chardet",
     "python-dateutil",
