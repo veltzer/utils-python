@@ -2,14 +2,12 @@
 PyYAML
 bsddb3
 chardet
-download
-imap
-jack_pulse
 jsonschema
+progressbar2
 python-dateutil
 python-pptx
 pytz
 referencing
 requests
-ruamel
+ruamel.yaml
 secretstorage
