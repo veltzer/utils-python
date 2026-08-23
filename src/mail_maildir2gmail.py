@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """Upload email messages from a list of Maildir to Google Mail."""
 

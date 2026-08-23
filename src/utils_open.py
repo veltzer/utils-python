@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 This is a wrapper for gnome-open(1) which does not pollute the screen.

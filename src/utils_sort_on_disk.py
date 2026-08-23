@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 this script sorts file on disk. it does so by moving them around so that the order of creation seems right.

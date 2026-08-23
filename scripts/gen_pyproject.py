@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """
 Generate pyproject.toml from the [dependencies] pip table in

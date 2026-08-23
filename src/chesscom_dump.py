@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Download every chess.com game for a user into one PGN. No auth, stdlib only."""
 import argparse
 import configparser
