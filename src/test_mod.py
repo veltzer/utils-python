@@ -92,7 +92,7 @@ def check_shebangs() -> list[str]:
 
 def check_deps_in_sync() -> list[str]:
     """pyproject.toml is generated, so its deps must match their source"""
-    source = os.path.join(ROOT, "rsconstruct.local.toml")
+    source = os.path.join(ROOT, "rsconstruct.toml")
     generated = os.path.join(ROOT, "pyproject.toml")
     for path in (source, generated):
         if not os.path.isfile(path):

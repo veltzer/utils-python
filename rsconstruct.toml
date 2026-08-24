@@ -1,36 +1,8 @@
-# rsconstruct configuration for this repository — shared defaults plus
-# repo-specific config (merged from the former rsconstruct.local.toml).
+# rsconstruct configuration for this repository.
 
 # ─── analyzers ───────────────────────────────────────────────────────────────
 
-[analyzer.tera]
-
-[analyzer.markdown]
-
 [analyzer.python]
-
-# ─── templating ──────────────────────────────────────────────────────────────
-
-# Convention: tera configs are Lua (config/*.lua). dep_auto entries are
-# silently skipped where absent. Repos still on config/*.py keep a
-# dep_inputs override in their local overlay until converted.
-[processor.tera]
-dep_auto = [
-	"config/project.lua",
-	"config/personal.lua",
-	"config/version.lua",
-	"config/github.lua",
-	"config/python.lua",
-	"config/shared.lua",
-]
-
-# ─── markdown ────────────────────────────────────────────────────────────────
-
-[processor.rumdl]
-src_dirs = ["src"]
-
-[processor.zspell]
-src_dirs = ["src"]
 
 # ─── python ──────────────────────────────────────────────────────────────────
 
@@ -50,27 +22,14 @@ exclude = ["download", "imap"]
 # not the distribution name.
 mapping = { ruamel = "ruamel.yaml", progressbar = "progressbar2" }
 
-# ─── shell ───────────────────────────────────────────────────────────────────
-
-[processor.shellcheck]
-src_dirs = ["scripts", "src"]
-args = ["--severity=error", "--shell=bash"]
-
-# ─── toml / yaml / json ──────────────────────────────────────────────────────
+# ─── toml ────────────────────────────────────────────────────────────────────
 
 [processor.taplo]
 src_dirs = ["."]
 
-[processor.htmlhint]
-src_dirs = ["src"]
+# ─── dependencies ────────────────────────────────────────────────────────────
 
-[processor.tidy]
-src_dirs = ["src"]
-
-# ─── merged from rsconstruct.local.toml ─────────────────────────────────────
-
-# Runtime deps so CI installs what the code imports (pylint/mypy resolve
-# them) -- the demos-cloud-aws pattern.
+# Runtime deps so CI installs what the code imports (pylint/mypy resolve them).
 [dependencies]
 pip = [
     "chardet",
@@ -97,5 +56,5 @@ pip = [
 # `uv sync` and CI install the same list. Never edit pyproject.toml by hand.
 [processor.script.gen_pyproject]
 command = "scripts/gen_pyproject.py"
-src_files = ["rsconstruct.local.toml"]
+src_files = ["rsconstruct.toml"]
 batch = true
