@@ -33,13 +33,6 @@ system = [
     "libdb-dev",
 ]
 
-# pyproject.toml is generated from the [dependencies] table above so that
-# `uv sync` and CI install the same list. Never edit pyproject.toml by hand.
-[processor.script.gen_pyproject]
-command = "scripts/gen_pyproject.py"
-src_files = ["rsconstruct.toml"]
-batch = true
-
 # lint the GitHub Actions workflow files with actionlint
 [processor.actionlint]
 src_dirs = [".github/workflows"]
