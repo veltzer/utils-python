@@ -15,13 +15,6 @@ src_dirs = ["src", "scripts"]
 [processor.mypy]
 src_dirs = ["src", "scripts"]
 
-[processor.requirements]
-src_dirs = ["src", "scripts"]
-exclude = ["download", "imap"]
-# `from ruamel.yaml import ...` scans as the top-level name `ruamel`, which is
-# not the distribution name.
-mapping = { ruamel = "ruamel.yaml", progressbar = "progressbar2" }
-
 # ─── toml ────────────────────────────────────────────────────────────────────
 
 [processor.taplo]
@@ -29,7 +22,8 @@ src_dirs = ["."]
 
 # ─── dependencies ────────────────────────────────────────────────────────────
 
-# Runtime deps so CI installs what the code imports (pylint/mypy resolve them).
+# Python dependencies come from pyproject.toml ([project].dependencies and
+# [dependency-groups]); `rsconstruct tools install-deps` reads both.
 [dependencies]
 # bsddb3 has no wheel: pip builds it from the sdist, and that build needs the
 # Berkeley DB headers (db.h, from libdb-dev). Without them CI dies in
@@ -37,26 +31,6 @@ src_dirs = ["."]
 # installed before pip, so the headers are in place when bsddb3 compiles.
 system = [
     "libdb-dev",
-]
-pip = [
-    "chardet",
-    "python-dateutil",
-    "PyGithub",
-    "jsonschema",
-    "python-pptx",
-    "progressbar2",
-    "pytz",
-    "referencing",
-    "requests",
-    "types-requests",
-    "ruamel.yaml",
-    "pyyaml",
-    "types-PyYAML",
-    "types-python-dateutil",
-    "types-jsonschema",
-    "types-pytz",
-    "bsddb3",
-    "secretstorage",
 ]
 
 # pyproject.toml is generated from the [dependencies] table above so that
