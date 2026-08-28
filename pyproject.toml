@@ -36,3 +36,20 @@ dependencies = [
 
 [tool.uv]
 package = false
+
+[tool.mypy]
+mypy_path = "src:python:scripts"
+explicit_package_bases = true
+namespace_packages = true
+
+# Third-party libraries without type stubs; `foo.*` also matches `foo` itself.
+[[tool.mypy.overrides]]
+module = [
+    "download.*",
+    "jsonschema.*",
+    "pptx.*",
+    "progressbar.*",
+    "ruamel.*",
+    "secretstorage.*",
+]
+ignore_missing_imports = true
