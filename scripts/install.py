@@ -9,8 +9,10 @@ commands in ~/.local/bin and the packages become importable packages in the
 user site-packages folder, both as symlinks back into the git checkout, so
 editing a file here changes the installed version immediately.
 
-Old symlinks in the target folders that point back into this checkout are
+Dead symlinks in the target folders that point back into this checkout are
 removed first, so files deleted from the repo do not linger as dead links.
+Links that are already correct are left untouched, so a rerun only reports
+what actually changed.
 """
 
 import argparse
@@ -20,8 +22,12 @@ import site
 import sys
 
 
-def unlink_stale(target_folder: str, source_folder: str, want_dirs: bool, doit: bool, debug: bool) -> None:
-    """remove links in target_folder which point back into source_folder"""
+def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool) -> None:
+    """remove dead links in target_folder which point back into source_folder
+
+    Live links are left in place; do_install checks each one and only touches
+    those that are wrong, so repeated runs are quiet no-ops.
+    """
     if not os.path.isdir(target_folder):
         return
     for filename in os.listdir(target_folder):
@@ -30,7 +36,7 @@ def unlink_stale(target_folder: str, source_folder: str, want_dirs: bool, doit: 
             continue
         if not os.path.realpath(full).startswith(source_folder):
             continue
-        if os.path.isdir(os.path.realpath(full)) != want_dirs:
+        if os.path.exists(full):
             continue
         if debug:
             print(f"unlinking [{full}]")
@@ -67,7 +73,7 @@ def install(source_folder: str, target_folder: str, want_dirs: bool, doit: bool,
     if not os.path.isdir(source_folder):
         print(f"no such source folder [{source_folder}]", file=sys.stderr)
         sys.exit(1)
-    unlink_stale(target_folder, source_folder, want_dirs, doit, debug)
+    unlink_stale(target_folder, source_folder, doit, debug)
     if not os.path.isdir(target_folder):
         if debug:
             print(f"mkdir [{target_folder}]")
