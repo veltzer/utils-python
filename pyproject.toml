@@ -15,6 +15,7 @@ version = "0.0.0"
 requires-python = ">=3.14"
 dependencies = [
     "chardet",
+    "google-api-python-client",
     "python-dateutil",
     "PyGithub",
     "jsonschema",
@@ -54,6 +55,8 @@ namespace_packages = true
 [[tool.mypy.overrides]]
 module = [
     "download.*",
+    "google.*",
+    "googleapiclient.*",
     "jsonschema.*",
     "pptx.*",
     "progressbar.*",
