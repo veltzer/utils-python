@@ -1325,11 +1325,6 @@ dependencies = [
     { name = "requests" },
     { name = "ruamel-yaml" },
     { name = "secretstorage" },
-    { name = "types-jsonschema" },
-    { name = "types-python-dateutil" },
-    { name = "types-pytz" },
-    { name = "types-pyyaml" },
-    { name = "types-requests" },
 ]
 
 [package.dev-dependencies]
@@ -1338,6 +1333,11 @@ dev = [
     { name = "pylint" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "types-jsonschema" },
+    { name = "types-python-dateutil" },
+    { name = "types-pytz" },
+    { name = "types-pyyaml" },
+    { name = "types-requests" },
 ]
 
 [package.metadata]
@@ -1356,11 +1356,6 @@ requires-dist = [
     { name = "requests" },
     { name = "ruamel-yaml" },
     { name = "secretstorage" },
-    { name = "types-jsonschema" },
-    { name = "types-python-dateutil" },
-    { name = "types-pytz" },
-    { name = "types-pyyaml" },
-    { name = "types-requests" },
 ]
 
 [package.metadata.requires-dev]
@@ -1369,6 +1364,11 @@ dev = [
     { name = "pylint" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "types-jsonschema" },
+    { name = "types-python-dateutil" },
+    { name = "types-pytz" },
+    { name = "types-pyyaml" },
+    { name = "types-requests" },
 ]
 
 [[package]]

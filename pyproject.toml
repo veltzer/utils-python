@@ -24,13 +24,8 @@ dependencies = [
     "pytz",
     "referencing",
     "requests",
-    "types-requests",
     "ruamel.yaml",
     "pyyaml",
-    "types-PyYAML",
-    "types-python-dateutil",
-    "types-jsonschema",
-    "types-pytz",
     "bsddb3",
     "secretstorage",
 ]
@@ -41,6 +36,11 @@ dev = [
     "pylint",
     "pytest",
     "ruff",
+    "types-jsonschema",
+    "types-python-dateutil",
+    "types-pytz",
+    "types-PyYAML",
+    "types-requests",
 ]
 
 [tool.uv]
