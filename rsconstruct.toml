@@ -1,5 +1,9 @@
 # rsconstruct configuration for this repository.
 
+[build]
+# src_dirs entries name directories; "." (the whole tree) is a config error
+reject_dot_src_dirs = true
+
 # ─── analyzers ───────────────────────────────────────────────────────────────
 
 [analyzer.python]
@@ -18,7 +22,7 @@ src_dirs = ["src", "scripts"]
 # ─── toml ────────────────────────────────────────────────────────────────────
 
 [processor.taplo]
-src_dirs = ["."]
+src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 
 # ─── dependencies ────────────────────────────────────────────────────────────
 
