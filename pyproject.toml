@@ -28,6 +28,7 @@ dependencies = [
     "pyyaml",
     "bsddb3",
     "secretstorage",
+    "google-auth",
 ]
 
 [dependency-groups]
