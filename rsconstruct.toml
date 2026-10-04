@@ -10,16 +10,16 @@ reject_dot_src_dirs = true
 
 # ─── python ──────────────────────────────────────────────────────────────────
 
-[processor.ruff]
+[processor.checker.ruff]
 src_dirs = ["src", "scripts"]
 
 
-[processor.mypy]
+[processor.checker.mypy]
 src_dirs = ["src", "scripts"]
 
 # ─── toml ────────────────────────────────────────────────────────────────────
 
-[processor.taplo]
+[processor.checker.taplo]
 src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 
 # ─── dependencies ────────────────────────────────────────────────────────────
@@ -36,10 +36,10 @@ system = [
 ]
 
 # lint the GitHub Actions workflow files with actionlint
-[processor.actionlint]
+[processor.checker.actionlint]
 src_dirs = [".github/workflows"]
 
 # ─── markdown ────────────────────────────────────────────────────────────────
 
-[processor.rumdl]
+[processor.checker.rumdl]
 src_files = ["README.md"]
