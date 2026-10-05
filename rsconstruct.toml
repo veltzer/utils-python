@@ -25,7 +25,7 @@ src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 # ─── dependencies ────────────────────────────────────────────────────────────
 
 # Python dependencies come from pyproject.toml ([project].dependencies and
-# [dependency-groups]); `rsconstruct tools install-deps` reads both.
+# [dependency-groups]); `rsconstruct tool install-deps` reads both.
 [dependencies]
 # bsddb3 has no wheel: pip builds it from the sdist, and that build needs the
 # Berkeley DB headers (db.h, from libdb-dev). Without them CI dies in
