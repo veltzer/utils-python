@@ -26,14 +26,6 @@ src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 
 # Python dependencies come from pyproject.toml ([project].dependencies and
 # [dependency-groups]); `rsconstruct tool install-deps` reads both.
-[dependencies]
-# bsddb3 has no wheel: pip builds it from the sdist, and that build needs the
-# Berkeley DB headers (db.h, from libdb-dev). Without them CI dies in
-# `setup.py egg_info` with metadata-generation-failed. System packages are
-# installed before pip, so the headers are in place when bsddb3 compiles.
-system = [
-    "libdb-dev",
-]
 
 # lint the GitHub Actions workflow files with actionlint
 [processor.checker.iactionlint]

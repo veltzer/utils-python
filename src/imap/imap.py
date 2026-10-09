@@ -61,14 +61,14 @@ def decode_header(value):
 
 
 def parsedate(value):
+    if not value:
+        return None
     value = decode_header(value)
     value = email.utils.parsedate_tz(value)
-    timestamp = time.mktime(tuple(value[:9]))
-    if value[9]:
-        timestamp -= time.timezone + value[9]
-        if time.daylight:
-            timestamp += 3600
-    return time.localtime(timestamp)
+    if value is not None:
+        timestamp = email.utils.mktime_tz(value)
+        return time.localtime(timestamp)
+    return None
 
 # imap functions
 

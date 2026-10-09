@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
 """
-check_keyring.py
+keyring_check.py
 
 Tests whether the default GNOME keyring (Secret Service collection) is
 unlocked, locked-but-openable-with-empty-password, or locked with a real
 password.
 
 Requirements:
-    sudo apt install python3-secretstorage
+    secretstorage (installed via uv)
 
 Usage:
-    python3 check_keyring.py
+    python3 keyring_check.py
 
 Exit codes:
     0 - keyring is accessible without a password prompt
@@ -24,8 +24,8 @@ import sys
 try:
     import secretstorage
 except ImportError:
-    print("ERROR: python3-secretstorage is not installed.")
-    print("Install it with: sudo apt install python3-secretstorage")
+    print("ERROR: secretstorage is not installed.")
+    print("Install it with: uv sync")
     sys.exit(2)
 
 

@@ -90,23 +90,6 @@ def check_shebangs() -> list[str]:
     return problems
 
 
-def check_deps_in_sync() -> list[str]:
-    """pyproject.toml is generated, so its deps must match their source"""
-    source = os.path.join(ROOT, "rsconstruct.toml")
-    generated = os.path.join(ROOT, "pyproject.toml")
-    for path in (source, generated):
-        if not os.path.isfile(path):
-            return [f"missing [{os.path.relpath(path, ROOT)}]"]
-    with open(source, "rb") as stream:
-        want = tomllib.load(stream).get("dependencies", {}).get("pip", [])
-    with open(generated, "rb") as stream:
-        got = tomllib.load(stream).get("project", {}).get("dependencies", [])
-    if want != got:
-        missing = sorted(set(want) - set(got))
-        extra = sorted(set(got) - set(want))
-        return [f"pyproject.toml is stale: missing {missing}, extra {extra}"]
-    return []
-
 
 def check_scripts_parse() -> list[str]:
     """every script must at least be syntactically valid python
@@ -174,5 +157,4 @@ CHECKS = [
     ("shebangs are consistent", check_shebangs),
     ("scripts are valid python", check_scripts_parse),
     ("imports are installed", check_imports_resolve),
-    ("pyproject.toml matches its source", check_deps_in_sync),
 ]

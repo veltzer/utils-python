@@ -4,9 +4,8 @@
 Smoke test for this repo.
 
 Runs the shallow checks in test_mod.py: that the packages under src still
-import, that the scripts all carry the same shebang and parse, that everything
-they import is installed, and that the generated pyproject.toml still matches
-the dependency list it is generated from.
+import, that the scripts all carry the same shebang and parse, and that everything
+they import is installed.
 
 It answers "is the layout intact", not "is any given script correct". Exits
 non-zero when a check fails, so it is usable from a build.

@@ -18,7 +18,7 @@ import os.path
 import re
 import subprocess
 
-import jack_pulse.config  # type: ignore
+import jack_pulse.config
 
 
 def get_sinks():

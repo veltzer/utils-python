@@ -7,7 +7,7 @@ audio_jack_post_stop
 import os
 import os.path
 
-import jack_pulse.config  # type: ignore
+import jack_pulse.config
 
 
 def main() -> None:

@@ -30,7 +30,7 @@ def get(url, file):
             maxval = file_size // block_sz
             if file_size % block_sz > 0:
                 maxval += 1
-            pbar = progressbar.ProgressBar(maxval=maxval)
+            pbar = progressbar.ProgressBar(max_value=maxval)
             pbar.start()
         else:
             pbar = None

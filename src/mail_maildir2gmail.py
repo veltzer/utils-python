@@ -3,6 +3,7 @@
 """Upload email messages from a list of Maildir to Google Mail."""
 
 import argparse
+import dbm
 import email
 import email.header
 import email.utils
@@ -10,8 +11,6 @@ import os
 import sys
 import time
 from imaplib import IMAP4_SSL
-
-import bsddb3  # type: ignore
 
 
 class Gmail:
@@ -72,16 +71,16 @@ class Gmail:
         self.mark_appended(filename)
 
     def check_appended(self, filename):
-        return os.path.basename(filename) in self.database
+        return os.path.basename(filename).encode("utf-8") in self.database
 
     def mark_appended(self, filename):
-        self.database[os.path.basename(filename)] = "1"
+        self.database[os.path.basename(filename).encode("utf-8")] = b"1"
 
     @property
     def database(self):
         if self.__database is None:
             dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + ".db")
-            self.__database = bsddb3.btopen(dbname, "w")
+            self.__database = dbm.open(dbname, "c")  # noqa: SIM115
         return self.__database
 
     @property
@@ -136,12 +135,11 @@ def main():
         "--folder", help="Folder to store the emails", default="All Mail"
     )
     parser.add_argument(
-        "--password", help="Password to log into Gmail", default="password"
-    )
-    parser.add_argument(
         "--username", help="Username to log into Gamil", default="username"
     )
     args, dirnames = parser.parse_known_args()
+    import getpass
+    args.password = getpass.getpass("Password: ")
 
     gmail = Gmail(args)
     for dirname in dirnames:
@@ -156,16 +154,14 @@ def main():
 
 
 def parsedate(value):
+    if not value:
+        return None
     value = decode_header(value)
     value = email.utils.parsedate_tz(value)
-    if isinstance(value, tuple):
-        timestamp = time.mktime(tuple(value[:9]))
-        if value[9]:
-            timestamp -= time.timezone + value[9]
-            if time.daylight:
-                timestamp += 3600
+    if value is not None:
+        timestamp = email.utils.mktime_tz(value)
         return time.localtime(timestamp)
-    raise ValueError(f"value {value} is bad")
+    return None
 
 
 if __name__ == "__main__":

@@ -17,7 +17,6 @@ dependencies = [
     "chardet",
     "google-api-python-client",
     "python-dateutil",
-    "PyGithub",
     "jsonschema",
     "python-pptx",
     "progressbar2",
@@ -26,7 +25,6 @@ dependencies = [
     "requests",
     "ruamel.yaml",
     "pyyaml",
-    "bsddb3",
     "secretstorage",
     "google-auth",
 ]
@@ -47,14 +45,13 @@ dev = [
 package = false
 
 [tool.mypy]
-mypy_path = "src:python:scripts"
+mypy_path = "src:scripts"
 explicit_package_bases = true
 namespace_packages = true
 
 # Third-party libraries without type stubs; `foo.*` also matches `foo` itself.
 [[tool.mypy.overrides]]
 module = [
-    "download.*",
     "google.*",
     "googleapiclient.*",
     "jsonschema.*",
