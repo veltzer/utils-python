@@ -9,12 +9,6 @@ Restructuring the flow of this app:
 - recursively traverse the folder given.
 - any file which is an email copy to gmail.
 
-TODO:
-- do real progress report - find number of files to be imported
-    in advance and report on progress.
-- do watchdog for connections hanging.
-- make an rmdir executable to remove a directory on the imap server.
-    (make it in this executable using subcommands of argparser).
 """
 
 import argparse

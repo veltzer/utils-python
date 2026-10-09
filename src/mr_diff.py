@@ -3,12 +3,7 @@
 """
 This script prints repos which are not registered in mr.
 
-It will first read the projects registered in ~/.mrconfig
-
-TODO:
-- make this script query github and bitbucket and do the
-reverse check as well: that all the repos that I have
-there are here too.
+It will first read the projects registered in ~/.mrconfig.
 """
 
 import os.path

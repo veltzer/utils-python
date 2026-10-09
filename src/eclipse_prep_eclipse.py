@@ -2,15 +2,7 @@
 
 """
 This script preps eclipse for my use by installing cdt and vrapper
-on it
-
-TODO:
-- check if the features we install exist before we install them.
-This will save time (see my eclipse notes about how to do that)
-and only install the feature if it is missing.
-- the name "neon" is hardcoded in this script. find out how to find
-the version of a specific eclipse without running it and remove
-this hardcoding.
+on it.
 """
 
 import os
@@ -51,7 +43,7 @@ def main():
             "-application",
             "org.eclipse.equinox.p2.director",
             "-repository",
-            "http://download.eclipse.org/releases/neon/",
+            "http://download.eclipse.org/releases/latest/",
             "-installIU",
             feature + ".feature.group",
         ]

@@ -15,7 +15,6 @@ import os
 import os.path
 import subprocess
 import sys
-import tomllib
 
 # realpath, not abspath: these scripts are installed as symlinks into
 # ~/.local/bin, and the checks are about the checkout they point back into.

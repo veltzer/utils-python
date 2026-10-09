@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 
 """
-This script creates a playlist from the current folder
-
-TODO:
-if a filename has special characters in it then the playlist will not work.
-Try to find a way around that...
+This script creates a playlist from the current folder.
 """
 
 import os
@@ -44,7 +40,7 @@ def main() -> None:
                 continue
             filenames.append(full)
     filenames = sorted(filenames, key=os.path.basename)
-    with open("playlist.m3u", "w") as f:
+    with open("playlist.m3u8", "w", encoding="utf-8") as f:
         for filename in filenames:
             f.write(filename)
             f.write("\n")

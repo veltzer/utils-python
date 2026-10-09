@@ -9,9 +9,6 @@ http://docs.fedoraproject.org/en-US/Fedora_Draft_Documentation/0.1/html/Musician
 https://github.com/jackaudio/jackaudio.github.com/wiki/WalkThrough_User_PulseOnJack
 http://trac.jackaudio.org/wiki/WalkThrough/User/PulseOnJack
 http://superuser.com/questions/210617/how-to-automatically-set-pulseaudio-default-sink-to-remote-server-at-boot-ubun
-
-TODO:
-- make a post about it...
 """
 
 import os.path

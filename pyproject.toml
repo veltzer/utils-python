@@ -45,7 +45,7 @@ dev = [
 package = false
 
 [tool.mypy]
-mypy_path = "src:scripts"
+mypy_path = "src:scripts:tests"
 explicit_package_bases = true
 namespace_packages = true
 

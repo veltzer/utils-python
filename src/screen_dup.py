@@ -9,17 +9,6 @@ I mainly use this script for teaching...
 Another way to configure this is to use the KDE -> System Settings -> Display
 and Monitor -> Display Configuration. It used to be useless but now KDE
 has improved.
-
-TODO
-- add a feature by which I could supply a desired resolution and it
-will be picked if supported by the two screens.
-- blog about this (I dont think people know how to do this
-programmatically...)
-
-NOTES:
-- If you want to see something similar, look at /usr/bin/xrandr-tool.
-- I found that the "crtc" parameter to xrandr was essential
-(did not work without it).
 """
 
 import re
