@@ -12,8 +12,7 @@ import sys
 
 import yaml
 
-home = os.getenv("HOME")
-assert home is not None, "HOME environment variable is not set"
+home = os.path.expanduser("~")
 print_all = True
 stop_on_fail = False
 

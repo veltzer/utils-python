@@ -23,16 +23,16 @@ def main() -> None:
         if not os.path.isfile(file):
             print(f"{sys.argv[0]}: cannot find or access file [{file}]")
             sys.exit(1)
-    md5 = None
+    file_hash = None
     for file in files:
         with open(file, "rb") as f:
-            new_md5 = hashlib.md5(f.read())
-        if md5 is not None:
-            if new_md5.hexdigest() != md5.hexdigest():
+            new_hash = hashlib.sha256(f.read())
+        if file_hash is not None:
+            if new_hash.hexdigest() != file_hash.hexdigest():
                 print("they are different")
                 sys.exit(1)
         else:
-            md5 = new_md5
+            file_hash = new_hash
     print("they are the same")
 
 

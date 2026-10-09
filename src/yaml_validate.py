@@ -117,7 +117,8 @@ def main():
         else:
             # Default, non-debug behavior
             validate(instance=data, schema=schema)
-        assert check_order_recursively(data, schema, yaml_file, debug=args.debug)
+        if not check_order_recursively(data, schema, yaml_file, debug=args.debug):
+            raise ValueError(f"Order check failed for {yaml_file}")
 
 
 if __name__ == "__main__":

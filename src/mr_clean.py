@@ -12,8 +12,7 @@ import subprocess
 
 
 def main() -> None:
-    home = os.getenv("HOME")
-    assert home is not None
+    home = os.path.expanduser("~")
     projects = []
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
