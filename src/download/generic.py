@@ -18,11 +18,11 @@ def get(url, file):
     while doing it
     """
     print(f"downloading [{url}]...")
-    if os.path.dirname(file) != '':
+    if os.path.dirname(file) != "":
         os.makedirs(os.path.dirname(file), exist_ok=True)
     with open(file, "wb") as f, urllib.request.urlopen(url) as u:
         meta = u.info()
-        content_length = meta['Content-Length']
+        content_length = meta["Content-Length"]
         file_size = int(content_length) if content_length else None
         block_sz = 8192
 

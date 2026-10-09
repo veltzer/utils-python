@@ -18,8 +18,8 @@ def get(link, file):
     c = re.compile(ted_re)
     m = c.findall(web_content)
     if len(m) == 0:
-        raise ValueError('no match')
+        raise ValueError("no match")
     if len(m) != 1:
-        raise ValueError('too many matches')
+        raise ValueError("too many matches")
     url = m[0]
     download.generic.get(url, file)
