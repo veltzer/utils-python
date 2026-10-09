@@ -106,7 +106,7 @@ def decode_header(value):
                 v = v.decode()
             else:
                 v = v.decode(c)
-        except (UnicodeError, LookupError):
+        except UnicodeError, LookupError:
             v = v.decode("iso-8859-1")
         result.append(v)
     return " ".join(result)
@@ -125,7 +125,7 @@ def encode_unicode(value):
 
 
 def log(message):
-    t=time.strftime("%H:%M:%S")
+    t = time.strftime("%H:%M:%S")
     print(f"[{t}]: {encode_unicode(message)}")
 
 
@@ -139,6 +139,7 @@ def main():
     )
     args, dirnames = parser.parse_known_args()
     import getpass
+
     args.password = getpass.getpass("Password: ")
 
     gmail = Gmail(args)

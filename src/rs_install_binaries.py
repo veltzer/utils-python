@@ -21,7 +21,11 @@ from pathlib import Path
 
 def main() -> None:
     install_dir_env = os.environ.get("RS_INSTALL_DIR")
-    install_dir = Path(install_dir_env) if install_dir_env else Path.home() / "install" / "binaries"
+    install_dir = (
+        Path(install_dir_env)
+        if install_dir_env
+        else Path.home() / "install" / "binaries"
+    )
     owner = "veltzer"
 
     tools = [
@@ -85,8 +89,20 @@ def main() -> None:
         for tool in tools:
             # Get the released version
             res = subprocess.run(
-                ["gh", "release", "view", "--repo", f"{owner}/{tool}", "--json", "tagName", "--jq", ".tagName"],
-                capture_output=True, text=True, check=False
+                [
+                    "gh",
+                    "release",
+                    "view",
+                    "--repo",
+                    f"{owner}/{tool}",
+                    "--json",
+                    "tagName",
+                    "--jq",
+                    ".tagName",
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
             )
             if res.returncode != 0:
                 print(f"{tool}: no release found, skipping", file=sys.stderr)
@@ -101,7 +117,7 @@ def main() -> None:
             local_version = ""
 
             if target.is_file() and os.access(target, os.X_OK) and marker.is_file():
-                local_version = marker.read_text(encoding='utf-8').strip()
+                local_version = marker.read_text(encoding="utf-8").strip()
 
             if local_version == remote_version:
                 print(f"{tool}: {local_version} is up to date")
@@ -113,27 +129,43 @@ def main() -> None:
 
             download_path = tmp_path / tool
             dl_res = subprocess.run(
-                ["gh", "release", "download", tag, "--repo", f"{owner}/{tool}", 
-                 "--pattern", asset, "--output", str(download_path), "--clobber"],
-                check=False
+                [
+                    "gh",
+                    "release",
+                    "download",
+                    tag,
+                    "--repo",
+                    f"{owner}/{tool}",
+                    "--pattern",
+                    asset,
+                    "--output",
+                    str(download_path),
+                    "--clobber",
+                ],
+                check=False,
             )
             if dl_res.returncode != 0:
-                print(f"{tool}: could not download asset [{asset}] from [{tag}]", file=sys.stderr)
+                print(
+                    f"{tool}: could not download asset [{asset}] from [{tag}]",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
             download_path.chmod(0o755)
 
             # Move and write marker
             shutil.move(str(download_path), str(target))
-            marker.write_text(remote_version + "\n", encoding='utf-8')
+            marker.write_text(remote_version + "\n", encoding="utf-8")
 
             if not local_version:
                 installed += 1
             else:
                 updated += 1
 
-    print(f"{installed} installed, {updated} updated, {current} already current, {missing} without a release")
+    print(
+        f"{installed} installed, {updated} updated, {current} already current, {missing} without a release"
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

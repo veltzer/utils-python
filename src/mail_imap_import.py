@@ -24,6 +24,7 @@ def main() -> None:
     cp.read(os.path.expanduser("~/.details.ini"))
     opt_username = cp.get("google", "username")
     import getpass
+
     opt_password = getpass.getpass("Password: ")
     opt_hostname = cp.get("google_imap", "hostname")
     opt_port = cp.get("google_imap", "port")

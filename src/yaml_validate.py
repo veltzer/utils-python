@@ -13,8 +13,8 @@ from referencing import Registry, Resource
 from referencing.jsonschema import DRAFT7
 from ruamel.yaml import YAML
 
-ROOT="root"
-SCHEMA_CACHE : dict[str, None] = {}
+ROOT = "root"
+SCHEMA_CACHE: dict[str, None] = {}
 DEBUG = True
 
 
@@ -23,7 +23,7 @@ def load_yaml_with_order(file_path):
     Loads a YAML file while preserving the order of keys.
     Uses ruamel.yaml for this purpose.
     """
-    yaml = YAML(typ="rt") # rt stands for round-trip, preserving order and comments
+    yaml = YAML(typ="rt")  # rt stands for round-trip, preserving order and comments
     with open(file_path, encoding="UTF8") as f:
         return yaml.load(f)
 
@@ -39,6 +39,7 @@ def fetch_schema(schema_url):
     schema = response.json()
     SCHEMA_CACHE[schema_url] = schema
     return schema
+
 
 def check_order_recursively(data, schema, filename, path="", debug=False):
     """
@@ -57,7 +58,9 @@ def check_order_recursively(data, schema, filename, path="", debug=False):
             actual_keys = list(data.keys())
             ordered_actual_keys = [key for key in expected_order if key in actual_keys]
 
-            if ordered_actual_keys != [key for key in actual_keys if key in expected_order]:
+            if ordered_actual_keys != [
+                key for key in actual_keys if key in expected_order
+            ]:
                 line_num = data.lc.line if hasattr(data, "lc") else "N/A"
                 print(f"Error in filename: {filename}:{line_num}")
                 print(f"Property Order FAILED at path: {path}")
@@ -70,14 +73,18 @@ def check_order_recursively(data, schema, filename, path="", debug=False):
             sub_schema = schema.get("properties", {}).get(key)
             if sub_schema:
                 new_path = f"{path}.{key}" if path else key
-                if not check_order_recursively(value, sub_schema, filename, new_path, debug):
+                if not check_order_recursively(
+                    value, sub_schema, filename, new_path, debug
+                ):
                     is_valid = False
     elif isinstance(data, list):
         item_schema = schema.get("items")
         if item_schema:
             for i, item in enumerate(data):
                 new_path = f"{path}[{i}]"
-                if not check_order_recursively(item, item_schema, filename, new_path, debug):
+                if not check_order_recursively(
+                    item, item_schema, filename, new_path, debug
+                ):
                     is_valid = False
     return is_valid
 
@@ -89,8 +96,14 @@ def main():
     parser = argparse.ArgumentParser(
         description="Validate a YAML file against a JSON schema, including property order."
     )
-    parser.add_argument("yaml_files", nargs="+", help="One or more YAML files to validate.")
-    parser.add_argument("--debug", action="store_true", help="Enable verbose debug output for resolver and order checking.")
+    parser.add_argument(
+        "yaml_files", nargs="+", help="One or more YAML files to validate."
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable verbose debug output for resolver and order checking.",
+    )
     args = parser.parse_args()
 
     for yaml_file in args.yaml_files:
@@ -110,7 +123,9 @@ def main():
 
             # The schema itself is a resource, and we define a retriever for any *other* URIs
             resource = Resource.from_contents(schema, default_specification=DRAFT7)
-            registry = Registry(retrieve=logging_retriever).with_resource(schema_url, resource)
+            registry = Registry(retrieve=logging_retriever).with_resource(
+                schema_url, resource
+            )
             # Use a specific validator class with our custom registry
             validator = Draft7Validator(schema, registry=registry)
             validator.validate(data)

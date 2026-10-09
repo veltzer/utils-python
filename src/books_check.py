@@ -16,11 +16,30 @@ def main() -> None:
         sys.exit(1)
 
     folders = ["by_name", "by_topic"]
-    
+
     allowed_extensions = {
-        ".chm", ".tar.bz2", ".pdf", ".ps", ".html", ".dvi", ".lit", ".doc", 
-        ".djvu", ".zip", ".rtf", ".txt", ".pdb", ".mht", ".rar", ".jpg", 
-        ".js", ".gif", ".epub", ".mobi", ".nfo", ".tar.xz"
+        ".chm",
+        ".tar.bz2",
+        ".pdf",
+        ".ps",
+        ".html",
+        ".dvi",
+        ".lit",
+        ".doc",
+        ".djvu",
+        ".zip",
+        ".rtf",
+        ".txt",
+        ".pdb",
+        ".mht",
+        ".rar",
+        ".jpg",
+        ".js",
+        ".gif",
+        ".epub",
+        ".mobi",
+        ".nfo",
+        ".tar.xz",
     }
 
     print("EXTENSION PROBLEMS")
@@ -36,7 +55,11 @@ def main() -> None:
             for f in files:
                 p = Path(root) / f
                 # Extract double extensions for tar.bz2 and tar.xz
-                suffix = "".join(p.suffixes[-2:]) if p.name.endswith(".tar.bz2") or p.name.endswith(".tar.xz") else p.suffix
+                suffix = (
+                    "".join(p.suffixes[-2:])
+                    if p.name.endswith(".tar.bz2") or p.name.endswith(".tar.xz")
+                    else p.suffix
+                )
                 if suffix not in allowed_extensions:
                     print(p)
 
@@ -111,5 +134,5 @@ def main() -> None:
                     print(p)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

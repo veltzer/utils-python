@@ -34,9 +34,11 @@ def main() -> None:
     options = jack_pulse.config.getConfig()
     runfile = os.path.expanduser("~/.myjack_run")
     if options["do_midi_bridge"]:
-        with subprocess.Popen("a2jmidi_bridge") as p1, subprocess.Popen(
-            "j2amidi_bridge"
-        ) as p2, open(runfile, "w") as f:
+        with (
+            subprocess.Popen("a2jmidi_bridge") as p1,
+            subprocess.Popen("j2amidi_bridge") as p2,
+            open(runfile, "w") as f,
+        ):
             f.write(str(p1.pid) + "\n")
             f.write(str(p2.pid) + "\n")
         if options["do_load_jack_module"]:

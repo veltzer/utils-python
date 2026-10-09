@@ -19,13 +19,15 @@ def main() -> None:
     # -n: no swap file will be used
     # -i NONE: no .viminfo file updates
     editor = ["vim", "-n", "-i", "NONE", "-M"]
-    
+
     key = ""
     encrypt_sh = Path.home() / ".config" / "encrypt.sh"
     if encrypt_sh.exists():
         res = subprocess.run(
-            ["bash", "-c", f"source {encrypt_sh} && echo $key"], 
-            capture_output=True, text=True, check=False
+            ["bash", "-c", f"source {encrypt_sh} && echo $key"],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         if res.returncode == 0:
             key = res.stdout.strip()
@@ -53,7 +55,9 @@ def main() -> None:
         print(f"{filename} isn't readable.")
         sys.exit(2)
 
-    tmp_fd, tmp_path = tempfile.mkstemp(prefix=f"{my_name}.", dir=str(Path.home() / "tmp"))
+    tmp_fd, tmp_path = tempfile.mkstemp(
+        prefix=f"{my_name}.", dir=str(Path.home() / "tmp")
+    )
     os.close(tmp_fd)
 
     try:

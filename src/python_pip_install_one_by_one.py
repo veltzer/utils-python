@@ -11,7 +11,9 @@ def main():
     with open("requirements.thawed.txt", "r") as f:
         for line in f:
             package = line.strip()
-            if package and not package.startswith("#"):  # Ignore empty lines and comments
+            if package and not package.startswith(
+                "#"
+            ):  # Ignore empty lines and comments
                 print(f"Installing: [{package}]")
                 subprocess.run(["pip", "install", package], check=True)
                 # You could add a pause here if needed

@@ -25,9 +25,17 @@ def gh_api(endpoint, method="GET"):
 def get_all_workflow_runs(repo):
     """Fetch all workflow runs as (id, conclusion) pairs, newest first."""
     result = subprocess.run(
-        ["gh", "api", f"repos/{repo}/actions/runs", "--paginate",
-         "--jq", r'.workflow_runs[] | "\(.id) \(.conclusion // "")"'],
-        capture_output=True, text=True, check=True,
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/actions/runs",
+            "--paginate",
+            "--jq",
+            r'.workflow_runs[] | "\(.id) \(.conclusion // "")"',
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     runs = []
     for line in result.stdout.strip().splitlines():
@@ -49,7 +57,9 @@ def get_repo():
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return result.stdout.strip()
 
@@ -67,7 +77,13 @@ def main():
 
     kept = []
     to_delete = []
-    failed_conclusions = {"failure", "cancelled", "timed_out", "startup_failure", "action_required"}
+    failed_conclusions = {
+        "failure",
+        "cancelled",
+        "timed_out",
+        "startup_failure",
+        "action_required",
+    }
     for run_id, conclusion in runs:
         if conclusion in failed_conclusions:
             to_delete.append(run_id)

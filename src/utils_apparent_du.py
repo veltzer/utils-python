@@ -9,9 +9,9 @@ smaller than a block count for what they claim to be.
 
 usage: apparent-du [-q] [-a] [DIR...]
 
-	-q  quiet: print only the totals, skip the per-file listing
-	-a  include non-regular files (symlinks, fifos, sockets) in the listing
-	    and in the size total; by default only regular files are summed
+        -q  quiet: print only the totals, skip the per-file listing
+        -a  include non-regular files (symlinks, fifos, sockets) in the listing
+            and in the size total; by default only regular files are summed
 
 With no DIR, the current directory is used. Hidden files are included.
 Symlinks are never followed; their own size is counted only with -a.
@@ -45,16 +45,16 @@ def main() -> None:
 
     while args:
         arg = args[0]
-        if arg == '-q':
+        if arg == "-q":
             quiet = True
             args.pop(0)
-        elif arg == '-a':
+        elif arg == "-a":
             all_types = True
             args.pop(0)
-        elif arg == '-h':
+        elif arg == "-h":
             print(__doc__.strip())
             sys.exit(0)
-        elif arg.startswith('-'):
+        elif arg.startswith("-"):
             print(f"apparent-du: invalid option -- {arg}\n", file=sys.stderr)
             print(__doc__.strip(), file=sys.stderr)
             sys.exit(2)
@@ -90,7 +90,9 @@ def main() -> None:
                 except OSError:
                     continue
 
-                is_dir = sum([1 for _ in dnames if _ == name]) > 0  # True if entry is in dnames
+                is_dir = (
+                    sum([1 for _ in dnames if _ == name]) > 0
+                )  # True if entry is in dnames
                 is_symlink = os.path.islink(path)
 
                 if is_dir and not is_symlink:
@@ -107,12 +109,12 @@ def main() -> None:
 
         if not quiet and count > 0:
             print()
-        
+
         print(f"{d}: {human(total)} apparent in {count} files, {dir_count} directories")
         print(f"  exact: {total} bytes")
 
     sys.exit(status)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

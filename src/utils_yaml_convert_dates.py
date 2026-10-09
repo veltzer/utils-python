@@ -58,11 +58,15 @@ def parse_date_and_tz(date_string: str) -> tuple[str, str | None] | None:
 
     try:
         dt_original = parse(date_string)
-    except (ParserError, ValueError):
+    except ParserError, ValueError:
         return None
 
     original_tz_name = dt_original.tzname()
-    iana_timezone = TIMEZONE_MAP.get(original_tz_name, original_tz_name) if original_tz_name else None
+    iana_timezone = (
+        TIMEZONE_MAP.get(original_tz_name, original_tz_name)
+        if original_tz_name
+        else None
+    )
 
     if dt_original.tzinfo is None:
         dt_utc = dt_original.replace(tzinfo=UTC)
@@ -104,7 +108,9 @@ def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
                         data[key] = DoubleQuotedScalarString(utc_string)
                         # Insert the new "timezone" key after the current key
                         if iana_timezone:
-                            data.insert(i + 1, tz_key, DoubleQuotedScalarString(iana_timezone))  # type: ignore[attr-defined]
+                            data.insert(  # type: ignore[attr-defined]
+                                i + 1, tz_key, DoubleQuotedScalarString(iana_timezone)
+                            )
             else:
                 # If the key doesnt match, recurse into the value.
                 data[key] = find_and_convert_dates_in_data(data[key], key_name)
@@ -162,7 +168,9 @@ def main() -> None:
     key_to_find = sys.argv[1]
     files_to_process = sys.argv[2:]
 
-    print(f"--- Starting YAML Date Conversion for key [{key_to_find}] in {len(files_to_process)} file(s) ---")
+    print(
+        f"--- Starting YAML Date Conversion for key [{key_to_find}] in {len(files_to_process)} file(s) ---"
+    )
 
     for file_path in files_to_process:
         process_yaml_file(file_path, key_to_find)

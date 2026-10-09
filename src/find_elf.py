@@ -14,7 +14,7 @@ def is_elf_file(filepath):
         with open(filepath, "rb") as f:
             magic = f.read(4)
             return magic == b"\x7fELF"
-    except (OSError, PermissionError):
+    except OSError, PermissionError:
         return False
 
 

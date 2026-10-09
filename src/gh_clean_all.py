@@ -30,7 +30,9 @@ def get_repo():
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return result.stdout.strip()
 
@@ -39,7 +41,9 @@ def get_all_deployments(repo):
     """Fetch all deployment IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/deployments", "--paginate", "--jq", ".[].id"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
@@ -47,9 +51,16 @@ def get_all_deployments(repo):
 def get_latest_deployment_state(repo, deployment_id):
     """Return the most recent status state for a deployment, or None if none exist."""
     result = subprocess.run(
-        ["gh", "api", f"repos/{repo}/deployments/{deployment_id}/statuses",
-         "--jq", ".[0].state"],
-        capture_output=True, text=True, check=True,
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/deployments/{deployment_id}/statuses",
+            "--jq",
+            ".[0].state",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     state = result.stdout.strip()
     return state or None
@@ -73,7 +84,9 @@ def get_all_release_ids(repo):
     """Fetch all release IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/releases", "--paginate", "--jq", ".[].id"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
@@ -86,9 +99,17 @@ def delete_release(repo, release_id):
 def get_all_workflow_runs(repo):
     """Fetch all workflow runs as (id, conclusion) pairs, newest first."""
     result = subprocess.run(
-        ["gh", "api", f"repos/{repo}/actions/runs", "--paginate",
-         "--jq", r'.workflow_runs[] | "\(.id) \(.conclusion // "")"'],
-        capture_output=True, text=True, check=True,
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/actions/runs",
+            "--paginate",
+            "--jq",
+            r'.workflow_runs[] | "\(.id) \(.conclusion // "")"',
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     runs = []
     for line in result.stdout.strip().splitlines():
@@ -163,7 +184,13 @@ def clean_workflows(repo, keep):
 
     kept = []
     to_delete = []
-    failed_conclusions = {"failure", "cancelled", "timed_out", "startup_failure", "action_required"}
+    failed_conclusions = {
+        "failure",
+        "cancelled",
+        "timed_out",
+        "startup_failure",
+        "action_required",
+    }
     for run_id, conclusion in runs:
         if conclusion in failed_conclusions:
             to_delete.append(run_id)

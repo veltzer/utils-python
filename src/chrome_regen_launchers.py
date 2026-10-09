@@ -24,17 +24,25 @@ def main() -> None:
 
     if not local_state.is_file():
         print(f"error: {local_state} not found", file=sys.stderr)
-        print("is Google Chrome installed and has it been run at least once?", file=sys.stderr)
+        print(
+            "is Google Chrome installed and has it been run at least once?",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     if not Path(chrome_bin).is_file() or not os.access(chrome_bin, os.X_OK):
         print(f"warning: {chrome_bin} not found or not executable", file=sys.stderr)
-        print("the launchers will still be written but may not work until Chrome is installed", file=sys.stderr)
+        print(
+            "the launchers will still be written but may not work until Chrome is installed",
+            file=sys.stderr,
+        )
 
     apps_dir.mkdir(parents=True, exist_ok=True)
 
     # Collect launchers we previously generated (matched by our prefix).
-    stale_ours = [f for f in apps_dir.glob(f"{launcher_prefix}*.desktop") if f.is_file()]
+    stale_ours = [
+        f for f in apps_dir.glob(f"{launcher_prefix}*.desktop") if f.is_file()
+    ]
 
     # Also collect user-local launchers that point at google-chrome with a
     # --profile-directory flag and weren't written by us — stale hand-rolled ones.
@@ -43,15 +51,19 @@ def main() -> None:
         if not f.is_file() or f.name.startswith(launcher_prefix):
             continue
         try:
-            content = f.read_text(encoding='utf-8')
-            if re.search(r'^Exec=.*google-chrome.*--profile-directory=', content, flags=re.MULTILINE):
+            content = f.read_text(encoding="utf-8")
+            if re.search(
+                r"^Exec=.*google-chrome.*--profile-directory=",
+                content,
+                flags=re.MULTILINE,
+            ):
                 stale_other.append(f)
         except Exception:  # noqa: BLE001, S110
             pass
 
     # Read profiles
     try:
-        with open(local_state, 'r', encoding='utf-8') as file_handle:
+        with open(local_state, "r", encoding="utf-8") as file_handle:
             data = json.load(file_handle)
     except Exception as e:  # noqa: BLE001  # noqa: BLE001
         print(f"error reading {local_state}: {e}", file=sys.stderr)
@@ -71,9 +83,9 @@ def main() -> None:
         email = info.get("user_name", "")
 
         # Sanitize display name
-        slug = re.sub(r'[^a-z0-9-]', '', name.lower().replace(' ', '-'))
+        slug = re.sub(r"[^a-z0-9-]", "", name.lower().replace(" ", "-"))
         if not slug:
-            slug = re.sub(r'[^a-z0-9-]', '', directory.lower().replace(' ', '-'))
+            slug = re.sub(r"[^a-z0-9-]", "", directory.lower().replace(" ", "-"))
 
         out_path = apps_dir / f"{launcher_prefix}{slug}.desktop"
         wanted_paths.add(out_path)
@@ -107,7 +119,7 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
 
         if out_path.is_file():
             try:
-                current_content = out_path.read_text(encoding='utf-8')
+                current_content = out_path.read_text(encoding="utf-8")
                 if current_content == desired:
                     print(f"  unchanged {out_path}  ({directory} → {name})")
                     unchanged += 1
@@ -115,7 +127,7 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
             except Exception:  # noqa: BLE001, S110
                 pass
 
-        out_path.write_text(desired, encoding='utf-8')
+        out_path.write_text(desired, encoding="utf-8")
         print(f"  wrote {out_path}  ({directory} → {name})")
         wrote += 1
 
@@ -125,20 +137,34 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
             print(f"removing stale per-profile launcher: {f}")
             f.unlink()
             removed += 1
-    
+
     for f in stale_other:
         print(f"removing stale hand-rolled per-profile launcher: {f}")
         f.unlink()
         removed += 1
 
     if wrote > 0 or removed > 0:
-        if subprocess.run(["command", "-v", "update-desktop-database"], capture_output=True, shell=True).returncode == 0:  # noqa: PLW1510
+        if (
+            subprocess.run(  # noqa: PLW1510
+                ["command", "-v", "update-desktop-database"],
+                capture_output=True,
+                shell=True,
+            ).returncode
+            == 0
+        ):
             print("\nrefreshing desktop database...")
-            subprocess.run(["update-desktop-database", str(apps_dir)], stderr=subprocess.DEVNULL)  # noqa: PLW1510
-        print(f"\ndone. wrote {wrote}, unchanged {unchanged}, removed {removed} launcher(s) in {apps_dir}.")
+            subprocess.run(  # noqa: PLW1510
+                ["update-desktop-database", str(apps_dir)], stderr=subprocess.DEVNULL
+            )
+        print(
+            f"\ndone. wrote {wrote}, unchanged {unchanged}, removed {removed} launcher(s) in {apps_dir}."
+        )
         print("they should appear in KRunner / Kickoff within a few seconds.")
     else:
-        print(f"\nno changes were needed — {unchanged} launcher(s) already up to date in {apps_dir}.")
+        print(
+            f"\nno changes were needed — {unchanged} launcher(s) already up to date in {apps_dir}."
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

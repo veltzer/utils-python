@@ -19,14 +19,17 @@ def main() -> None:
         print(f"movie is {movie}")
         print(f"srt is {srt}")
         print(f"outfile is {outfile}")
-    
+
     # Use ffmpeg to burn the subtitles into the video stream
     # using the subtitles filter.
     args = [
         "ffmpeg",
-        "-i", movie,
-        "-vf", f"subtitles={srt}",
-        "-c:a", "copy",
+        "-i",
+        movie,
+        "-vf",
+        f"subtitles={srt}",
+        "-c:a",
+        "copy",
         outfile,
     ]
     subprocess.check_call(args)

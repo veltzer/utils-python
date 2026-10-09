@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Download every chess.com game for a user into one PGN. No auth, stdlib only."""
+
 import argparse
 import configparser
 import json
@@ -27,13 +28,13 @@ def get(url, retries=5):
             if e.code == 404:
                 return None
             if e.code in (429, 503):
-                wait = int(e.headers.get("Retry-After", 2 ** i))
+                wait = int(e.headers.get("Retry-After", 2**i))
                 print(f"  {e.code}, sleeping {wait}s", file=sys.stderr)
                 time.sleep(wait)
                 continue
             raise
-        except (urllib.error.URLError, TimeoutError):
-            time.sleep(2 ** i)
+        except urllib.error.URLError, TimeoutError:
+            time.sleep(2**i)
     raise RuntimeError(f"gave up on {url}")
 
 
@@ -53,10 +54,13 @@ def main():
     # optional: falls back to the config file, so the common case is bare
     p.add_argument("username", nargs="?", default=None)
     p.add_argument("-o", "--output", default=None)
-    p.add_argument("-c", "--cache", default=cfg.get("cache", "pgn_cache"),
-                   help="per-month cache dir")
-    p.add_argument("--delay", type=float,
-                   default=float(cfg.get("delay", 0.5)))
+    p.add_argument(
+        "-c",
+        "--cache",
+        default=cfg.get("cache", "pgn_cache"),
+        help="per-month cache dir",
+    )
+    p.add_argument("--delay", type=float, default=float(cfg.get("delay", 0.5)))
     a = p.parse_args()
 
     # CLI wins over config; config exists so the username need not be retyped
@@ -84,19 +88,22 @@ def main():
 
     # a wrong-but-real username is the common failure: it fetches fine and
     # yields almost nothing. Say whose account this is before downloading.
-    who = ", ".join(
-        str(profile[k]) for k in ("name", "location") if profile.get(k)
+    who = ", ".join(str(profile[k]) for k in ("name", "location") if profile.get(k))
+    print(
+        f"{user} -> {profile.get('url', '?')}" + (f" ({who})" if who else ""),
+        file=sys.stderr,
     )
-    print(f"{user} -> {profile.get('url', '?')}" + (f" ({who})" if who else ""),
-          file=sys.stderr)
     print(f"{len(archives)} monthly archives", file=sys.stderr)
     if len(archives) < 3:
-        print(f"WARNING: only {len(archives)} archive month(s). If you expected "
-              f"more, check the username above is really yours.", file=sys.stderr)
+        print(
+            f"WARNING: only {len(archives)} archive month(s). If you expected "
+            f"more, check the username above is really yours.",
+            file=sys.stderr,
+        )
 
     current = archives[-1] if archives else None
     for url in archives:
-        ym = "-".join(url.split("/")[-2:])          # 2026-08
+        ym = "-".join(url.split("/")[-2:])  # 2026-08
         path = os.path.join(a.cache, ym + ".pgn")
         # never trust the cache for the in-progress month
         if os.path.exists(path) and url != current:
@@ -120,7 +127,10 @@ def main():
 
     with open(out, "rb") as f:
         games = f.read().count(b"[Event ")
-    print(f"wrote {out}: {games} games, {os.path.getsize(out)/1e6:.1f} MB", file=sys.stderr)
+    print(
+        f"wrote {out}: {games} games, {os.path.getsize(out) / 1e6:.1f} MB",
+        file=sys.stderr,
+    )
 
 
 if __name__ == "__main__":

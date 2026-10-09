@@ -25,7 +25,7 @@ def main() -> None:
                     content = f.read()
                     if pattern in content:
                         print(f"{full}")
-            except (UnicodeDecodeError, PermissionError):
+            except UnicodeDecodeError, PermissionError:
                 pass
 
 

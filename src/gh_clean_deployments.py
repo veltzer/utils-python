@@ -29,7 +29,9 @@ def get_all_deployments(repo):
     """Fetch all deployment IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/deployments", "--paginate", "--jq", ".[].id"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
@@ -37,9 +39,16 @@ def get_all_deployments(repo):
 def get_latest_deployment_state(repo, deployment_id):
     """Return the most recent status state for a deployment, or None if none exist."""
     result = subprocess.run(
-        ["gh", "api", f"repos/{repo}/deployments/{deployment_id}/statuses",
-         "--jq", ".[0].state"],
-        capture_output=True, text=True, check=True,
+        [
+            "gh",
+            "api",
+            f"repos/{repo}/deployments/{deployment_id}/statuses",
+            "--jq",
+            ".[0].state",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
     )
     state = result.stdout.strip()
     return state or None
@@ -63,7 +72,9 @@ def get_repo():
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return result.stdout.strip()
 

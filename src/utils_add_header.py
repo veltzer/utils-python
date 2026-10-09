@@ -18,7 +18,7 @@ def add_header_to_file(filename):
     base_name = os.path.splitext(os.path.basename(filename))[0]
 
     # Create the header text
-    header = f"\"\"\" {base_name}.py \"\"\"\n\n"
+    header = f'""" {base_name}.py """\n\n'
 
     # Check if file exists
     if not os.path.exists(filename):
@@ -30,7 +30,7 @@ def add_header_to_file(filename):
         content = file.read()
 
     # Check if the file already begins with triple quotes
-    if content.lstrip().startswith("\"\"\""):
+    if content.lstrip().startswith('"""'):
         print(f"File [{filename}] already begins with triple quotes. Skipping.")
         return True
 

@@ -18,7 +18,7 @@ import re
 import sys
 
 
-def extract_mermaid_diagrams(mermaid_folder:str, file_path:str):
+def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
     with open(file_path, "r") as file:
         content = file.read()
 
@@ -47,7 +47,7 @@ def extract_mermaid_diagrams(mermaid_folder:str, file_path:str):
 
         # Create .mmd file
         mmd_filename = f"{num}.mmd"
-        with open(os.path.join(mermaid_folder,mmd_filename), "w") as mmd_file:
+        with open(os.path.join(mermaid_folder, mmd_filename), "w") as mmd_file:
             mmd_file.write(diagram)
 
         # Replace the diagram with a link in the original content

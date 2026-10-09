@@ -42,7 +42,7 @@ def main():
                                         printedFiles.add(full)
                                 else:
                                     print(f"{full}, {num}: {line[:-1]}")
-                except (UnicodeDecodeError, PermissionError):
+                except UnicodeDecodeError, PermissionError:
                     pass
 
 

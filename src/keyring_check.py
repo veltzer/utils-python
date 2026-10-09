@@ -48,8 +48,7 @@ def main() -> int:
 
     if not collection.is_locked():
         print("Status: ALREADY UNLOCKED")
-        print("(Either it has no password, or PAM/the session already "
-              "unlocked it.)")
+        print("(Either it has no password, or PAM/the session already unlocked it.)")
         return 0
 
     print("Status: locked — attempting to unlock...")
@@ -71,8 +70,7 @@ def main() -> int:
         return 1
 
     print("Status: UNLOCKED successfully without a password prompt.")
-    print("(Keyring password is empty, or PAM provided the password "
-          "transparently.)")
+    print("(Keyring password is empty, or PAM provided the password transparently.)")
     return 0
 
 

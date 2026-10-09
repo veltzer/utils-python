@@ -21,7 +21,9 @@ def upgrade_module(module_name):
         return
 
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", module_name])
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", "--upgrade", module_name]
+        )
         print(f"{module_name} has been upgraded.")
     except subprocess.CalledProcessError as e:
         print(f"Error upgrading {module_name}: {e}")

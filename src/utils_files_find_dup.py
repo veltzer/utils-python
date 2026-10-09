@@ -26,7 +26,7 @@ def find_duplicates(directory):
             filepath = os.path.join(root, filename)
             try:
                 checksum = calculate_checksum(filepath)
-            except (OSError, PermissionError):
+            except OSError, PermissionError:
                 continue
             checksum_map[checksum].append(filepath)
     return {k: v for k, v in checksum_map.items() if len(v) > 1}
@@ -41,7 +41,9 @@ def get_user_choice(duplicates):
 
         while True:
             try:
-                choice = int(input("Enter the number of the file to keep (or 0 to keep all): "))
+                choice = int(
+                    input("Enter the number of the file to keep (or 0 to keep all): ")
+                )
                 if 0 <= choice <= len(files):
                     break
                 print("Invalid choice. Please enter a number between 0 and", len(files))

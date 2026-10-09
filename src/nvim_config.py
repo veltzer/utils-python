@@ -26,7 +26,10 @@ def check_requirements() -> None:
     missing_requirements = False
 
     if not shutil.which("nvim"):
-        print_color("red", "Error: Neovim is not installed. Please install Neovim 0.8.0+ (0.9+ recommended).")
+        print_color(
+            "red",
+            "Error: Neovim is not installed. Please install Neovim 0.8.0+ (0.9+ recommended).",
+        )
         missing_requirements = True
 
     if not shutil.which("git"):
@@ -39,14 +42,16 @@ def check_requirements() -> None:
 
 def setup_lazyvim() -> None:
     print_color("yellow", "This script will set up LazyVim for Neovim.")
-    print_color("yellow", "It will backup your existing Neovim configuration if it exists.")
-    
+    print_color(
+        "yellow", "It will backup your existing Neovim configuration if it exists."
+    )
+
     try:
         reply = input("Do you want to proceed? (y/n): ").strip().lower()
     except EOFError:
         reply = ""
-        
-    if reply != 'y':
+
+    if reply != "y":
         print_color("yellow", "Setup cancelled.")
         sys.exit(0)
 
@@ -66,7 +71,7 @@ def setup_lazyvim() -> None:
         home / ".local" / "state" / "nvim",
         home / ".cache" / "nvim",
     ]
-    
+
     for d in dirs_to_backup:
         if d.is_dir():
             print_color("yellow", f"Backing up {d}...")
@@ -75,7 +80,10 @@ def setup_lazyvim() -> None:
 
     # Clone LazyVim starter
     print_color("green", "Cloning LazyVim starter...")
-    subprocess.run(["git", "clone", "https://github.com/LazyVim/starter", str(nvim_config)], check=False)
+    subprocess.run(
+        ["git", "clone", "https://github.com/LazyVim/starter", str(nvim_config)],
+        check=False,
+    )
 
     # Remove .git folder
     git_folder = nvim_config / ".git"
@@ -93,5 +101,5 @@ def main() -> None:
     setup_lazyvim()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

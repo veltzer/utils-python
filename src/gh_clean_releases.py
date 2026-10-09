@@ -26,7 +26,9 @@ def get_all_release_ids(repo):
     """Fetch all release IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/releases", "--paginate", "--jq", ".[].id"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
@@ -40,7 +42,9 @@ def get_repo():
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
-        capture_output=True, text=True, check=True,
+        capture_output=True,
+        text=True,
+        check=True,
     )
     return result.stdout.strip()
 

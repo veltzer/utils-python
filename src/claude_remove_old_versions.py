@@ -32,19 +32,25 @@ from pathlib import Path
 
 
 def get_version_tuple(v_str: str) -> tuple:
-    return tuple(map(int, v_str.split('.')))
+    return tuple(map(int, v_str.split(".")))
 
 
 def get_size(path: Path) -> str:
-    res = subprocess.run(["du", "-sh", str(path)], capture_output=True, text=True, check=False)
+    res = subprocess.run(
+        ["du", "-sh", str(path)], capture_output=True, text=True, check=False
+    )
     if res.returncode == 0:
-        return res.stdout.split('\t')[0]
+        return res.stdout.split("\t")[0]
     return "unknown"
 
 
 def main() -> None:
     versions_dir_env = os.environ.get("CLAUDE_VERSIONS_DIR")
-    versions_dir = Path(versions_dir_env) if versions_dir_env else Path.home() / ".local" / "share" / "claude" / "versions"
+    versions_dir = (
+        Path(versions_dir_env)
+        if versions_dir_env
+        else Path.home() / ".local" / "share" / "claude" / "versions"
+    )
     dry_run = os.environ.get("DRY_RUN", "0") == "1"
 
     if not versions_dir.is_dir():
@@ -52,7 +58,7 @@ def main() -> None:
         sys.exit(1)
 
     versions = []
-    version_pattern = re.compile(r'^[0-9]+\.[0-9]+\.[0-9]+$')
+    version_pattern = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
     for p in versions_dir.iterdir():
         if p.is_dir() and version_pattern.match(p.name):
             versions.append(p.name)
@@ -64,7 +70,7 @@ def main() -> None:
     versions.sort(key=get_version_tuple)
 
     keep = set()
-    
+
     links_to_check = [Path.home() / ".local" / "bin" / "claude"]
     claude_path = shutil.which("claude")
     if claude_path:
@@ -76,7 +82,7 @@ def main() -> None:
             target = link.resolve()
             if target.parent == resolved_versions_dir:
                 keep.add(target.name)
-                
+
     keep.add(versions[-1])
 
     print(f"keeping: {' '.join(sorted(keep))}")
@@ -100,5 +106,5 @@ def main() -> None:
         print(f"total size now: {get_size(versions_dir)}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -34,8 +34,20 @@ def main() -> None:
     # We do not create the final output file directly because it will
     # have root ownership and we want a file with the user's ownership.
     print(f"creating [{target_etc}]...")
-    subprocess.run(["sudo", "tar", "--create", "--bzip2", "--absolute-names", "--file", str(tmp_etc), "/etc"], check=True)
-    
+    subprocess.run(
+        [
+            "sudo",
+            "tar",
+            "--create",
+            "--bzip2",
+            "--absolute-names",
+            "--file",
+            str(tmp_etc),
+            "/etc",
+        ],
+        check=True,
+    )
+
     shutil.copy(str(tmp_etc), str(target_etc))
     subprocess.run(["sudo", "rm", str(tmp_etc)], check=True)
 
@@ -47,7 +59,9 @@ def main() -> None:
     print(f"creating [{target_alternatives}]...")
     with open(target_alternatives, "w", encoding="utf-8") as f:
         # Note: Fixed a bug from the original bash script where it redirected to dpkg_selections
-        subprocess.run(["update-alternatives", "--get-selections"], stdout=f, check=True)
+        subprocess.run(
+            ["update-alternatives", "--get-selections"], stdout=f, check=True
+        )
 
 
 if __name__ == "__main__":

@@ -31,9 +31,11 @@ POLICY_WIKI = False
 POLICY_ISSUES = True
 POLICY_PROJECTS = False
 
+
 def die(msg: str) -> None:
     print(msg, file=sys.stderr)
     sys.exit(1)
+
 
 def find_lua() -> str:
     for cmd in ["lua5.4", "lua"]:
@@ -43,6 +45,7 @@ def find_lua() -> str:
     die("lua is not installed")
     return ""
 
+
 def lua_scalar(lua_bin: str, file_path: str, field: str) -> str:
     script = f"""
         local f, d = "{file_path}", "{field}"
@@ -51,8 +54,11 @@ def lua_scalar(lua_bin: str, file_path: str, field: str) -> str:
         local v = _G[d]
         if v ~= nil then io.write(tostring(v)) end
     """
-    res = subprocess.run([lua_bin, "-e", script], capture_output=True, text=True)  # noqa: PLW1510
+    res = subprocess.run(  # noqa: PLW1510
+        [lua_bin, "-e", script], capture_output=True, text=True
+    )
     return res.stdout.strip()
+
 
 def lua_keywords(lua_bin: str, file_path: str) -> list[str]:
     script = f"""
@@ -63,8 +69,11 @@ def lua_keywords(lua_bin: str, file_path: str) -> list[str]:
         table.sort(KEYWORDS)
         for _, k in ipairs(KEYWORDS) do print(k) end
     """
-    res = subprocess.run([lua_bin, "-e", script], capture_output=True, text=True)  # noqa: PLW1510
+    res = subprocess.run(  # noqa: PLW1510
+        [lua_bin, "-e", script], capture_output=True, text=True
+    )
     return [line.strip() for line in res.stdout.splitlines() if line.strip()]
+
 
 def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
     lua_file = os.path.join(dir_path, "config", "project.lua")
@@ -83,8 +92,18 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
     want_desc = lua_scalar(lua_bin, lua_file, "DESCRIPTION_SHORT")
     if want_desc:
         res = subprocess.run(  # noqa: PLW1510
-            ["gh", "repo", "view", repo, "--json", "description", "--jq", ".description // \"\""],
-            capture_output=True, text=True
+            [
+                "gh",
+                "repo",
+                "view",
+                repo,
+                "--json",
+                "description",
+                "--jq",
+                '.description // ""',
+            ],
+            capture_output=True,
+            text=True,
         )
         if res.returncode == 0:
             have_desc = res.stdout.strip()
@@ -93,14 +112,27 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 print(f"  local:  {want_desc}")
                 print(f"  github: {have_desc}")
                 if not dry_run:
-                    subprocess.run(["gh", "repo", "edit", repo, "--description", want_desc], stdout=subprocess.DEVNULL)  # noqa: PLW1510
+                    subprocess.run(  # noqa: PLW1510
+                        ["gh", "repo", "edit", repo, "--description", want_desc],
+                        stdout=subprocess.DEVNULL,
+                    )
 
     # --- topics ---
     want_topics = set(lua_keywords(lua_bin, lua_file))
     if want_topics:
         res = subprocess.run(  # noqa: PLW1510
-            ["gh", "repo", "view", repo, "--json", "repositoryTopics", "--jq", "[.repositoryTopics[].name]"],
-            capture_output=True, text=True
+            [
+                "gh",
+                "repo",
+                "view",
+                repo,
+                "--json",
+                "repositoryTopics",
+                "--jq",
+                "[.repositoryTopics[].name]",
+            ],
+            capture_output=True,
+            text=True,
         )
         if res.returncode == 0:
             try:
@@ -108,24 +140,35 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 have_topics = set(have_topics_list)
             except json.JSONDecodeError:
                 have_topics = set()
-            
+
             if want_topics != have_topics:
                 print(f"{name}: topics")
                 print(f"  local:  {' '.join(sorted(want_topics))}")
                 print(f"  github: {' '.join(sorted(have_topics))}")
                 if not dry_run:
                     args = []
-                    for t in (have_topics - want_topics):
+                    for t in have_topics - want_topics:
                         args.extend(["--remove-topic", t])
-                    for t in (want_topics - have_topics):
+                    for t in want_topics - have_topics:
                         args.extend(["--add-topic", t])
                     if args:
-                        subprocess.run(["gh", "repo", "edit", repo] + args, stdout=subprocess.DEVNULL)  # noqa: PLW1510
+                        subprocess.run(  # noqa: PLW1510
+                            ["gh", "repo", "edit", repo] + args,
+                            stdout=subprocess.DEVNULL,
+                        )
 
     # --- feature policy ---
     res = subprocess.run(  # noqa: PLW1510
-        ["gh", "repo", "view", repo, "--json", "hasWikiEnabled,hasIssuesEnabled,hasProjectsEnabled"],
-        capture_output=True, text=True
+        [
+            "gh",
+            "repo",
+            "view",
+            repo,
+            "--json",
+            "hasWikiEnabled,hasIssuesEnabled,hasProjectsEnabled",
+        ],
+        capture_output=True,
+        text=True,
     )
     if res.returncode == 0:
         try:
@@ -133,7 +176,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
             have_wiki = features.get("hasWikiEnabled", False)
             have_issues = features.get("hasIssuesEnabled", False)
             have_projects = features.get("hasProjectsEnabled", False)
-            
+
             fargs = []
             if have_wiki != POLICY_WIKI:
                 fargs.append(f"--enable-wiki={str(POLICY_WIKI).lower()}")
@@ -141,24 +184,45 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 fargs.append(f"--enable-issues={str(POLICY_ISSUES).lower()}")
             if have_projects != POLICY_PROJECTS:
                 fargs.append(f"--enable-projects={str(POLICY_PROJECTS).lower()}")
-                
+
             if fargs:
                 print(f"{name}: features")
-                print(f"  want:   wiki={str(POLICY_WIKI).lower()} issues={str(POLICY_ISSUES).lower()} projects={str(POLICY_PROJECTS).lower()}")
-                print(f"  github: wiki={str(have_wiki).lower()} issues={str(have_issues).lower()} projects={str(have_projects).lower()}")
+                print(
+                    f"  want:   wiki={str(POLICY_WIKI).lower()} issues={str(POLICY_ISSUES).lower()} projects={str(POLICY_PROJECTS).lower()}"
+                )
+                print(
+                    f"  github: wiki={str(have_wiki).lower()} issues={str(have_issues).lower()} projects={str(have_projects).lower()}"
+                )
                 if not dry_run:
-                    subprocess.run(["gh", "repo", "edit", repo] + fargs, stdout=subprocess.DEVNULL)  # noqa: PLW1510
+                    subprocess.run(  # noqa: PLW1510
+                        ["gh", "repo", "edit", repo] + fargs, stdout=subprocess.DEVNULL
+                    )
         except json.JSONDecodeError:
             pass
 
+
 def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
     res = subprocess.run(  # noqa: PLW1510
-        ["gh", "repo", "list", owner, "--no-archived", "--source", "--limit", "1000", "--json", "name", "--jq", ".[].name"],
-        capture_output=True, text=True
+        [
+            "gh",
+            "repo",
+            "list",
+            owner,
+            "--no-archived",
+            "--source",
+            "--limit",
+            "1000",
+            "--json",
+            "name",
+            "--jq",
+            ".[].name",
+        ],
+        capture_output=True,
+        text=True,
     )
     if res.returncode != 0:
         die("failed to list repositories")
-    
+
     for name in res.stdout.splitlines():
         name = name.strip()
         if not name:
@@ -169,6 +233,7 @@ def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
             continue
         sync_one(dir_path, owner, lua_bin, dry_run)
 
+
 def main() -> None:
     owner = os.environ.get("GH_OWNER", "veltzer")
     dry_run = os.environ.get("DRY_RUN", "0") == "1"
@@ -176,11 +241,11 @@ def main() -> None:
 
     if not shutil.which("gh"):
         die("gh is not installed")
-    
+
     lua_bin = find_lua()
 
     args = sys.argv[1:]
-    
+
     if not args or (len(args) == 1 and args[0] == "--all"):
         sync_all(owner, base_dir, lua_bin, dry_run)
     else:
@@ -189,6 +254,7 @@ def main() -> None:
                 sync_all(owner, base_dir, lua_bin, dry_run)
             else:
                 sync_one(d, owner, lua_bin, dry_run)
+
 
 if __name__ == "__main__":
     main()

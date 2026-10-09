@@ -19,15 +19,17 @@ def main() -> None:
     # -n: no swap file will be used
     # -i NONE: no .viminfo file updates
     editor = ["vim", "-n", "-i", "NONE"]
-    
+
     # Read key from ~/.config/encrypt.sh if it exists (assuming it exports key=... or just sets it)
     key = ""
     encrypt_sh = Path.home() / ".config" / "encrypt.sh"
     if encrypt_sh.exists():
         # Source the bash script and echo the key
         res = subprocess.run(
-            ["bash", "-c", f"source {encrypt_sh} && echo $key"], 
-            capture_output=True, text=True, check=False
+            ["bash", "-c", f"source {encrypt_sh} && echo $key"],
+            capture_output=True,
+            text=True,
+            check=False,
         )
         if res.returncode == 0:
             key = res.stdout.strip()
@@ -58,7 +60,9 @@ def main() -> None:
         print(f"{filename} isn't writable.")
         sys.exit(3)
 
-    tmp_fd, tmp_path = tempfile.mkstemp(prefix=f"{my_name}.", dir=str(Path.home() / "tmp"))
+    tmp_fd, tmp_path = tempfile.mkstemp(
+        prefix=f"{my_name}.", dir=str(Path.home() / "tmp")
+    )
     os.close(tmp_fd)
 
     try:
