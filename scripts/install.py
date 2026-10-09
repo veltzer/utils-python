@@ -22,14 +22,15 @@ import site
 import sys
 
 
-def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool) -> None:
+def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool) -> int:
     """remove dead links in target_folder which point back into source_folder
 
     Live links are left in place; do_install checks each one and only touches
     those that are wrong, so repeated runs are quiet no-ops.
     """
+    removed = 0
     if not os.path.isdir(target_folder):
-        return
+        return 0
     for filename in os.listdir(target_folder):
         full = os.path.join(target_folder, filename)
         if not os.path.islink(full):
@@ -42,38 +43,45 @@ def unlink_stale(target_folder: str, source_folder: str, doit: bool, debug: bool
             print(f"unlinking [{full}]")
         if doit:
             os.unlink(full)
+        removed += 1
+    return removed
 
 
-def do_install(source: str, target: str, doit: bool, debug: bool) -> None:
+def do_install(source: str, target: str, doit: bool, debug: bool) -> str:
     """install a single symlink, replacing whatever link is already there"""
+    replaced = False
     if os.path.islink(target):
         if os.readlink(target) == source:
-            return
+            return "unchanged"
         if debug:
             print(f"unlinking [{target}]")
         if doit:
             os.unlink(target)
-    if os.path.exists(target):
+        replaced = True
+    elif os.path.exists(target):
         print(f"not a symlink, leaving alone [{target}]", file=sys.stderr)
-        return
+        return "skipped"
+
     if debug:
         print(f"symlinking [{source}] -> [{target}]")
     if doit:
         os.symlink(source, target)
+    return "replaced" if replaced else "created"
 
 
-def install(source_folder: str, target_folder: str, want_dirs: bool, doit: bool, debug: bool) -> None:
+def install(source_folder: str, target_folder: str, want_dirs: bool, doit: bool, debug: bool) -> dict:
     """symlink entries of source_folder into target_folder
 
     want_dirs selects which kind of entry to install: the directories in
     src are packages, the files are scripts.
     """
+    stats = {"removed_stale": 0, "created": 0, "replaced": 0, "unchanged": 0, "skipped": 0}
     source_folder = os.path.abspath(os.path.expanduser(source_folder))
     target_folder = os.path.abspath(os.path.expanduser(target_folder))
     if not os.path.isdir(source_folder):
         print(f"no such source folder [{source_folder}]", file=sys.stderr)
         sys.exit(1)
-    unlink_stale(target_folder, source_folder, doit, debug)
+    stats["removed_stale"] = unlink_stale(target_folder, source_folder, doit, debug)
     if not os.path.isdir(target_folder):
         if debug:
             print(f"mkdir [{target_folder}]")
@@ -85,7 +93,9 @@ def install(source_folder: str, target_folder: str, want_dirs: bool, doit: bool,
         source = os.path.join(source_folder, entry)
         if os.path.isdir(source) != want_dirs:
             continue
-        do_install(source, os.path.join(target_folder, entry), doit, debug)
+        res = do_install(source, os.path.join(target_folder, entry), doit, debug)
+        stats[res] += 1
+    return stats
 
 
 def main() -> None:
@@ -123,8 +133,18 @@ def main() -> None:
     args = parser.parse_args()
     doit = not args.dry_run
     debug = not args.quiet
-    install(args.source_scripts, args.target_scripts, False, doit, debug)
-    install(args.source_packages, args.target_packages, True, doit, debug)
+    stats_scripts = install(args.source_scripts, args.target_scripts, False, doit, debug)
+    stats_packages = install(args.source_packages, args.target_packages, True, doit, debug)
+    
+    total_stats = {k: stats_scripts[k] + stats_packages.get(k, 0) for k in stats_scripts}
+    
+    print("\n--- Installation Statistics ---")
+    print(f"removed [{total_stats['removed_stale']}] stale symlinks")
+    print(f"created [{total_stats['created']}] new symlinks")
+    print(f"replaced [{total_stats['replaced']}] existing symlinks")
+    print(f"left alone [{total_stats['unchanged']}] already correct symlinks")
+    if total_stats["skipped"] > 0:
+        print(f"skipped [{total_stats['skipped']}] paths that exist but are not symlinks")
 
 
 if __name__ == "__main__":
