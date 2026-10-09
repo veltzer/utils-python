@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 This script backs up your /etc folder (where 90% of your configuration lives)

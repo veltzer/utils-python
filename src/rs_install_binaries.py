@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Install the rs* tools from their GitHub releases into ~/install/binaries.

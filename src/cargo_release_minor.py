@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Bump the minor version, commit, publish to crates.io, tag and push, all in

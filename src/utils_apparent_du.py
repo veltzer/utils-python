@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 apparent-du - recursive listing plus total apparent size of a folder.

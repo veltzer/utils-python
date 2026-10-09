@@ -35,3 +35,15 @@ src_dirs = [".github/workflows"]
 
 [processor.checker.rumdl]
 src_files = ["README.md"]
+
+# ─── tests ───────────────────────────────────────────────────────────────────
+
+# The smoke test (tests/test_smoke.py): the packages under src import, the
+# scripts parse and share one shebang, and everything they import resolves.
+# It checks the whole layout itself, so the file paths rsconstruct appends
+# are ignored; scanning src, scripts and tests reruns it when any changes.
+[processor.checker.script]
+command = "python"
+args = ["tests/test_smoke.py"]
+src_dirs = ["src", "scripts", "tests"]
+src_extensions = [".py"]

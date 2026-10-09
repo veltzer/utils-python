@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Remove old Claude Code binaries left behind by the self-updater.

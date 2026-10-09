@@ -41,8 +41,6 @@ jobs:
       run: |
         rsconstruct tool install-deps
         rsconstruct tool install
-    - name: test
-      run: python tests/test_smoke.py
     - name: build
       run: rsconstruct build
     - name: status

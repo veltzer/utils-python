@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Renames Google Chrome profile directories under ~/.config/google-chrome/

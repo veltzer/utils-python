@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Sync a repository's GitHub metadata (description, topics, and the
