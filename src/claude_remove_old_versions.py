@@ -60,7 +60,8 @@ def main() -> None:
     versions = []
     version_pattern = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
     for p in versions_dir.iterdir():
-        if p.is_dir() and version_pattern.match(p.name):
+        # a version is normally a single binary file; accept a directory too
+        if (p.is_file() or p.is_dir()) and not p.is_symlink() and version_pattern.match(p.name):
             versions.append(p.name)
 
     if not versions:
@@ -80,8 +81,8 @@ def main() -> None:
     for link in links_to_check:
         if link.exists():
             target = link.resolve()
-            if target.parent == resolved_versions_dir:
-                keep.add(target.name)
+            if target.is_relative_to(resolved_versions_dir):
+                keep.add(target.relative_to(resolved_versions_dir).parts[0])
 
     keep.add(versions[-1])
 
@@ -97,7 +98,10 @@ def main() -> None:
             print(f"would remove: {version} ({size})")
         else:
             print(f"removing: {version} ({size})")
-            shutil.rmtree(path, ignore_errors=True)
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
         removed += 1
 
     if removed == 0:
