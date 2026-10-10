@@ -83,7 +83,10 @@ def main() -> None:
     current = 0
     missing = 0
 
-    with tempfile.TemporaryDirectory() as tmpdir:
+    # Download next to the target, not in /tmp: os.replace() is only an
+    # atomic rename within one filesystem. Renaming over the old binary also
+    # works while it is running ("Text file busy" only hits writes into it).
+    with tempfile.TemporaryDirectory(dir=install_dir, prefix=".rs_install_") as tmpdir:
         tmp_path = Path(tmpdir)
 
         for tool in tools:
@@ -154,7 +157,7 @@ def main() -> None:
             download_path.chmod(0o755)
 
             # Move and write marker
-            shutil.move(str(download_path), str(target))
+            os.replace(download_path, target)
             marker.write_text(remote_version + "\n", encoding="utf-8")
 
             if not local_version:
