@@ -97,7 +97,7 @@ def delete_release(repo, release_id):
 
 
 def get_all_workflow_runs(repo):
-    """Fetch all workflow runs as (id, conclusion) pairs, newest first."""
+    """Fetch all workflow runs as (id, status, conclusion) triples, newest first."""
     result = subprocess.run(
         [
             "gh",
@@ -105,7 +105,7 @@ def get_all_workflow_runs(repo):
             f"repos/{repo}/actions/runs",
             "--paginate",
             "--jq",
-            r'.workflow_runs[] | "\(.id) \(.conclusion // "")"',
+            r'.workflow_runs[] | "\(.id) \(.status) \(.conclusion // "")"',
         ],
         capture_output=True,
         text=True,
@@ -115,10 +115,11 @@ def get_all_workflow_runs(repo):
     for line in result.stdout.strip().splitlines():
         if not line.strip():
             continue
-        parts = line.split(" ", 1)
+        parts = line.split(" ", 2)
         run_id = int(parts[0])
-        conclusion = parts[1] if len(parts) > 1 else ""
-        runs.append((run_id, conclusion))
+        status = parts[1]
+        conclusion = parts[2] if len(parts) > 2 else ""
+        runs.append((run_id, status, conclusion))
     return runs
 
 
@@ -191,13 +192,21 @@ def clean_workflows(repo, keep):
         "startup_failure",
         "action_required",
     }
-    for run_id, conclusion in runs:
-        if conclusion in failed_conclusions:
+    unfinished = 0
+    for run_id, status, conclusion in runs:
+        # GitHub refuses to delete a run that is queued or still running,
+        # so leave those alone and don't count them toward `keep`.
+        if status != "completed":
+            unfinished += 1
+        elif conclusion in failed_conclusions:
             to_delete.append(run_id)
         elif len(kept) < keep:
             kept.append(run_id)
         else:
             to_delete.append(run_id)
+
+    if unfinished:
+        print(f"Skipping {unfinished} unfinished workflow runs.")
 
     if not to_delete:
         print("Nothing to delete.")
@@ -223,4 +232,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"command failed: {' '.join(e.cmd)}\n{e.stderr.strip()}")
