@@ -12,7 +12,9 @@ update. This script deletes every version except the one in use.
 Which version is "in use" is decided by resolving the claude symlink
 (~/.local/bin/claude, or whatever `claude` on PATH resolves to). The newest
 version by version-sort is always kept too, so a broken or missing symlink
-can never lead to deleting everything.
+can never lead to deleting everything. A zero-byte entry is never "newest":
+that is what an interrupted or in-progress download looks like, and keeping
+it would protect nothing.
 
 Usage:
   claude_remove_old_versions.py
@@ -84,7 +86,14 @@ def main() -> None:
             if target.is_relative_to(resolved_versions_dir):
                 keep.add(target.relative_to(resolved_versions_dir).parts[0])
 
-    keep.add(versions[-1])
+    # the newest complete version; a zero-byte file is a download that never
+    # finished, and must not shadow the real newest one
+    complete = [
+        v for v in versions
+        if not ((versions_dir / v).is_file() and (versions_dir / v).stat().st_size == 0)
+    ]
+    if complete:
+        keep.add(complete[-1])
 
     print(f"keeping: {' '.join(sorted(keep))}")
 
