@@ -21,7 +21,6 @@ def list_enabled_apis(project_id):
         project_id = default_project
     service_usage: Any = discovery.build("serviceusage", "v1", credentials=credentials)
     print(f"Listing enabled APIs for project: {project_id}")
-    # pylint: disable=no-member
     request = service_usage.services().list(
         parent=f"projects/{project_id}", filter="state:ENABLED"
     )

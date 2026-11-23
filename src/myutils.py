@@ -45,7 +45,7 @@ def get_from_user(message: str) -> str:
         return ""
 
 
-def delete_work(dbh: pymysql.Connection, f_id: int) -> None:  # type: ignore[name-defined]
+def delete_work(dbh: pymysql.Connection, f_id: int) -> None:
     queries = [
         "DELETE FROM TbWkWorkAuthorization WHERE workId=%s",
         "DELETE FROM TbWkWorkChapter WHERE workId=%s",
@@ -62,7 +62,7 @@ def delete_work(dbh: pymysql.Connection, f_id: int) -> None:  # type: ignore[nam
             cursor.execute(query, (f_id,))
 
 
-def db_connect() -> pymysql.Connection:  # type: ignore[name-defined]
+def db_connect() -> pymysql.Connection:
     rcfile = Path.home() / ".perlmyworld.ini"
     cfg = configparser.ConfigParser()
     if not cfg.read(rcfile):

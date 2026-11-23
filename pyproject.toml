@@ -37,6 +37,7 @@ dev = [
     "pytest",
     "ruff",
     "types-jsonschema",
+    "types-pymysql",
     "types-python-dateutil",
     "types-pytz",
     "types-PyYAML",

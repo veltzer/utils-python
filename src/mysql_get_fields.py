@@ -10,7 +10,7 @@ import myutils
 DEBUG = True
 
 
-def get_fields(dbh: pymysql.Connection, table: str) -> dict[str, None]:  # type: ignore[name-defined]
+def get_fields(dbh: pymysql.Connection, table: str) -> dict[str, None]:
     if DEBUG:
         print(f"table is {table}")
     sql = "SELECT column_name FROM information_schema.columns WHERE table_name=%s AND table_schema=DATABASE()"

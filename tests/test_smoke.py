@@ -17,7 +17,7 @@ import sys
 # realpath so this works when run through the symlink in ~/.local/bin
 sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 
-import test_mod  # pylint: disable=wrong-import-position
+import test_mod
 
 
 def main() -> int:

@@ -4,6 +4,7 @@
 utils_python_filetype
 """
 
+import dbm
 import os
 import pickle
 import shelve
@@ -15,24 +16,22 @@ def check_file_type(file_path):
         return "File does not exist"
 
     # Check if its a shelf file
-    # pylint: disable=broad-except
     try:
         with shelve.open(file_path, "r"):
             # If we can open it as a shelf, its likely a shelf file
             return "Shelf file"
-    except Exception:  # noqa: BLE001
+    except (dbm.error, OSError):
         # Not a shelf file, continue to check if its a pickle file
         pass
 
     # Check if its a pickle file
-    # pylint: disable=broad-except
     try:
         with open(file_path, "rb") as f:
             pickle.load(f)
         return "Pickle file"
     except pickle.UnpicklingError:
         return "Pickle file (but corrupted or incomplete)"
-    except Exception:  # noqa: BLE001
+    except (EOFError, AttributeError, ImportError, IndexError, KeyError, TypeError, ValueError, OSError):
         return "Not a shelf or pickle file"
 
 

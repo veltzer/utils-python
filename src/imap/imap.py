@@ -25,7 +25,6 @@ import time
 
 def db_open():
     dbname = os.path.expanduser("~/.imap_import.db")
-    # pylint: disable=no-member
     return dbm.gnu.open(dbname, "c")
 
 

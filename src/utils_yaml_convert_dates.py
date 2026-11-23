@@ -37,6 +37,7 @@ from dateutil.parser._parser import ParserError
 # ruamel.yaml is a library specifically designed for round-trip YAML
 # processing, which preserves comments and formatting.
 from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedMap
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString
 
 # --- Configuration ---
@@ -82,7 +83,7 @@ def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
 
     This function is idempotent.
     """
-    if isinstance(data, dict):
+    if isinstance(data, CommentedMap):
         # Use a static list of keys to iterate over, as we may modify the dict
         keys = list(data.keys())
         for i, key in enumerate(keys):
@@ -105,7 +106,7 @@ def find_and_convert_dates_in_data(data: Any, key_name: str) -> Any:
                         data[key] = DoubleQuotedScalarString(utc_string)
                         # Insert the new "timezone" key after the current key
                         if iana_timezone:
-                            data.insert(  # type: ignore[attr-defined]
+                            data.insert(
                                 i + 1, tz_key, DoubleQuotedScalarString(iana_timezone)
                             )
             else:

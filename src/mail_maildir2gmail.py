@@ -26,15 +26,9 @@ class Gmail:
             # self.folder = "[Gmail]/%s" % self.folder
             pass
 
-        self.__database = None
         self.__imap = None
 
     def __del__(self):
-        if self.__database is not None:
-            with contextlib.suppress(Exception):
-                self.__database.close()
-            self.__database = None
-
         if self.__imap is not None:
             with contextlib.suppress(Exception):
                 self.__imap.close()
@@ -67,17 +61,16 @@ class Gmail:
         self.mark_appended(filename)
 
     def check_appended(self, filename):
-        return os.path.basename(filename).encode("utf-8") in self.database
+        with self.open_database() as database:
+            return os.path.basename(filename).encode("utf-8") in database
 
     def mark_appended(self, filename):
-        self.database[os.path.basename(filename).encode("utf-8")] = b"1"
+        with self.open_database() as database:
+            database[os.path.basename(filename).encode("utf-8")] = b"1"
 
-    @property
-    def database(self):
-        if self.__database is None:
-            dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + ".db")
-            self.__database = dbm.open(dbname, "c")  # noqa: SIM115
-        return self.__database
+    def open_database(self):
+        dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + ".db")
+        return dbm.open(dbname, "c")
 
     @property
     def imap(self):

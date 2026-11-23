@@ -934,6 +934,15 @@ wheels = [
 ]
 
 [[package]]
+name = "types-pymysql"
+version = "1.2.4.20261122"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/46/bc/76d0dd75c73f9de9924b79551a2d926041aab02485ac4382a1ec8b8cba95/types_pymysql-1.2.4.20261122.tar.gz", hash = "sha256:fcd8a185893a81358154647645f2990d8fef45a31c7bc99446f57bb54c891418", size = 23145, upload-time = "2026-11-22T08:57:18.28Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bb/7b/01cabf1c90ab0c7d4444ca40c1583e8d54662ae024b9b7aab99b6f256775/types_pymysql-1.2.4.20261122-py3-none-any.whl", hash = "sha256:e37bd5b3e187973e983e29a8d522bd9e3d71569d1c2abab24374745fe2696f7e", size = 23497, upload-time = "2026-11-22T08:57:17.498Z" },
+]
+
+[[package]]
 name = "types-python-dateutil"
 version = "2.9.0.20261116"
 source = { registry = "https://pypi.org/simple" }
@@ -1036,6 +1045,7 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
     { name = "types-jsonschema" },
+    { name = "types-pymysql" },
     { name = "types-python-dateutil" },
     { name = "types-pytz" },
     { name = "types-pyyaml" },
@@ -1067,6 +1077,7 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
     { name = "types-jsonschema" },
+    { name = "types-pymysql" },
     { name = "types-python-dateutil" },
     { name = "types-pytz" },
     { name = "types-pyyaml" },

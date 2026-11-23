@@ -4,7 +4,7 @@
 Script to set up LazyVim for Neovim.
 """
 
-import datetime
+import datetime as dt
 import shutil
 import subprocess
 import sys
@@ -56,7 +56,7 @@ def setup_lazyvim() -> None:
         sys.exit(0)
 
     home = Path.home()
-    timestamp = datetime.datetime.now(tz=datetime.UTC).strftime("%Y%m%d%H%M%S")
+    timestamp = dt.datetime.now(tz=dt.UTC).strftime("%Y%m%d%H%M%S")
 
     # Backup existing configuration
     nvim_config = home / ".config" / "nvim"

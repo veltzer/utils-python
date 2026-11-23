@@ -58,14 +58,14 @@ def main() -> None:
                 flags=re.MULTILINE,
             ):
                 stale_other.append(f)
-        except Exception:  # noqa: BLE001
+        except (OSError, ValueError):
             pass
 
     # Read profiles
     try:
         with open(local_state, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
-    except Exception as e:  # noqa: BLE001  # noqa: BLE001
+    except (OSError, ValueError) as e:
         print(f"error reading {local_state}: {e}", file=sys.stderr)
         sys.exit(1)
 
@@ -124,7 +124,7 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
                     print(f"  unchanged {out_path}  ({directory} → {name})")
                     unchanged += 1
                     continue
-            except Exception:  # noqa: BLE001
+            except (OSError, ValueError):
                 pass
 
         out_path.write_text(desired, encoding="utf-8")

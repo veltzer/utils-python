@@ -13,7 +13,7 @@ Usage (batch):
 Flags: --dry-run, --no-backup, --help
 """
 
-import datetime
+import datetime as dt
 import json
 import subprocess
 import sys
@@ -24,7 +24,7 @@ def list_profiles(local_state_path: Path) -> list:
     try:
         with open(local_state_path, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
-    except Exception as e:  # noqa: BLE001
+    except (OSError, ValueError) as e:
         print(f"error reading {local_state_path}: {e}", file=sys.stderr)
         return []
 
@@ -166,7 +166,7 @@ def main() -> None:
     backup_file = None
     if do_backup:
         backup_dir.mkdir(parents=True, exist_ok=True)
-        ts = datetime.datetime.now(tz=datetime.UTC).strftime("%Y%m%d-%H%M%S")
+        ts = dt.datetime.now(tz=dt.UTC).strftime("%Y%m%d-%H%M%S")
         backup_file = backup_dir / f"chrome-config-{ts}.tar"
         print(f"backing up to {backup_file}...")
         try:
@@ -201,7 +201,7 @@ def main() -> None:
     try:
         with open(local_state, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
-    except Exception as e:  # noqa: BLE001
+    except (OSError, ValueError) as e:
         print(f"error reading {local_state}: {e}", file=sys.stderr)
         sys.exit(1)
 
@@ -232,7 +232,7 @@ def main() -> None:
             json.dump(
                 data, file_handle, separators=(",", ":")
             )  # Chrome uses compact JSON usually, or can just dump normally
-    except Exception as e:  # noqa: BLE001
+    except (OSError, ValueError) as e:
         print(f"ERROR rewriting {local_state}: {e}", file=sys.stderr)
         sys.exit(1)
 
