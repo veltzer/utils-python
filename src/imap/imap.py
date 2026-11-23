@@ -46,18 +46,15 @@ def db_close(opt_database):
 
 def decode_header(value):
     result = []
-    for v, c in email.header.decode_header(value):
-        if isinstance(v, str):
-            result.append(v)
+    for part, charset in email.header.decode_header(value):
+        if isinstance(part, str):
+            result.append(part)
             continue
         try:
-            if c is None:
-                v = v.decode()
-            else:
-                v = v.decode(c)
+            text = part.decode() if charset is None else part.decode(charset)
         except UnicodeError, LookupError:
-            v = v.decode("iso-8859-1")
-        result.append(v)
+            text = part.decode("iso-8859-1")
+        result.append(text)
     return " ".join(result)
 
 
@@ -72,26 +69,37 @@ def parsedate(value):
     return None
 
 
+def _text(item):
+    """an item of an imap answer, as text for an error message"""
+    return item.decode() if isinstance(item, bytes) else str(item)
+
+
 # imap functions
 
 
 class IMAP:
     def __init__(self):
         self.db = None
-        self.imap = None
+        self.imap: imaplib.IMAP4_SSL | None = None
+
+    def _conn(self) -> imaplib.IMAP4_SSL:
+        """the connection; it is an error to use it before connect()"""
+        if self.imap is None:
+            raise ValueError("not connected, call connect() first")
+        return self.imap
 
     def connect(self, opt_hostname, opt_port):
         self.imap = imaplib.IMAP4_SSL(opt_hostname, opt_port)
 
     def login(self, username, password):
-        (res, _) = self.imap.login(username, password)
+        (res, _) = self._conn().login(username, password)
         if res != "OK":
             raise ValueError(f"could not login with error [{res}]")
         self.db = db_open()
 
     def logout(self):
         db_close(self.db)
-        (res, _) = self.imap.logout()
+        (res, _) = self._conn().logout()
         if res != "BYE":
             raise ValueError(f"could not logout with error [{res}]")
 
@@ -100,28 +108,28 @@ class IMAP:
         check if we have a single folder. if you pass 'a/b' it will check if you have a SINGLE
         folder called 'a/b'...
         """
-        (res, l) = self.imap.list(name)
+        (res, data) = self._conn().list(name)
         if res != "OK":
-            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
-        return not (len(l) == 1 and l[0] is None)
+            raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
+        return not (len(data) == 1 and data[0] is None)
 
     def create(self, name):
         """
         this function creates a single folder.
         if the folder exists then it will throw an exception
         """
-        (res, l) = self.imap.create(name)
+        (res, data) = self._conn().create(name)
         if res != "OK":
-            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
+            raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
 
     def delete(self, name):
         """
         this function deletes a single folder.
         If the folder doesn't exist then it will throw an exception
         """
-        (res, l) = self.imap.delete(name)
+        (res, data) = self._conn().delete(name)
         if res != "OK":
-            raise ValueError(f"could not list [{name}]. error is [{l[0].decode()}]")
+            raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
 
     def have_fullpath(self, path):
         """
@@ -168,10 +176,10 @@ class IMAP:
         """
         append a single message to a mailbox
         """
-        (res, l) = self.imap.append(mailbox, flags, date_time, message)
+        (res, data) = self._conn().append(mailbox, flags, date_time, message)
         if res != "OK":
             raise ValueError(
-                f"could not append to [{mailbox}]. error is [{l[0].decode()}]"
+                f"could not append to [{mailbox}]. error is [{_text(data[0])}]"
             )
 
     def append_file(self, mailbox, flags, filename):
@@ -185,8 +193,8 @@ class IMAP:
     def test(self):
         """test function"""
         # this works
-        print(self.imap.capability())
-        print(self.imap.list())
+        print(self._conn().capability())
+        print(self._conn().list())
         # this works
         assert not self.have("dontexist")
         assert self.have("business")

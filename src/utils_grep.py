@@ -21,8 +21,8 @@ def main():
     folder = sys.argv[3]
     debug = False
     # debug=True
-    printOnlyFiles = False
-    printedFiles = set()
+    print_only_files = False
+    printed_files = set()
 
     for root, _dirs, files in os.walk(folder):
         for file in files:
@@ -36,10 +36,10 @@ def main():
                     with open(full) as f:
                         for num, line in enumerate(f):
                             for _ in c.finditer(line):
-                                if printOnlyFiles:
-                                    if full not in printedFiles:
+                                if print_only_files:
+                                    if full not in printed_files:
                                         print(full)
-                                        printedFiles.add(full)
+                                        printed_files.add(full)
                                 else:
                                     print(f"{full}, {num}: {line[:-1]}")
                 except UnicodeDecodeError, PermissionError:

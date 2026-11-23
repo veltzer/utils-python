@@ -5,6 +5,7 @@ Script to set Firefox as the default browser in Linux environments.
 """
 
 import subprocess
+from pathlib import Path
 
 
 def get_default_browser() -> str:
@@ -41,25 +42,21 @@ def set_mime_default(browser: str, mime_type: str) -> None:
 
 def get_kde_browser() -> str:
     try:
-        from pathlib import Path
-
         kdeglobals = Path.home() / ".config" / "kdeglobals"
         if not kdeglobals.exists():
             return ""
 
         # kdeglobals might have issues with strict ini format, reading manually is safer
-        with open(kdeglobals, "r", encoding="utf-8") as f:
+        with open(kdeglobals, encoding="utf-8") as f:
             for line in f:
                 if line.startswith("BrowserApplication="):
                     return line.strip().split("=", 1)[1]
-    except Exception:  # noqa: BLE001, S110
+    except (OSError, UnicodeDecodeError):
         pass
     return ""
 
 
 def set_kde_browser(browser: str) -> None:
-    from pathlib import Path
-
     kdeglobals = Path.home() / ".config" / "kdeglobals"
     subprocess.run(
         [

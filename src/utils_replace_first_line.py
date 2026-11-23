@@ -21,7 +21,7 @@ def main() -> None:
     for file in sys.argv[2:]:
         new_file = file + ".tmp"
         first = True
-        with open(file, "r") as old_stream, open(new_file, "w") as new_stream:
+        with open(file) as old_stream, open(new_file, "w") as new_stream:
             for line in old_stream:
                 if first:
                     new_stream.write(replacement + "\n")

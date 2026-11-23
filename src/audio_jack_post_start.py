@@ -23,15 +23,16 @@ def get_sinks():
         ["pacmd", "list-sink-inputs"], stdout=subprocess.PIPE
     ) as pout:
         myre = re.compile(r"^\s+index: (\d+)\n$")
-        for line in pout.stdout:
-            line = line.decode()
+        assert pout.stdout is not None
+        for raw_line in pout.stdout:
+            line = raw_line.decode()
             mymatch = myre.match(line)
             if mymatch:
                 yield int(mymatch.group(1))
 
 
 def main() -> None:
-    options = jack_pulse.config.getConfig()
+    options = jack_pulse.config.get_config()
     runfile = os.path.expanduser("~/.myjack_run")
     if options["do_midi_bridge"]:
         with (

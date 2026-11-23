@@ -22,7 +22,7 @@ from pathlib import Path
 
 def list_profiles(local_state_path: Path) -> list:
     try:
-        with open(local_state_path, "r", encoding="utf-8") as file_handle:
+        with open(local_state_path, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
     except Exception as e:  # noqa: BLE001
         print(f"error reading {local_state_path}: {e}", file=sys.stderr)
@@ -76,12 +76,12 @@ def main() -> None:
     # Check if chrome is running
     try:
         if (
-            subprocess.run(  # noqa: PLW1510
-                ["pgrep", "-x", "chrome"], capture_output=True
+            subprocess.run(
+                ["pgrep", "-x", "chrome"], capture_output=True, check=False
             ).returncode
             == 0
-            or subprocess.run(  # noqa: PLW1510
-                ["pgrep", "-x", "google-chrome"], capture_output=True
+            or subprocess.run(
+                ["pgrep", "-x", "google-chrome"], capture_output=True, check=False
             ).returncode
             == 0
         ):
@@ -147,7 +147,7 @@ def main() -> None:
         new_names.append(new)
 
     print("\nplan:")
-    for old, new in zip(old_names, new_names):
+    for old, new in zip(old_names, new_names, strict=False):
         print(f"  '{old}' -> '{new}'")
 
     if dry_run:
@@ -163,6 +163,7 @@ def main() -> None:
         print("aborted")
         sys.exit(0)
 
+    backup_file = None
     if do_backup:
         backup_dir.mkdir(parents=True, exist_ok=True)
         ts = datetime.datetime.now(tz=datetime.UTC).strftime("%Y%m%d-%H%M%S")
@@ -180,8 +181,8 @@ def main() -> None:
                 ],
                 check=True,
             )
-            du_out = subprocess.run(  # noqa: PLW1510
-                ["du", "-h", str(backup_file)], capture_output=True, text=True
+            du_out = subprocess.run(
+                ["du", "-h", str(backup_file)], capture_output=True, text=True, check=False
             ).stdout
             size = du_out.split("\t")[0] if du_out else "?"
             print(f"backup: {size}")
@@ -190,7 +191,7 @@ def main() -> None:
             sys.exit(1)
 
     print("renaming directories...")
-    for old, new in zip(old_names, new_names):
+    for old, new in zip(old_names, new_names, strict=False):
         src = chrome_config / old
         dst = chrome_config / new
         print(f"'{src}' -> '{dst}'")
@@ -198,13 +199,13 @@ def main() -> None:
 
     print("rewriting Local State...")
     try:
-        with open(local_state, "r", encoding="utf-8") as file_handle:
+        with open(local_state, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
     except Exception as e:  # noqa: BLE001
         print(f"error reading {local_state}: {e}", file=sys.stderr)
         sys.exit(1)
 
-    mapping = dict(zip(old_names, new_names))
+    mapping = dict(zip(old_names, new_names, strict=False))
 
     profile_data = data.get("profile", {})
 
@@ -246,7 +247,7 @@ def main() -> None:
     for new in new_names:
         print(f'  google-chrome --profile-directory="{new}"')
     print("then re-run chrome_regen_launchers.py to update .desktop files")
-    if do_backup:
+    if backup_file is not None:
         print(f"restore: tar -xf {backup_file} -C {home}/.config")
 
 

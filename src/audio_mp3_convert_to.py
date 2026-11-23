@@ -12,9 +12,9 @@ import sys
 
 
 def main() -> None:
-    doRun = True
-    doDebug = True
-    doRedirect = False
+    do_run = True
+    do_debug = True
+    do_redirect = False
     for filename in sys.argv[1:]:
         assert os.path.isfile(filename)
         base, suffix = os.path.splitext(filename)
@@ -28,10 +28,10 @@ def main() -> None:
             filename,
             new_name,
         ]
-        if doDebug:
+        if do_debug:
             print(f"arguments are [{args}]")
-        if doRun:
-            if doRedirect:
+        if do_run:
+            if do_redirect:
                 subprocess.check_call(
                     args, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL
                 )

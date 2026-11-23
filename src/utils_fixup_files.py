@@ -18,8 +18,8 @@ def main() -> None:
     pattern = re.compile(r"^	+attributes\['do")
     extract_pattern = re.compile(r"^	+(.*)$")
     with infile.open("r") as in_fh, outfile.open("w") as out_fh:
-        for line in in_fh:
-            line = line.rstrip("\n")
+        for raw_line in in_fh:
+            line = raw_line.rstrip("\n")
             if pattern.match(line):
                 match = extract_pattern.match(line)
                 if match:

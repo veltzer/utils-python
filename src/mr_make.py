@@ -62,8 +62,8 @@ def get_projects():
     projects = []
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
-        for line in f:
-            line = line.rstrip()
+        for raw_line in f:
+            line = raw_line.rstrip()
             if line.startswith("["):
                 project_root = os.path.join(home, line[1:-1])
                 project_name = line[1:-1].split("/")[-1]
@@ -108,9 +108,8 @@ def main():
         if os.path.isfile(makefile):
             os.chdir(project_root)
             check_empty_output = True
-            if project_name in opts:  # noqa: SIM102
-                if "dont_check_empty_output" in opts[project_name]:
-                    check_empty_output = False
+            if project_name in opts and "dont_check_empty_output" in opts[project_name]:
+                check_empty_output = False
             if check_empty_output:
                 code = run_empty_output(["make"])
                 do_stats(code, events)

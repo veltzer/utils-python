@@ -54,8 +54,8 @@ def lua_scalar(lua_bin: str, file_path: str, field: str) -> str:
         local v = _G[d]
         if v ~= nil then io.write(tostring(v)) end
     """
-    res = subprocess.run(  # noqa: PLW1510
-        [lua_bin, "-e", script], capture_output=True, text=True
+    res = subprocess.run(
+        [lua_bin, "-e", script], capture_output=True, text=True, check=False
     )
     return res.stdout.strip()
 
@@ -69,8 +69,8 @@ def lua_keywords(lua_bin: str, file_path: str) -> list[str]:
         table.sort(KEYWORDS)
         for _, k in ipairs(KEYWORDS) do print(k) end
     """
-    res = subprocess.run(  # noqa: PLW1510
-        [lua_bin, "-e", script], capture_output=True, text=True
+    res = subprocess.run(
+        [lua_bin, "-e", script], capture_output=True, text=True, check=False
     )
     return [line.strip() for line in res.stdout.splitlines() if line.strip()]
 
@@ -91,7 +91,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
     # --- description ---
     want_desc = lua_scalar(lua_bin, lua_file, "DESCRIPTION_SHORT")
     if want_desc:
-        res = subprocess.run(  # noqa: PLW1510
+        res = subprocess.run(
             [
                 "gh",
                 "repo",
@@ -103,7 +103,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 '.description // ""',
             ],
             capture_output=True,
-            text=True,
+            text=True, check=False
         )
         if res.returncode == 0:
             have_desc = res.stdout.strip()
@@ -112,15 +112,15 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 print(f"  local:  {want_desc}")
                 print(f"  github: {have_desc}")
                 if not dry_run:
-                    subprocess.run(  # noqa: PLW1510
+                    subprocess.run(
                         ["gh", "repo", "edit", repo, "--description", want_desc],
-                        stdout=subprocess.DEVNULL,
+                        stdout=subprocess.DEVNULL, check=False
                     )
 
     # --- topics ---
     want_topics = set(lua_keywords(lua_bin, lua_file))
     if want_topics:
-        res = subprocess.run(  # noqa: PLW1510
+        res = subprocess.run(
             [
                 "gh",
                 "repo",
@@ -132,7 +132,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                 "[.repositoryTopics[].name]",
             ],
             capture_output=True,
-            text=True,
+            text=True, check=False
         )
         if res.returncode == 0:
             try:
@@ -152,13 +152,13 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                     for t in want_topics - have_topics:
                         args.extend(["--add-topic", t])
                     if args:
-                        subprocess.run(  # noqa: PLW1510
-                            ["gh", "repo", "edit", repo] + args,
-                            stdout=subprocess.DEVNULL,
+                        subprocess.run(
+                            ["gh", "repo", "edit", repo, *args],
+                            stdout=subprocess.DEVNULL, check=False
                         )
 
     # --- feature policy ---
-    res = subprocess.run(  # noqa: PLW1510
+    res = subprocess.run(
         [
             "gh",
             "repo",
@@ -168,7 +168,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
             "hasWikiEnabled,hasIssuesEnabled,hasProjectsEnabled",
         ],
         capture_output=True,
-        text=True,
+        text=True, check=False
     )
     if res.returncode == 0:
         try:
@@ -194,15 +194,15 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
                     f"  github: wiki={str(have_wiki).lower()} issues={str(have_issues).lower()} projects={str(have_projects).lower()}"
                 )
                 if not dry_run:
-                    subprocess.run(  # noqa: PLW1510
-                        ["gh", "repo", "edit", repo] + fargs, stdout=subprocess.DEVNULL
+                    subprocess.run(
+                        ["gh", "repo", "edit", repo, *fargs], stdout=subprocess.DEVNULL, check=False
                     )
         except json.JSONDecodeError:
             pass
 
 
 def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
-    res = subprocess.run(  # noqa: PLW1510
+    res = subprocess.run(
         [
             "gh",
             "repo",
@@ -218,13 +218,13 @@ def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
             ".[].name",
         ],
         capture_output=True,
-        text=True,
+        text=True, check=False
     )
     if res.returncode != 0:
         die("failed to list repositories")
 
-    for name in res.stdout.splitlines():
-        name = name.strip()
+    for raw_name in res.stdout.splitlines():
+        name = raw_name.strip()
         if not name:
             continue
         dir_path = os.path.join(base_dir, name)

@@ -68,10 +68,7 @@ def parse_date_and_tz(date_string: str) -> tuple[str, str | None] | None:
         else None
     )
 
-    if dt_original.tzinfo is None:
-        dt_utc = dt_original.replace(tzinfo=UTC)
-    else:
-        dt_utc = dt_original.astimezone(UTC)
+    dt_utc = dt_original.replace(tzinfo=UTC) if dt_original.tzinfo is None else dt_original.astimezone(UTC)
 
     utc_string = dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -140,7 +137,7 @@ def process_yaml_file(file_path: str, key_name: str) -> None:
     ryaml.indent(mapping=2, sequence=4, offset=2)
 
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             yaml_content = ryaml.load(f)
 
         find_and_convert_dates_in_data(yaml_content, key_name)

@@ -69,14 +69,14 @@ def main() -> None:
 
         run_res = subprocess.run(gpg_args, check=False)
         if run_res.returncode != 0:
-            subprocess.run(rm_cmd + [tmp_path], check=False)
-            print(f"could not decrypt file with code [{res.returncode}]")
-            sys.exit(res.returncode)
+            subprocess.run([*rm_cmd, tmp_path], check=False)
+            print(f"could not decrypt file with code [{run_res.returncode}]")
+            sys.exit(run_res.returncode)
 
         # edit the file
-        subprocess.run(editor + [tmp_path], check=False)
+        subprocess.run([*editor, tmp_path], check=False)
     finally:
-        subprocess.run(rm_cmd + [tmp_path], check=False)
+        subprocess.run([*rm_cmd, tmp_path], check=False)
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ import os
 import os.path
 import urllib.request
 
-import progressbar  # type: ignore
+import progressbar
 
 
 def get(url, file):

@@ -13,11 +13,7 @@ from pathlib import Path
 def find_marp_files(root_dir: str) -> list[Path]:
     """Find all markdown files that might be Marp presentations recursively."""
     root_path = Path(root_dir)
-    marp_files = []
-
-    for path in root_path.rglob("*.md"):
-        marp_files.append(path)  # noqa: PERF402
-    return marp_files
+    return list(root_path.rglob("*.md"))
 
 
 def extract_image_links(file_path: Path) -> list[tuple[str, int]]:
@@ -27,7 +23,7 @@ def extract_image_links(file_path: Path) -> list[tuple[str, int]]:
     # Regex for both ![]() and ![alt](url "title") formats
     image_pattern = r"!\[([^\]]*)\]\(([^)\"]+)(?:\"[^\"]*\")?\)"
 
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8") as f:
         for line_num, line in enumerate(f, 1):
             matches = re.finditer(image_pattern, line)
             for match in matches:

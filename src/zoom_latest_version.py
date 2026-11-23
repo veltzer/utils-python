@@ -25,8 +25,7 @@ def get_latest_zoom_version():
         # The version is usually in the redirect URL
         final_url = response.url
         if "zoom_amd64.deb" in final_url:
-            version = final_url.split("/")[-2]
-            return version
+            return final_url.split("/")[-2]
 
         return None
 

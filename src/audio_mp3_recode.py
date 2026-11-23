@@ -16,11 +16,11 @@ import subprocess
 import sys
 import tempfile
 
-doRun = True
-doDebug = False
-doCheck = True
+do_run = True
+do_debug = False
+do_check = True
 # do you want to redirect standard output?
-doRedirect = False
+do_redirect = False
 opt_codec = "copy"
 # opt_codec="libmp3lame"
 
@@ -49,17 +49,16 @@ def fix(filename):
         filename,
         out,
     ]
-    if doRun:
-        if doCheck:
-            if doRedirect:
+    if do_run:
+        if do_check:
+            if do_redirect:
                 subprocess.check_call(args, stdout=subprocess.DEVNULL)
             else:
                 subprocess.check_call(args)
+        elif do_redirect:
+            subprocess.call(args, stdout=subprocess.DEVNULL)
         else:
-            if doRedirect:
-                subprocess.call(args, stdout=subprocess.DEVNULL)
-            else:
-                subprocess.call(args)
+            subprocess.call(args)
     else:
         print(args)
     # copy the mp3 tag data

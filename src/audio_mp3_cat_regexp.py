@@ -7,10 +7,10 @@ Script to be used to catenate many mp3 files.
 import glob
 import subprocess
 
-doRun = True
-doCheck = False
+do_run = True
+do_check = False
 # do you want to redirect standard output?
-doRedirect = False
+do_redirect = False
 
 
 def unite(filenames, out):
@@ -26,23 +26,22 @@ def unite(filenames, out):
         "-loglevel",
         "quiet",
     ]
-    if doRun:
-        if doCheck:
-            if doRedirect:
+    if do_run:
+        if do_check:
+            if do_redirect:
                 subprocess.check_call(args, stdout=subprocess.DEVNULL)
             else:
                 subprocess.check_call(args)
+        elif do_redirect:
+            subprocess.call(args, stdout=subprocess.DEVNULL)
         else:
-            if doRedirect:
-                subprocess.call(args, stdout=subprocess.DEVNULL)
-            else:
-                subprocess.call(args)
+            subprocess.call(args)
     else:
         print(filenames, out)
 
 
 def main() -> None:
-    doDebug = False
+    do_debug = False
     do_numbers = False
     do_six = True
     do_same_names = False
@@ -50,15 +49,15 @@ def main() -> None:
         lect = 1
         for x in range(1, 37):
             newx = f"{x:02d}"
-            if doDebug:
+            if do_debug:
                 print(newx)
             file_list = sorted(glob.glob(f"{newx}-*"))
-            if doDebug:
+            if do_debug:
                 print(file_list)
             assert len(file_list) == 6
             name = file_list[0][5:]
             res = f"{lect:02d} - {name}"
-            if doDebug:
+            if do_debug:
                 print(f"new name is [{res}]")
             unite(file_list, res)
             lect += 1

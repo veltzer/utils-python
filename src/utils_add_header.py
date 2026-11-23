@@ -26,7 +26,7 @@ def add_header_to_file(filename):
         return False
 
     # Read the file content
-    with open(filename, "r") as file:
+    with open(filename) as file:
         content = file.read()
 
     # Check if the file already begins with triple quotes

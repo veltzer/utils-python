@@ -8,6 +8,7 @@ pass a project id to list another project the credentials can read.
 """
 
 import argparse
+from typing import Any
 
 import google.auth
 from googleapiclient import discovery
@@ -18,7 +19,7 @@ def list_enabled_apis(project_id):
     credentials, default_project = google.auth.default()
     if project_id is None:
         project_id = default_project
-    service_usage = discovery.build("serviceusage", "v1", credentials=credentials)
+    service_usage: Any = discovery.build("serviceusage", "v1", credentials=credentials)
     print(f"Listing enabled APIs for project: {project_id}")
     # pylint: disable=no-member
     request = service_usage.services().list(

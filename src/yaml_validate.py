@@ -6,6 +6,7 @@ Validate a yaml file including order of elements
 
 import argparse
 import sys
+from typing import Any
 
 import requests
 from jsonschema import Draft7Validator, validate
@@ -14,7 +15,7 @@ from referencing.jsonschema import DRAFT7
 from ruamel.yaml import YAML
 
 ROOT = "root"
-SCHEMA_CACHE: dict[str, None] = {}
+SCHEMA_CACHE: dict[str, Any] = {}
 DEBUG = True
 
 
@@ -123,7 +124,9 @@ def main():
 
             # The schema itself is a resource, and we define a retriever for any *other* URIs
             resource = Resource.from_contents(schema, default_specification=DRAFT7)
-            registry = Registry(retrieve=logging_retriever).with_resource(
+            # Registry is an attrs class: its retrieve= argument is made by attrs, which the type checker cannot see
+            registry_class: Any = Registry
+            registry = registry_class(retrieve=logging_retriever).with_resource(
                 schema_url, resource
             )
             # Use a specific validator class with our custom registry

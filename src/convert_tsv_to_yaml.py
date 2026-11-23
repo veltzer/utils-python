@@ -34,7 +34,7 @@ def _parse_tsv_data(input_file, array_columns_str=""):
         if key.strip()
     }
 
-    with open(input_file, "r", newline="", encoding="utf-8") as tsvfile:
+    with open(input_file, newline="", encoding="utf-8") as tsvfile:
         reader = csv.reader(tsvfile, delimiter="\t")
         raw_headers = next(reader)
         data_rows = list(reader)
@@ -67,7 +67,7 @@ def _parse_tsv_data(input_file, array_columns_str=""):
     # --- Second Pass: Build records ---
     records = []
     for row in data_rows:
-        record = {}
+        record: dict[str, bool | list[str] | str] = {}
         for index, key in active_headers_map.items():
             value_str = row[index].strip() if index < len(row) else ""
             if index in boolean_column_indices:

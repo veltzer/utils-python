@@ -20,7 +20,7 @@ def check_file_type(file_path):
         with shelve.open(file_path, "r"):
             # If we can open it as a shelf, its likely a shelf file
             return "Shelf file"
-    except Exception:  # noqa: BLE001, S110
+    except Exception:  # noqa: BLE001
         # Not a shelf file, continue to check if its a pickle file
         pass
 

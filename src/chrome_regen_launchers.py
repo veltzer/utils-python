@@ -58,12 +58,12 @@ def main() -> None:
                 flags=re.MULTILINE,
             ):
                 stale_other.append(f)
-        except Exception:  # noqa: BLE001, S110
+        except Exception:  # noqa: BLE001
             pass
 
     # Read profiles
     try:
-        with open(local_state, "r", encoding="utf-8") as file_handle:
+        with open(local_state, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
     except Exception as e:  # noqa: BLE001  # noqa: BLE001
         print(f"error reading {local_state}: {e}", file=sys.stderr)
@@ -124,7 +124,7 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
                     print(f"  unchanged {out_path}  ({directory} → {name})")
                     unchanged += 1
                     continue
-            except Exception:  # noqa: BLE001, S110
+            except Exception:  # noqa: BLE001
                 pass
 
         out_path.write_text(desired, encoding="utf-8")
@@ -145,16 +145,16 @@ Exec={chrome_bin} --profile-directory="{directory}" --incognito
 
     if wrote > 0 or removed > 0:
         if (
-            subprocess.run(  # noqa: PLW1510
+            subprocess.run(
                 ["command", "-v", "update-desktop-database"],
                 capture_output=True,
-                shell=True,
+                shell=True, check=False
             ).returncode
             == 0
         ):
             print("\nrefreshing desktop database...")
-            subprocess.run(  # noqa: PLW1510
-                ["update-desktop-database", str(apps_dir)], stderr=subprocess.DEVNULL
+            subprocess.run(
+                ["update-desktop-database", str(apps_dir)], stderr=subprocess.DEVNULL, check=False
             )
         print(
             f"\ndone. wrote {wrote}, unchanged {unchanged}, removed {removed} launcher(s) in {apps_dir}."

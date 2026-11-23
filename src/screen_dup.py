@@ -27,12 +27,12 @@ res = [
     (640, 480),
 ]
 real = True
-checkTwoScreens = True
-doPrint = True
-doDebug = True
-doUseResolution = False
-resolutionToUse = (1024, 768)
-doCrtc = False
+check_two_screens = True
+do_print = True
+do_debug = True
+do_use_resolution = False
+resolution_to_use = (1024, 768)
+do_crtc = False
 
 # functions start here
 
@@ -42,7 +42,7 @@ class Output:
         self.name = name
         self.resolutions = set()
 
-    def addResolution(self, x, y):
+    def add_resolution(self, x, y):
         self.resolutions.add((x, y))
 
     def supports(self, resolution):
@@ -76,6 +76,7 @@ def find_all_outputs():
     # regular expresson to find disconnected|connected devices
     re_output = re.compile("^(.*) (?:disconnected|connected) (.*)")
     re_res = re.compile(r"^   (\d+)x(\d+) *(.*)")
+    o = None
     with subprocess.Popen(["xrandr"], stdout=subprocess.PIPE) as process:
         xrandr_stdout, _ = process.communicate()
     for line in str(xrandr_stdout, encoding="utf8").split("\n"):
@@ -85,9 +86,9 @@ def find_all_outputs():
             o = Output(current_output_name)
             outputs.append(o)
         m = re_res.match(line)
-        if m:
-            o.addResolution(int(m.group(1)), int(m.group(2)))
-    if doDebug:
+        if m and o is not None:
+            o.add_resolution(int(m.group(1)), int(m.group(2)))
+    if do_debug:
         for output in outputs:
             print(output)
     return outputs
@@ -98,6 +99,7 @@ def find_outputs():
     # regular expresson to find connected devices
     re_output = re.compile(r"^(.*) (?:connected) (.*)")
     re_res = re.compile(r"^   (\d+)x(\d+) *(.*)")
+    o = None
     with subprocess.Popen(["xrandr"], stdout=subprocess.PIPE) as process:
         xrandr_stdout, _ = process.communicate()
     for line in str(xrandr_stdout, encoding="utf8").split("\n"):
@@ -107,9 +109,9 @@ def find_outputs():
             o = Output(current_output_name)
             outputs.append(o)
         m = re_res.match(line)
-        if m:
-            o.addResolution(int(m.group(1)), int(m.group(2)))
-    if doDebug:
+        if m and o is not None:
+            o.add_resolution(int(m.group(1)), int(m.group(2)))
+    if do_debug:
         for output in outputs:
             print(output)
     return outputs
@@ -127,7 +129,7 @@ def set_outputs(outputs, mode):
             "--pos",
             "0x0",
         ]
-        if doCrtc:
+        if do_crtc:
             args.extend(
                 [
                     "--crtc",
@@ -154,26 +156,26 @@ def invert_the_screen():
 
 def main():
     outputs = find_outputs()
-    if checkTwoScreens and len(outputs) != 2:
+    if check_two_screens and len(outputs) != 2:
         raise ValueError("you have !=2 screens connected")
-    if doPrint:
+    if do_print:
         print("found two screens")
-    if doUseResolution:
-        # check that the two outputs support "resolutionToUse"
+    if do_use_resolution:
+        # check that the two outputs support "resolution_to_use"
         # if so set them
         # if not issue error message
-        if outputs[0].supports(resolutionToUse) and outputs[1].supports(
-            resolutionToUse
+        if outputs[0].supports(resolution_to_use) and outputs[1].supports(
+            resolution_to_use
         ):
-            set_outputs(outputs, resolutionToUse)
+            set_outputs(outputs, resolution_to_use)
         else:
             raise ValueError(
-                "your two screens do not support resolution", resolutionToUse
+                "your two screens do not support resolution", resolution_to_use
             )
     else:
         # find the highest resolution supported by the two screens
         mode = find_highest_mode(outputs)
-        if doPrint:
+        if do_print:
             print("found best mode to be", mode)
         # set it!
         set_outputs(outputs, mode)

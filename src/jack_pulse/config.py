@@ -8,7 +8,7 @@ import os.path
 mysection = "jack_pulse"
 
 
-def getConfig():
+def get_config():
     inifile = os.path.expanduser("~/.jack_pulse.ini")
     if not os.path.isfile(inifile):
         print(

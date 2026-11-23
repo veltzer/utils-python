@@ -123,7 +123,7 @@ def main():
         rollups = [rollup for result in executor.map(get_rollups, batches) for rollup in result]
         bad = sorted((name, state) for name, state in rollups if state not in (None, "SUCCESS"))
         details = executor.map(get_bad_suites, [name for name, _ in bad])
-        for (name_with_owner, state), suites in zip(bad, details):
+        for (name_with_owner, state), suites in zip(bad, details, strict=False):
             print(f"{name_with_owner}: {state}")
             for workflow, suite_state, url in suites:
                 print(f"    {workflow}: {suite_state} {url}")

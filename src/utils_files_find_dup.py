@@ -26,7 +26,7 @@ def find_duplicates(directory):
             filepath = os.path.join(root, filename)
             try:
                 checksum = calculate_checksum(filepath)
-            except OSError, PermissionError:
+            except OSError:
                 continue
             checksum_map[checksum].append(filepath)
     return {k: v for k, v in checksum_map.items() if len(v) > 1}

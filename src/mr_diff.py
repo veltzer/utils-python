@@ -20,8 +20,8 @@ def main():
     have_mrconfig = set()
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
-        for line in f:
-            line = line.rstrip()
+        for raw_line in f:
+            line = raw_line.rstrip()
             if line.startswith("["):
                 project = line[1:-1].split("/")[-1]
                 have_mrconfig.add(project)

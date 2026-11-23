@@ -3,10 +3,12 @@
 """Upload email messages from a list of Maildir to Google Mail."""
 
 import argparse
+import contextlib
 import dbm
 import email
 import email.header
 import email.utils
+import getpass
 import os
 import sys
 import time
@@ -29,20 +31,14 @@ class Gmail:
 
     def __del__(self):
         if self.__database is not None:
-            # pylint: disable=broad-except
-            try:
+            with contextlib.suppress(Exception):
                 self.__database.close()
-            except Exception:  # noqa: BLE001, S110
-                pass
             self.__database = None
 
         if self.__imap is not None:
-            # pylint: disable=broad-except
-            try:
+            with contextlib.suppress(Exception):
                 self.__imap.close()
                 self.__imap.logout()
-            except Exception:  # noqa: BLE001, S110
-                pass
             self.__imap = None
 
     def append(self, filename):
@@ -97,18 +93,15 @@ class Gmail:
 
 def decode_header(value):
     result = []
-    for v, c in email.header.decode_header(value):
-        if isinstance(v, str):
-            result.append(v)
+    for part, charset in email.header.decode_header(value):
+        if isinstance(part, str):
+            result.append(part)
             continue
         try:
-            if c is None:
-                v = v.decode()
-            else:
-                v = v.decode(c)
+            text = part.decode() if charset is None else part.decode(charset)
         except UnicodeError, LookupError:
-            v = v.decode("iso-8859-1")
-        result.append(v)
+            text = part.decode("iso-8859-1")
+        result.append(text)
     return " ".join(result)
 
 
@@ -138,20 +131,18 @@ def main():
         "--username", help="Username to log into Gamil", default="username"
     )
     args, dirnames = parser.parse_known_args()
-    import getpass
-
     args.password = getpass.getpass("Password: ")
 
     gmail = Gmail(args)
     for dirname in dirnames:
-        for filename in os.listdir(dirname):
-            filename = os.path.join(dirname, filename)
+        for entry in os.listdir(dirname):
+            filename = os.path.join(dirname, entry)
             if os.path.isfile(filename):
                 try:
                     gmail.append(filename)
                 except Exception as e:
                     log(f"Unable to send [{filename}]")
-                    raise e  # noqa: TRY201
+                    raise e
 
 
 def parsedate(value):

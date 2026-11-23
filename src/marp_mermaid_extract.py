@@ -19,7 +19,7 @@ import sys
 
 
 def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
-    with open(file_path, "r") as file:
+    with open(file_path) as file:
         content = file.read()
 
     # Regular expression to match Mermaid diagrams

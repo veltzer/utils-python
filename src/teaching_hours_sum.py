@@ -15,8 +15,8 @@ def main() -> None:
     filename = sys.argv[1]
     hours = 0
     with open(filename) as stream:
-        for line in stream:
-            line = line.rstrip()
+        for raw_line in stream:
+            line = raw_line.rstrip()
             # print(f"line is {line}")
             m = c.match(line)
             if m:

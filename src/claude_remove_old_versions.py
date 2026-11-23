@@ -59,12 +59,13 @@ def main() -> None:
         print(f"no versions directory at {versions_dir}", file=sys.stderr)
         sys.exit(1)
 
-    versions = []
     version_pattern = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
-    for p in versions_dir.iterdir():
-        # a version is normally a single binary file; accept a directory too
-        if (p.is_file() or p.is_dir()) and not p.is_symlink() and version_pattern.match(p.name):
-            versions.append(p.name)
+    # a version is normally a single binary file; accept a directory too
+    versions = [
+        p.name
+        for p in versions_dir.iterdir()
+        if (p.is_file() or p.is_dir()) and not p.is_symlink() and version_pattern.match(p.name)
+    ]
 
     if not versions:
         print(f"no versions found under {versions_dir}", file=sys.stderr)
