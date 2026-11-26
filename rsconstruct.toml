@@ -27,6 +27,10 @@ src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 # Python dependencies come from pyproject.toml ([project].dependencies and
 # [dependency-groups]); `rsconstruct tool install-deps` reads both.
 
+# lint the Lua configuration with luacheck (policy: .luacheckrc)
+[processor.checker.iluacheck]
+src_dirs = ["config"]
+
 # lint the YAML files with yamllint (policy: .yamllint.yaml)
 [processor.checker.iyamllint]
 src_dirs = [".github"]
