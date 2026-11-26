@@ -70,3 +70,6 @@ ignore-missing-imports = [
     "ruamel.*",
     "secretstorage.*",
 ]
+
+[tool.pyrefly.errors]
+no-any-return = "error"

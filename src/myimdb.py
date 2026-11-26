@@ -24,7 +24,7 @@ def get_movie_by_title(title: str) -> dict[str, Any] | None:
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
-        data = response.json()
+        data: dict[str, Any] = response.json()
         if data.get("Response") == "True":
             f_title = data.get("Title")
             if f_title == title:
