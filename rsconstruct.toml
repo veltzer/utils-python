@@ -20,7 +20,7 @@ src_dirs = ["src", "scripts"]
 # ─── toml ────────────────────────────────────────────────────────────────────
 
 [processor.checker.taplo]
-src_files = [".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
+src_files = [".ruff.toml", ".rumdl.toml", "pyproject.toml", "rsconstruct.toml"]
 
 # ─── dependencies ────────────────────────────────────────────────────────────
 
