@@ -58,18 +58,6 @@ search-path = [
     "tests",
     ".",
 ]
-# Third-party libraries without type information.
-ignore-missing-imports = [
-    "google.*",
-    "googleapiclient.*",
-    "mutagen.*",
-    "pymysql.*",
-    "jsonschema.*",
-    "pptx.*",
-    "progressbar.*",
-    "ruamel.*",
-    "secretstorage.*",
-]
 
 [tool.pyrefly.errors]
 no-any-return = "error"
