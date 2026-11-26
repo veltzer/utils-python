@@ -65,3 +65,8 @@ command = "python"
 args = ["tests/test_smoke.py"]
 src_dirs = ["src", "scripts", "tests"]
 src_extensions = [".py"]
+
+# every lint suppression names a rule and says why (see the fleet's CLAUDE.md)
+[processor.checker.suppressions]
+src_dirs = [".github", "config", "scripts", "src"]
+src_files = [".yamllint.yaml", "README.md"]
