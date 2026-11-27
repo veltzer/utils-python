@@ -11,7 +11,7 @@ import urllib.request
 import download.generic
 
 
-def get(link, file):
+def get(link: str, file: str) -> None:
     ted_re = r"http://download.ted.com/talks/[\w_]+-480p.mp4"
     with urllib.request.urlopen(link) as web:
         web_content = web.read().decode()

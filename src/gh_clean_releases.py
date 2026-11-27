@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 
-def gh_api(endpoint, method="GET"):
+def gh_api(endpoint: str, method: str = "GET"):
     """Call the GitHub API via the gh CLI."""
     cmd = ["gh", "api", endpoint]
     if method != "GET":
@@ -22,7 +22,7 @@ def gh_api(endpoint, method="GET"):
     return None
 
 
-def get_all_release_ids(repo):
+def get_all_release_ids(repo: str) -> list[int]:
     """Fetch all release IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/releases", "--paginate", "--jq", ".[].id"],
@@ -33,12 +33,12 @@ def get_all_release_ids(repo):
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
 
-def delete_release(repo, release_id):
+def delete_release(repo: str, release_id: int) -> None:
     """Delete a release."""
     gh_api(f"repos/{repo}/releases/{release_id}", method="DELETE")
 
 
-def get_repo():
+def get_repo() -> str:
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
@@ -49,7 +49,7 @@ def get_repo():
     return result.stdout.strip()
 
 
-def main():
+def main() -> None:
     repo = get_repo()
     count = 4
     if len(sys.argv) > 1:

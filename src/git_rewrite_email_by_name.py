@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 
-def main():
+def main() -> None:
     if len(sys.argv) != 2:
         raise ValueError("usage: git_change_commiter.py [oldname]")
     oldname = shlex.quote(sys.argv[1])

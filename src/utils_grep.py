@@ -10,7 +10,7 @@ import re
 import sys
 
 
-def main():
+def main() -> None:
     # command line usage...
     if len(sys.argv) != 4:
         print("usage: grep.py [expr] [fileregexp] [folder]")

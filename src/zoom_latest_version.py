@@ -7,7 +7,7 @@ zoom_latest_version
 import requests
 
 
-def get_latest_zoom_version():
+def get_latest_zoom_version() -> str | None:
     """
     Fetches the latest Zoom version number for Linux clients.
     Returns: string with version number or None if not found
@@ -35,7 +35,7 @@ def get_latest_zoom_version():
         return None
 
 
-def main():
+def main() -> None:
     version = get_latest_zoom_version()
     if version:
         print(f"Latest Zoom Linux version: {version}")

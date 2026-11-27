@@ -63,7 +63,7 @@ def validate_image_links(root_dir: str) -> bool:
     return all_valid
 
 
-def main():
+def main() -> None:
     if len(sys.argv) != 2:
         print("Usage: python script.py <root_directory>")
         sys.exit(1)

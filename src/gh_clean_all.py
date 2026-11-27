@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 
-def gh_api(endpoint, method="GET", fields=None):
+def gh_api(endpoint: str, method: str = "GET", fields: dict[str, str] | None = None):
     """Call the GitHub API via the gh CLI."""
     cmd = ["gh", "api", endpoint]
     if method != "GET":
@@ -26,7 +26,7 @@ def gh_api(endpoint, method="GET", fields=None):
     return None
 
 
-def get_repo():
+def get_repo() -> str:
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
@@ -37,7 +37,7 @@ def get_repo():
     return result.stdout.strip()
 
 
-def get_all_deployments(repo):
+def get_all_deployments(repo: str) -> list[int]:
     """Fetch all deployment IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/deployments", "--paginate", "--jq", ".[].id"],
@@ -48,7 +48,7 @@ def get_all_deployments(repo):
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
 
-def get_latest_deployment_state(repo, deployment_id):
+def get_latest_deployment_state(repo: str, deployment_id: int) -> str | None:
     """Return the most recent status state for a deployment, or None if none exist."""
     result = subprocess.run(
         [
@@ -66,7 +66,7 @@ def get_latest_deployment_state(repo, deployment_id):
     return state or None
 
 
-def deactivate_deployment(repo, deployment_id):
+def deactivate_deployment(repo: str, deployment_id: int) -> None:
     """Set deployment status to inactive so it can be deleted."""
     gh_api(
         f"repos/{repo}/deployments/{deployment_id}/statuses",
@@ -75,12 +75,12 @@ def deactivate_deployment(repo, deployment_id):
     )
 
 
-def delete_deployment(repo, deployment_id):
+def delete_deployment(repo: str, deployment_id: int) -> None:
     """Delete a deployment."""
     gh_api(f"repos/{repo}/deployments/{deployment_id}", method="DELETE")
 
 
-def get_all_release_ids(repo):
+def get_all_release_ids(repo: str) -> list[int]:
     """Fetch all release IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/releases", "--paginate", "--jq", ".[].id"],
@@ -91,12 +91,12 @@ def get_all_release_ids(repo):
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
 
-def delete_release(repo, release_id):
+def delete_release(repo: str, release_id: int) -> None:
     """Delete a release."""
     gh_api(f"repos/{repo}/releases/{release_id}", method="DELETE")
 
 
-def get_all_workflow_runs(repo):
+def get_all_workflow_runs(repo: str) -> list[tuple[int, str, str]]:
     """Fetch all workflow runs as (id, status, conclusion) triples, newest first."""
     result = subprocess.run(
         [
@@ -123,12 +123,12 @@ def get_all_workflow_runs(repo):
     return runs
 
 
-def delete_workflow_run(repo, run_id):
+def delete_workflow_run(repo: str, run_id: int) -> None:
     """Delete a workflow run."""
     gh_api(f"repos/{repo}/actions/runs/{run_id}", method="DELETE")
 
 
-def clean_deployments(repo, keep):
+def clean_deployments(repo: str, keep: int) -> None:
     print("\n=== Deployments ===")
     print(f"Fetching deployments for {repo}...")
     deployment_ids = get_all_deployments(repo)
@@ -158,7 +158,7 @@ def clean_deployments(repo, keep):
         print(f"  [{i}/{len(to_delete)}] Deleted deployment {dep_id}")
 
 
-def clean_releases(repo, keep):
+def clean_releases(repo: str, keep: int) -> None:
     print("\n=== Releases ===")
     print(f"Fetching releases for {repo}...")
     release_ids = get_all_release_ids(repo)
@@ -176,7 +176,7 @@ def clean_releases(repo, keep):
         print(f"  [{i}/{len(to_delete)}] Deleted release {release_id}")
 
 
-def clean_workflows(repo, keep):
+def clean_workflows(repo: str, keep: int) -> None:
     print("\n=== Workflow runs ===")
     print(f"Fetching workflow runs for {repo}...")
     runs = get_all_workflow_runs(repo)
@@ -218,7 +218,7 @@ def clean_workflows(repo, keep):
         print(f"  [{i}/{len(to_delete)}] Deleted workflow run {run_id}")
 
 
-def main():
+def main() -> None:
     repo = get_repo()
     keep = 4
     if len(sys.argv) > 1:

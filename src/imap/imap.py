@@ -19,7 +19,8 @@ import imaplib
 import os
 import os.path
 import time
-from typing import TYPE_CHECKING
+from time import struct_time
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     # the class of an open gdbm file has a name in the type stubs only
@@ -33,22 +34,22 @@ def db_open():
     return dbm.gnu.open(dbname, "c")
 
 
-def db_have(filename, opt_database):
+def db_have(filename: str, opt_database: Any) -> bool:
     return filename in opt_database
 
 
-def db_mark(filename, opt_database):
+def db_mark(filename: str, opt_database: Any) -> None:
     opt_database[filename] = "1"
 
 
-def db_close(opt_database):
+def db_close(opt_database: Any) -> None:
     opt_database.close()
 
 
 # general helpers
 
 
-def decode_header(value):
+def decode_header(value: str) -> str:
     result = []
     for part, charset in email.header.decode_header(value):
         if isinstance(part, str):
@@ -62,18 +63,17 @@ def decode_header(value):
     return " ".join(result)
 
 
-def parsedate(value):
+def parsedate(value: str) -> struct_time | None:
     if not value:
         return None
-    value = decode_header(value)
-    value = email.utils.parsedate_tz(value)
-    if value is not None:
-        timestamp = email.utils.mktime_tz(value)
+    parsed = email.utils.parsedate_tz(decode_header(value))
+    if parsed is not None:
+        timestamp = email.utils.mktime_tz(parsed)
         return time.localtime(timestamp)
     return None
 
 
-def _text(item):
+def _text(item: bytes | tuple[bytes, bytes] | None) -> str:
     """an item of an imap answer, as text for an error message"""
     return item.decode() if isinstance(item, bytes) else str(item)
 
@@ -82,7 +82,7 @@ def _text(item):
 
 
 class IMAP:
-    def __init__(self):
+    def __init__(self) -> None:
         self.db: _gdbm | None = None
         self.imap: imaplib.IMAP4_SSL | None = None
 
@@ -92,22 +92,22 @@ class IMAP:
             raise ValueError("not connected, call connect() first")
         return self.imap
 
-    def connect(self, opt_hostname, opt_port):
+    def connect(self, opt_hostname: str, opt_port: int) -> None:
         self.imap = imaplib.IMAP4_SSL(opt_hostname, opt_port)
 
-    def login(self, username, password):
+    def login(self, username: str, password: str) -> None:
         (res, _) = self._conn().login(username, password)
         if res != "OK":
             raise ValueError(f"could not login with error [{res}]")
         self.db = db_open()
 
-    def logout(self):
+    def logout(self) -> None:
         db_close(self.db)
         (res, _) = self._conn().logout()
         if res != "BYE":
             raise ValueError(f"could not logout with error [{res}]")
 
-    def have(self, name):
+    def have(self, name: str) -> bool:
         """
         check if we have a single folder. if you pass 'a/b' it will check if you have a SINGLE
         folder called 'a/b'...
@@ -117,7 +117,7 @@ class IMAP:
             raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
         return not (len(data) == 1 and data[0] is None)
 
-    def create(self, name):
+    def create(self, name: str) -> None:
         """
         this function creates a single folder.
         if the folder exists then it will throw an exception
@@ -126,7 +126,7 @@ class IMAP:
         if res != "OK":
             raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
 
-    def delete(self, name):
+    def delete(self, name: str) -> None:
         """
         this function deletes a single folder.
         If the folder doesn't exist then it will throw an exception
@@ -135,7 +135,7 @@ class IMAP:
         if res != "OK":
             raise ValueError(f"could not list [{name}]. error is [{_text(data[0])}]")
 
-    def have_fullpath(self, path):
+    def have_fullpath(self, path: str) -> bool:
         """
         check that we have a full path. Returns boolean to indicate the state.
         """
@@ -146,7 +146,7 @@ class IMAP:
                 return False
         return True
 
-    def create_fullpath_db(self, path):
+    def create_fullpath_db(self, path: str) -> None:
         """
         create a full path and remember which paths have been created in a set
         """
@@ -158,7 +158,7 @@ class IMAP:
                     self.create(cur)
                 db_mark(cur, self.db)
 
-    def create_fullpath(self, path):
+    def create_fullpath(self, path: str) -> None:
         """
         create a full path of folders. strict.
         """
@@ -166,7 +166,7 @@ class IMAP:
         for x in range(1, len(parts) + 1):
             self.create("/".join(parts[:x]))
 
-    def delete_fullpath(self, path):
+    def delete_fullpath(self, path: str) -> None:
         """
         delete a full path of folders. strict.
         """
@@ -176,7 +176,7 @@ class IMAP:
             cur = "/".join(parts[:x])
             self.delete(cur)
 
-    def append(self, mailbox, flags, date_time, message):
+    def append(self, mailbox: str, flags: str | None, date_time: struct_time | None, message: bytes) -> None:
         """
         append a single message to a mailbox
         """
@@ -186,14 +186,14 @@ class IMAP:
                 f"could not append to [{mailbox}]. error is [{_text(data[0])}]"
             )
 
-    def append_file(self, mailbox, flags, filename):
+    def append_file(self, mailbox: str, flags: str | None, filename: str) -> None:
         with open(filename, "rb") as f:
             content = f.read()
         message = email.message_from_bytes(content)
         timestamp = parsedate(message["date"])
         self.append(mailbox, flags, timestamp, content)
 
-    def test(self):
+    def test(self) -> None:
         """test function"""
         # this works
         print(self._conn().capability())
@@ -249,7 +249,7 @@ class IMAP:
         # lets try this
         self.delete_fullpath("test/foo/bar/zoo")
 
-    def import_folder(self, folder, toplevel, doprogress):
+    def import_folder(self, folder: str, toplevel: str, *, doprogress: bool) -> None:
         for root, _, files in os.walk(folder):
             for file in files:
                 if not file.endswith(",S"):

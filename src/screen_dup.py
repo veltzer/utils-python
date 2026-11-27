@@ -38,14 +38,14 @@ do_crtc = False
 
 
 class Output:
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self.name = name
         self.resolutions = set()
 
-    def add_resolution(self, x, y):
+    def add_resolution(self, x: int, y: int) -> None:
         self.resolutions.add((x, y))
 
-    def supports(self, resolution):
+    def supports(self, resolution: tuple[int, int]) -> bool:
         return resolution in self.resolutions
 
     def __repr__(self):
@@ -54,14 +54,14 @@ class Output:
         return ret
 
 
-def run(args):
+def run(args: list[str]) -> None:
     if real:
         subprocess.check_output(args)
     else:
         print(args)
 
 
-def find_highest_mode(outputs):
+def find_highest_mode(outputs: list[Output]) -> tuple[int, int]:
     for r in res:
         for output in outputs:
             if r not in output.resolutions:
@@ -71,7 +71,7 @@ def find_highest_mode(outputs):
     raise ValueError("no resolution found...")
 
 
-def find_all_outputs():
+def find_all_outputs() -> list[Output]:
     outputs = []
     # regular expresson to find disconnected|connected devices
     re_output = re.compile("^(.*) (?:disconnected|connected) (.*)")
@@ -94,7 +94,7 @@ def find_all_outputs():
     return outputs
 
 
-def find_outputs():
+def find_outputs() -> list[Output]:
     outputs = []
     # regular expresson to find connected devices
     re_output = re.compile(r"^(.*) (?:connected) (.*)")
@@ -117,7 +117,7 @@ def find_outputs():
     return outputs
 
 
-def set_outputs(outputs, mode):
+def set_outputs(outputs: list[Output], mode: tuple[int, int]) -> None:
     print("setting the outputs...")
     for index, output in enumerate(outputs):
         args = [
@@ -139,7 +139,7 @@ def set_outputs(outputs, mode):
         run(args)
 
 
-def invert_the_screen():
+def invert_the_screen() -> None:
     # dont try this at home...
     run(
         [
@@ -154,7 +154,7 @@ def invert_the_screen():
     )
 
 
-def main():
+def main() -> None:
     outputs = find_outputs()
     if check_two_screens and len(outputs) != 2:
         raise ValueError("you have !=2 screens connected")

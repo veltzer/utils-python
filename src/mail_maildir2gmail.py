@@ -12,11 +12,14 @@ import getpass
 import os
 import sys
 import time
+from argparse import Namespace
+from dbm import _Database
 from imaplib import IMAP4_SSL
+from time import struct_time
 
 
 class Gmail:
-    def __init__(self, options):
+    def __init__(self, options: Namespace) -> None:
         self.username = options.username
         self.password = options.password
         self.folder = options.folder
@@ -27,14 +30,14 @@ class Gmail:
 
         self.__imap: IMAP4_SSL | None = None
 
-    def __del__(self):
+    def __del__(self) -> None:
         if self.__imap is not None:
             with contextlib.suppress(Exception):
                 self.__imap.close()
                 self.__imap.logout()
             self.__imap = None
 
-    def append(self, filename):
+    def append(self, filename: str) -> None:
         if self.check_appended(filename):
             return
 
@@ -59,20 +62,20 @@ class Gmail:
         print(self.imap.append(self.folder, "(\\Seen)", timestamp, content))
         self.mark_appended(filename)
 
-    def check_appended(self, filename):
+    def check_appended(self, filename: str) -> bool:
         with self.open_database() as database:
             return os.path.basename(filename).encode("utf-8") in database
 
-    def mark_appended(self, filename):
+    def mark_appended(self, filename: str) -> None:
         with self.open_database() as database:
             database[os.path.basename(filename).encode("utf-8")] = b"1"
 
-    def open_database(self):
+    def open_database(self) -> _Database:
         dbname = os.path.abspath(os.path.splitext(sys.argv[0])[0] + ".db")
         return dbm.open(dbname, "c")
 
     @property
-    def imap(self):
+    def imap(self) -> IMAP4_SSL:
         if self.__imap is None:
             if not self.username or not self.password:
                 raise LookupError("Username/password not supplied")
@@ -83,7 +86,7 @@ class Gmail:
         return self.__imap
 
 
-def decode_header(value):
+def decode_header(value: str) -> str:
     result = []
     for part, charset in email.header.decode_header(value):
         if isinstance(part, str):
@@ -97,24 +100,23 @@ def decode_header(value):
     return " ".join(result)
 
 
-def encode_unicode(value):
+def encode_unicode(value: str | bytes) -> str | bytes:
     if isinstance(value, str):
         for codec in ["iso-8859-1", "utf8"]:
             try:
-                value = value.encode(codec)
-                break
+                return value.encode(codec)
             except UnicodeError:
                 pass
 
     return value
 
 
-def log(message):
+def log(message: str) -> None:
     t = time.strftime("%H:%M:%S")
     print(f"[{t}]: {encode_unicode(message)}")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--folder", help="Folder to store the emails", default="All Mail"
@@ -137,13 +139,12 @@ def main():
                     raise
 
 
-def parsedate(value):
+def parsedate(value: str) -> struct_time | None:
     if not value:
         return None
-    value = decode_header(value)
-    value = email.utils.parsedate_tz(value)
-    if value is not None:
-        timestamp = email.utils.mktime_tz(value)
+    parsed = email.utils.parsedate_tz(decode_header(value))
+    if parsed is not None:
+        timestamp = email.utils.mktime_tz(parsed)
         return time.localtime(timestamp)
     return None
 

@@ -9,14 +9,14 @@ It will first read the projects registered in ~/.mrconfig.
 import os.path
 
 
-def add_folder(base, have_folder):
+def add_folder(base: str, have_folder: set[str]) -> None:
     for f in os.listdir(base):
         full = os.path.join(base, f)
         if os.path.isdir(full):
             have_folder.add(f)
 
 
-def main():
+def main() -> None:
     have_mrconfig = set()
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:

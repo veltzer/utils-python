@@ -25,7 +25,7 @@ eclipse = os.path.expanduser("~/install/eclipse/eclipse")
 debug = False
 
 
-def max_output(out):
+def max_output(out: str) -> bool:
     found_cnt = 0
     found_id = None
     for x in out.split("\n"):
@@ -55,7 +55,7 @@ def max_output(out):
     return False
 
 
-def main():
+def main() -> None:
     # run eclipse with the folder as the workspace
     pid = os.fork()
     if pid == 0:

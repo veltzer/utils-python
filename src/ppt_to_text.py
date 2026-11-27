@@ -9,7 +9,7 @@ import sys
 from pptx import Presentation
 
 
-def odp_to_text(source, target):
+def odp_to_text(source: str, target: str) -> None:
     with open(target, "w") as stream:
         prs = Presentation(source)
         for slide in prs.slides:

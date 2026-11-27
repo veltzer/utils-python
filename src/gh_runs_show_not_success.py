@@ -25,6 +25,7 @@ import json
 import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 
 # repos per GraphQL query; measured fastest at around 10
 BATCH_SIZE = 10
@@ -59,13 +60,13 @@ query($owner: String!, $name: String!) {
 """
 
 
-def gh(*args):
+def gh(*args: str) -> str:
     """Run the gh CLI and return its stdout."""
     result = subprocess.run(["gh", *args], capture_output=True, text=True, check=True)
     return result.stdout
 
 
-def gh_graphql(query, variables=None):
+def gh_graphql(query: str, variables: dict[str, Any] | None = None):
     """Run a GraphQL query via the gh CLI, return its data."""
     cmd = ["api", "graphql", "-f", f"query={query}"]
     for key, value in (variables or {}).items():
@@ -73,7 +74,7 @@ def gh_graphql(query, variables=None):
     return json.loads(gh(*cmd))["data"]
 
 
-def get_repos():
+def get_repos() -> list[str]:
     """Return owner/name of every non-fork repository the user owns."""
     out = gh(
         "api",
@@ -85,7 +86,7 @@ def get_repos():
     return out.split()
 
 
-def get_rollups(batch):
+def get_rollups(batch: list[str]):
     """Return [(nameWithOwner, state)] for a batch; state is None without checks."""
     fields = []
     for index, name_with_owner in enumerate(batch):
@@ -101,7 +102,7 @@ def get_rollups(batch):
     return rollups
 
 
-def get_bad_suites(name_with_owner):
+def get_bad_suites(name_with_owner: str):
     """Return [(workflow name, status/conclusion, url)] for non-successful suites."""
     owner, name = name_with_owner.split("/", 1)
     data = gh_graphql(SUITES_QUERY, {"owner": owner, "name": name})
@@ -116,7 +117,7 @@ def get_bad_suites(name_with_owner):
     return suites
 
 
-def main():
+def main() -> None:
     repos = get_repos()
     batches = [repos[i:i + BATCH_SIZE] for i in range(0, len(repos), BATCH_SIZE)]
     with ThreadPoolExecutor(WORKERS) as executor:

@@ -22,7 +22,7 @@ CONFIG = os.path.join(
 UA = "chesscom_dump/1.0 (contact: you@example.com)"  # chess.com 403s generic agents
 
 
-def get(url, retries=5):
+def get(url: str, retries: int = 5):
     for i in range(retries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA})
@@ -42,14 +42,14 @@ def get(url, retries=5):
     raise RuntimeError(f"gave up on {url}")
 
 
-def load_config(path=CONFIG) -> Mapping[str, str]:
+def load_config(path: str = CONFIG) -> Mapping[str, str]:
     """[chesscom] section of the ini, or an empty mapping if there is no file."""
     cp = configparser.ConfigParser()
     cp.read(path)
     return cp["chesscom"] if cp.has_section("chesscom") else {}
 
 
-def main():
+def main() -> None:
     cfg = load_config()
 
     p = argparse.ArgumentParser(

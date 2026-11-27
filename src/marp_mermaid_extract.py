@@ -18,7 +18,7 @@ import re
 import sys
 
 
-def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
+def extract_mermaid_diagrams(mermaid_folder: str, file_path: str) -> None:
     with open(file_path) as file:
         content = file.read()
 
@@ -57,7 +57,7 @@ def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
         file.write(content)
 
 
-def main():
+def main() -> None:
     if len(sys.argv) < 2:
         print(f"Usage: {sys.argv[0]} [marpfile]")
         sys.exit(1)

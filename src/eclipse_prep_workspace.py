@@ -23,7 +23,7 @@ do_progress = True
 # do import?
 
 
-def progress(msg):
+def progress(msg: str) -> None:
     if do_progress:
         print(msg, file=sys.stderr)
 

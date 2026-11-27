@@ -18,7 +18,7 @@ print_all = True
 stop_on_fail = False
 
 
-def run_check_string(args, string, string_to_print=None, *, do_exit=False, do_print=False):
+def run_check_string(args: list[str], string: str, string_to_print: str | None = None, *, do_exit: bool = False, do_print: bool = False):
     """this method runs make and checks that the output does not have lines with warnings in them"""
     with subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         res_out, res_err = p.communicate()
@@ -42,7 +42,7 @@ def run_check_string(args, string, string_to_print=None, *, do_exit=False, do_pr
     return error_code
 
 
-def run_empty_output(args, string_to_print=None, *, do_exit=False, do_print=False):
+def run_empty_output(args: list[str], string_to_print: str | None = None, *, do_exit: bool = False, do_print: bool = False):
     with subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         res_out, res_err = p.communicate()
     res_out = res_out.decode()
@@ -58,7 +58,7 @@ def run_empty_output(args, string_to_print=None, *, do_exit=False, do_print=Fals
     return p.returncode
 
 
-def get_projects():
+def get_projects() -> list[tuple[str, str]]:
     projects = []
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
@@ -71,7 +71,7 @@ def get_projects():
     return projects
 
 
-def do_stats(code, events):
+def do_stats(code: int, events: dict[str, int]) -> None:
     if code:
         print("ERROR")
         events["error"] += 1
@@ -82,7 +82,7 @@ def do_stats(code, events):
         events["ok"] += 1
 
 
-def main():
+def main() -> None:
     projects = get_projects()
     project_options_file = os.path.expanduser("~/.mroptions.yaml")
     if os.path.isfile(project_options_file):

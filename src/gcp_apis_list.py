@@ -14,7 +14,7 @@ import google.auth
 from googleapiclient import discovery
 
 
-def list_enabled_apis(project_id):
+def list_enabled_apis(project_id: str | None) -> None:
     """Print every enabled API of the project, one per line."""
     credentials, default_project = google.auth.default()
     if project_id is None:
@@ -33,7 +33,7 @@ def list_enabled_apis(project_id):
         )
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(

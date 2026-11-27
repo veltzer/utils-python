@@ -19,7 +19,7 @@ SCHEMA_CACHE: dict[str, Any] = {}
 DEBUG = True
 
 
-def load_yaml_with_order(file_path):
+def load_yaml_with_order(file_path: str):
     """
     Loads a YAML file while preserving the order of keys.
     Uses ruamel.yaml for this purpose.
@@ -29,7 +29,7 @@ def load_yaml_with_order(file_path):
         return yaml.load(f)
 
 
-def fetch_schema(schema_url):
+def fetch_schema(schema_url: str):
     """
     Fetches a JSON schema from a given URL, using a cache to avoid re-fetching.
     """
@@ -42,7 +42,7 @@ def fetch_schema(schema_url):
     return schema
 
 
-def check_order_recursively(data, schema, filename, path="", *, debug=False):
+def check_order_recursively(data: object, schema: dict[str, Any], filename: str, path: str = "", *, debug: bool = False) -> bool:
     """
     Recursively traverses the data and checks property order against the schema.
     Returns True if all orders are valid, False otherwise.
@@ -90,7 +90,7 @@ def check_order_recursively(data, schema, filename, path="", *, debug=False):
     return is_valid
 
 
-def main():
+def main() -> None:
     """
     Main function to run the validation script.
     """
@@ -116,7 +116,7 @@ def main():
         schema = fetch_schema(schema_url)
         if DEBUG:
             # In debug mode, create a custom registry to see remote lookups
-            def logging_retriever(uri):
+            def logging_retriever(uri: str) -> Resource:
                 # Use our caching fetch_schema function
                 return Resource.from_contents(fetch_schema(uri))
 

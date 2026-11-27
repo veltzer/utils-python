@@ -6,7 +6,7 @@ from mutagen.easyid3 import EasyID3
 from mutagen.id3 import ID3NoHeaderError
 
 
-def first(mp3, key):
+def first(mp3: EasyID3, key: str):
     """the first value of a tag, or the empty string if it has none"""
     values = mp3.get(key)
     return values[0] if values else ""

@@ -7,7 +7,7 @@ Install requirements one by one
 import subprocess
 
 
-def main():
+def main() -> None:
     with open("requirements.thawed.txt") as f:
         for line in f:
             package = line.strip()

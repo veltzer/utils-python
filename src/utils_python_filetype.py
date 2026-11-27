@@ -11,7 +11,7 @@ import shelve
 import sys
 
 
-def check_file_type(file_path):
+def check_file_type(file_path: str):
     if not os.path.exists(file_path):
         return "File does not exist"
 
@@ -36,7 +36,7 @@ def check_file_type(file_path):
         return "Pickle file"
 
 
-def main():
+def main() -> None:
     file_path = sys.argv[1]
     result = check_file_type(file_path)
     print(f"The file is: {result}")

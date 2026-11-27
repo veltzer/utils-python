@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 
-def upgrade_module(module_name):
+def upgrade_module(module_name: str) -> None:
     try:
         importlib.import_module(module_name)
         print(f"{module_name} is installed.")

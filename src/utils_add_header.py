@@ -10,7 +10,7 @@ import sys
 import tempfile
 
 
-def add_header_to_file(filename):
+def add_header_to_file(filename: str) -> bool:
     """
     Add a header with the base name to the file if it doesnt already exist.
     """
@@ -46,7 +46,7 @@ def add_header_to_file(filename):
     return True
 
 
-def main():
+def main() -> int:
     # Check if any filenames were provided
     if len(sys.argv) < 2:
         print("Usage: python add_headers.py file1.py file2.py [file3.py ...]")

@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 
-def gh_api(endpoint, method="GET", fields=None):
+def gh_api(endpoint: str, method: str = "GET", fields: dict[str, str] | None = None):
     """Call the GitHub API via the gh CLI."""
     cmd = ["gh", "api", endpoint]
     if method != "GET":
@@ -25,7 +25,7 @@ def gh_api(endpoint, method="GET", fields=None):
     return None
 
 
-def get_all_deployments(repo):
+def get_all_deployments(repo: str) -> list[int]:
     """Fetch all deployment IDs, newest first."""
     result = subprocess.run(
         ["gh", "api", f"repos/{repo}/deployments", "--paginate", "--jq", ".[].id"],
@@ -36,7 +36,7 @@ def get_all_deployments(repo):
     return [int(line) for line in result.stdout.strip().splitlines() if line.strip()]
 
 
-def get_latest_deployment_state(repo, deployment_id):
+def get_latest_deployment_state(repo: str, deployment_id: int) -> str | None:
     """Return the most recent status state for a deployment, or None if none exist."""
     result = subprocess.run(
         [
@@ -54,7 +54,7 @@ def get_latest_deployment_state(repo, deployment_id):
     return state or None
 
 
-def deactivate_deployment(repo, deployment_id):
+def deactivate_deployment(repo: str, deployment_id: int) -> None:
     """Set deployment status to inactive so it can be deleted."""
     gh_api(
         f"repos/{repo}/deployments/{deployment_id}/statuses",
@@ -63,12 +63,12 @@ def deactivate_deployment(repo, deployment_id):
     )
 
 
-def delete_deployment(repo, deployment_id):
+def delete_deployment(repo: str, deployment_id: int) -> None:
     """Delete a deployment."""
     gh_api(f"repos/{repo}/deployments/{deployment_id}", method="DELETE")
 
 
-def get_repo():
+def get_repo() -> str:
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
@@ -79,7 +79,7 @@ def get_repo():
     return result.stdout.strip()
 
 
-def main():
+def main() -> None:
     repo = get_repo()
     keep = 4
     if len(sys.argv) > 1:

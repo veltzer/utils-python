@@ -7,7 +7,7 @@ Print the GCP project id of the application-default credentials.
 import google.auth
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     _, project_id = google.auth.default()
     print(project_id)

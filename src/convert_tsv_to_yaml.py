@@ -19,6 +19,7 @@ Args:
 
 import argparse
 import csv
+from typing import Any
 
 # Define recognizable boolean string values
 BOOLEAN_TRUE_STRS = {"true", "yes", "t", "y"}
@@ -26,7 +27,7 @@ BOOLEAN_FALSE_STRS = {"false", "no", "f", "n"}
 ALL_BOOLEAN_STRS = BOOLEAN_TRUE_STRS | BOOLEAN_FALSE_STRS
 
 
-def _parse_tsv_data(input_file, array_columns_str=""):
+def _parse_tsv_data(input_file: str, array_columns_str: str = ""):
     """Reads and processes the TSV data, returning a list of records."""
     array_keys = {
         key.strip().replace(" ", "_").lower()
@@ -83,7 +84,7 @@ def _parse_tsv_data(input_file, array_columns_str=""):
     return records
 
 
-def _write_yaml_file(records, output_file):
+def _write_yaml_file(records: list[dict[str, Any]], output_file: str) -> None:
     """Writes a list of records to a YAML file."""
     with open(output_file, "w", encoding="utf-8") as yamlfile:
         yamlfile.write("items:\n")
@@ -108,7 +109,7 @@ def _write_yaml_file(records, output_file):
                 is_first_item = False
 
 
-def convert_tsv_to_yaml(input_file, output_file, array_columns_str=""):
+def convert_tsv_to_yaml(input_file: str, output_file: str, array_columns_str: str = "") -> None:
     """Orchestrates the conversion from TSV to YAML."""
     records = _parse_tsv_data(input_file, array_columns_str)
     _write_yaml_file(records, output_file)

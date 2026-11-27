@@ -24,7 +24,7 @@ do_redirect = False
 opt_codec = "copy"
 
 
-def fix(filename):
+def fix(filename: str) -> None:
     print(f"fixing [{filename}]...")
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
         out = f.name
@@ -62,7 +62,7 @@ def fix(filename):
     shutil.move(out, filename)
 
 
-def main():
+def main() -> None:
     for filename in sys.argv[1:]:
         assert os.path.isfile(filename)
         fix(filename)

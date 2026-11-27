@@ -7,14 +7,14 @@ Build random times of day
 import random
 
 
-def make_hour(e, v, add=0):
+def make_hour(e: int, v: int, add: float = 0):
     t = -5
     while t < 0:
         t = random.normalvariate(e, v)
     return add + t
 
 
-def print_time(t):
+def print_time(t: float) -> None:
     print(f"{int(t // 60)}:{int(t % 60):02d}", end="")
 
 

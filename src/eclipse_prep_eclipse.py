@@ -9,14 +9,15 @@ import os
 import os.path
 import subprocess
 import sys
+from typing import Any
 
 
-def die(*args, **kwargs):
+def die(*args: Any, **kwargs: Any):
     print(*args, file=sys.stderr, **kwargs)
     sys.exit(1)
 
 
-def main():
+def main() -> None:
     # what file to check to see that we are in an eclipse folder
     checkfile = "eclipse"
     # show progress?

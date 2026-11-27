@@ -12,7 +12,7 @@ import urllib.request
 import progressbar
 
 
-def get(url, file):
+def get(url: str, file: str) -> None:
     """
     A function to download a file and show progress report
     while doing it

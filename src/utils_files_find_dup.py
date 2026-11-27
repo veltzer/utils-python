@@ -9,7 +9,7 @@ import os
 from collections import defaultdict
 
 
-def calculate_checksum(filename):
+def calculate_checksum(filename: str) -> str:
     """Calculates the SHA-256 checksum of a file."""
     with open(filename, "rb") as f:
         file_hash = hashlib.sha256()
@@ -18,7 +18,7 @@ def calculate_checksum(filename):
     return file_hash.hexdigest()
 
 
-def find_duplicates(directory):
+def find_duplicates(directory: str):
     """Recursively scans the directory and finds duplicate files based on checksum."""
     checksum_map = defaultdict(list)
     for root, _, files in os.walk(directory):
@@ -32,7 +32,7 @@ def find_duplicates(directory):
     return {k: v for k, v in checksum_map.items() if len(v) > 1}
 
 
-def get_user_choice(duplicates):
+def get_user_choice(duplicates: dict[str, list[str]]) -> None:
     """Prompts the user to choose which files to keep from the duplicates."""
     for checksum, files in duplicates.items():
         print(f"\nDuplicate files found with checksum {checksum}:")

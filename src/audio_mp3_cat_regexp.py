@@ -13,7 +13,7 @@ do_check = False
 do_redirect = False
 
 
-def unite(filenames, out):
+def unite(filenames: list[str], out: str) -> None:
     print(f"creating [{out}] out of [{filenames}]")
     args = [
         # "ffmpeg",

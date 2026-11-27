@@ -84,11 +84,11 @@ def main() -> None:
     if args.exit:
         sys.exit(0)
     imp = imap.imap.IMAP()
-    imp.connect(opt_hostname, opt_port)
+    imp.connect(opt_hostname, int(opt_port))
     imp.login(opt_username, opt_password)
     if args.subcommand == "import":
         imp.import_folder(
-            os.path.expanduser(args.mailfolder), args.toplevel, not args.noprogress
+            os.path.expanduser(args.mailfolder), args.toplevel, doprogress=not args.noprogress
         )
     if args.subcommand == "test":
         imp.test()

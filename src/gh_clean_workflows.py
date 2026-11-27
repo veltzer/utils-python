@@ -11,7 +11,7 @@ import subprocess
 import sys
 
 
-def gh_api(endpoint, method="GET"):
+def gh_api(endpoint: str, method: str = "GET"):
     """Call the GitHub API via the gh CLI."""
     cmd = ["gh", "api", endpoint]
     if method != "GET":
@@ -22,7 +22,7 @@ def gh_api(endpoint, method="GET"):
     return None
 
 
-def get_all_workflow_runs(repo):
+def get_all_workflow_runs(repo: str) -> list[tuple[int, str, str]]:
     """Fetch all workflow runs as (id, status, conclusion) triples, newest first."""
     result = subprocess.run(
         [
@@ -49,12 +49,12 @@ def get_all_workflow_runs(repo):
     return runs
 
 
-def delete_workflow_run(repo, run_id):
+def delete_workflow_run(repo: str, run_id: int) -> None:
     """Delete a workflow run."""
     gh_api(f"repos/{repo}/actions/runs/{run_id}", method="DELETE")
 
 
-def get_repo():
+def get_repo() -> str:
     """Get the current repo's owner/name from gh."""
     result = subprocess.run(
         ["gh", "repo", "view", "--json", "nameWithOwner", "--jq", ".nameWithOwner"],
@@ -65,7 +65,7 @@ def get_repo():
     return result.stdout.strip()
 
 
-def main():
+def main() -> None:
     repo = get_repo()
     keep = 4
     if len(sys.argv) > 1:

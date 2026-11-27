@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 
-def is_elf_file(filepath):
+def is_elf_file(filepath: Path) -> bool:
     """Check if a file is an ELF binary by examining its magic number."""
     try:
         with open(filepath, "rb") as f:
@@ -18,9 +18,9 @@ def is_elf_file(filepath):
         return False
 
 
-def find_elf_files(directory):
+def find_elf_files(directory_name: str) -> None:
     """Find all ELF files in a directory recursively."""
-    directory = Path(directory)
+    directory = Path(directory_name)
 
     if not directory.exists():
         print(f"Error: Directory [{directory}] does not exist", file=sys.stderr)
@@ -38,7 +38,7 @@ def find_elf_files(directory):
         print(f"Error: Permission denied accessing [{directory}]", file=sys.stderr)
 
 
-def main():
+def main() -> None:
     """Main function."""
     # Use command line argument or default to current directory
     directory = sys.argv[1] if len(sys.argv) > 1 else "."
