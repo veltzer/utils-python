@@ -76,8 +76,8 @@ def main():
     total = len(runs)
     print(f"Found {total} workflow runs, keeping {keep} most recent (non-failed).")
 
-    kept = []
-    to_delete = []
+    kept: list[int] = []
+    to_delete: list[int] = []
     failed_conclusions = {
         "failure",
         "cancelled",

@@ -62,7 +62,7 @@ def main() -> None:
             unite(file_list, res)
             lect += 1
     if do_six:
-        file_list = []
+        file_list: list[str] = []
         count = 1
         lect = 1
         for f in sorted(glob.glob("*.mp3")):

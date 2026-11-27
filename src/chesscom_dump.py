@@ -9,6 +9,10 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 API = "https://api.chess.com/pub/player"
 CONFIG = os.path.join(
@@ -38,7 +42,7 @@ def get(url, retries=5):
     raise RuntimeError(f"gave up on {url}")
 
 
-def load_config(path=CONFIG):
+def load_config(path=CONFIG) -> Mapping[str, str]:
     """[chesscom] section of the ini, or an empty mapping if there is no file."""
     cp = configparser.ConfigParser()
     cp.read(path)

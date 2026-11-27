@@ -90,8 +90,8 @@ def main():
     total = len(deployment_ids)
     print(f"Found {total} deployments, keeping {keep} most recent (non-failed).")
 
-    kept = []
-    to_delete = []
+    kept: list[int] = []
+    to_delete: list[int] = []
     failed_states = {"failure", "error"}
     for dep_id in deployment_ids:
         state = get_latest_deployment_state(repo, dep_id)

@@ -9,6 +9,7 @@ import os
 import os.path
 import subprocess
 import sys
+from typing import Any
 
 import yaml
 
@@ -86,7 +87,7 @@ def main():
     project_options_file = os.path.expanduser("~/.mroptions.yaml")
     if os.path.isfile(project_options_file):
         with open(project_options_file) as f:
-            opts = yaml.safe_load(f)
+            opts: dict[str, Any] = yaml.safe_load(f)
     else:
         opts = {}
 
