@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 
 
-def get_version_tuple(v_str: str) -> tuple:
+def get_version_tuple(v_str: str) -> tuple[int, ...]:
     return tuple(map(int, v_str.split(".")))
 
 

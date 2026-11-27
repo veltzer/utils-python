@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 
-def list_profiles(local_state_path: Path) -> list:
+def list_profiles(local_state_path: Path) -> list[tuple[str, str, str]]:
     try:
         with open(local_state_path, encoding="utf-8") as file_handle:
             data = json.load(file_handle)
@@ -29,7 +29,7 @@ def list_profiles(local_state_path: Path) -> list:
         return []
 
     info_cache = data.get("profile", {}).get("info_cache", {})
-    profiles = []
+    profiles: list[tuple[str, str, str]] = []
     for directory, info in info_cache.items():
         name = info.get("name", "?")
         email = info.get("user_name", "no account")
