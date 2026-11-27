@@ -18,9 +18,6 @@ import chardet
 
 # list all encodings that are supported by python
 # CAVEAT: does not list encodings that do not have aliases
-# import encodings.aliases # for aliases
-# print(encodings.aliases.aliases.keys())
-# exit(1)
 
 
 def main() -> None:

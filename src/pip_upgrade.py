@@ -14,7 +14,6 @@ import sys
 def upgrade_module(module_name):
     try:
         importlib.import_module(module_name)
-        # module_version = module.__version__
         print(f"{module_name} is installed.")
     except ImportError:
         print(f"{module_name} is not installed, skipping upgrade.")

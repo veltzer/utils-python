@@ -19,7 +19,6 @@ def main() -> None:
     for root, _dirs, files in os.walk(folder):
         for file in files:
             full = os.path.join(root, file)
-            # print(f"doing {full}")
             try:
                 with open(full) as f:
                     content = f.read()

@@ -8,8 +8,6 @@ import os
 import os.path
 import subprocess
 
-# projects=[(repo.name, os.path.join(home,"git",repo.name)) for repo in utils.github.get_nonforked_repos_list()]
-
 
 def main() -> None:
     home = os.path.expanduser("~")

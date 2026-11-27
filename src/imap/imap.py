@@ -186,7 +186,6 @@ class IMAP:
             content = f.read()
         message = email.message_from_bytes(content)
         timestamp = parsedate(message["date"])
-        # subject = decode_header(message['subject'])
         self.append(mailbox, flags, timestamp, content)
 
     def test(self):
@@ -236,7 +235,6 @@ class IMAP:
         assert self.have_fullpath("business/hinbit/projects/smartbuild")
 
         # this works
-        # filename='/home/mark/Mail/.hobbies.directory/blog/cur/1279466171.2097.5oTh7:2,S'
         filename = "support/test_mail_msg"
         self.create_fullpath("test/foo/bar/zoo")
         with open(filename, "rb") as f:

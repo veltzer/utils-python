@@ -16,8 +16,6 @@ def main():
             ):  # Ignore empty lines and comments
                 print(f"Installing: [{package}]")
                 subprocess.run(["pip", "install", package], check=True)
-                # You could add a pause here if needed
-                # input("Press Enter to continue...")
 
 
 if __name__ == "__main__":

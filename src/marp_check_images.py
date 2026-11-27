@@ -43,14 +43,11 @@ def validate_image_links(root_dir: str) -> bool:
         print("No Marp files found!")
         return False
 
-    # print(f"Found {len(marp_files)} Marp files")
 
     for marp_file in marp_files:
-        # print(f"Checking {marp_file}...")
         image_links = extract_image_links(marp_file)
 
         if not image_links:
-            # print("  No image links found")
             continue
 
         for image_path, line_num in image_links:
@@ -62,7 +59,6 @@ def validate_image_links(root_dir: str) -> bool:
                 all_valid = False
             else:
                 pass
-                # print(f"  ✓ Line {line_num}: Found {image_path}")
 
     return all_valid
 
@@ -77,11 +73,9 @@ def main():
         sys.exit(1)
     success = validate_image_links(root_dir)
     if not success:
-        # print("\n⚠️ Some images are missing!")
         sys.exit(1)
     else:
         pass
-        # print("\n✓ All images exist!")
 
 
 if __name__ == "__main__":

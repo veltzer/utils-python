@@ -20,7 +20,6 @@ def main():
     cf = re.compile(sys.argv[2])
     folder = sys.argv[3]
     debug = False
-    # debug=True
     print_only_files = False
     printed_files = set()
 

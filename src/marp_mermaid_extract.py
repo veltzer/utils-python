@@ -42,8 +42,6 @@ def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
         if slide_end == -1:
             slide_end = len(content)
 
-        # Extract the current slide content
-        # slide_content = content[slide_start:slide_end].strip()
 
         # Create .mmd file
         mmd_filename = f"{num}.mmd"
@@ -52,7 +50,6 @@ def extract_mermaid_diagrams(mermaid_folder: str, file_path: str):
 
         # Replace the diagram with a link in the original content
         replace = f"![{num}](../../../out/{mermaid_folder}/{num}.png)"
-        # replace = f"![{diagram_name}]({mmd_filename})"
         content = content[:start] + replace + content[end:]
 
     # Write the modified content back to the file

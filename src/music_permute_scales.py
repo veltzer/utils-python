@@ -9,9 +9,6 @@ and avoiding going through them always in the same cycle of fifths.
 
 import random
 
-# for deterministic behaviour
-# random.seed(7)
-
 
 def main() -> None:
     note_list = ["C", "F", "Bb", "Eb", "Ab", "Db", "Gb/F#", "B", "E", "A", "D", "G"]

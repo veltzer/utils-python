@@ -70,7 +70,6 @@ def main() -> None:
             if count % 6 == 0:
                 name = f[5:]
                 res = f"{lect:02d} - {name}"
-                # res=f"{lect:02d}.mp3"
                 unite(file_list, res)
                 file_list = []
                 count = 1

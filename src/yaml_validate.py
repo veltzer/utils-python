@@ -116,9 +116,7 @@ def main():
         schema = fetch_schema(schema_url)
         if DEBUG:
             # In debug mode, create a custom registry to see remote lookups
-            # print("DEBUG: Setting up validator with a debug registry...")
             def logging_retriever(uri):
-                # print(f"DEBUG: referencing library is fetching remote ref: {uri}")
                 # Use our caching fetch_schema function
                 return Resource.from_contents(fetch_schema(uri))
 

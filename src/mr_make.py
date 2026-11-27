@@ -58,7 +58,6 @@ def run_empty_output(args, string_to_print=None, *, do_exit=False, do_print=Fals
 
 
 def get_projects():
-    # projects=[(repo.name, os.path.join(home,"git",repo.name)) for repo in utils.github.get_nonforked_repos_list()]
     projects = []
     filename = os.path.expanduser("~/.mrconfig")
     with open(filename) as f:
@@ -116,7 +115,6 @@ def main():
             else:
                 code = run_check_string(["make"], string="warning")
                 do_stats(code, events)
-            # os.system("make")
         elif os.path.isfile(bootstrap):
             os.chdir(project_root)
             code = run_empty_output(["./bootstrap"])
@@ -127,7 +125,6 @@ def main():
             do_stats(code, events)
             print("OK")
         else:
-            # print(f"dont know how to build [{project_name}]...")
             print("MAKEFILE NOT FOUND")
             events["makefile"] += 1
 

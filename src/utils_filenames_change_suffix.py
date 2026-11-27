@@ -34,7 +34,6 @@ def main() -> None:
     bad_suffix = sys.argv[1]
     good_suffix = sys.argv[2]
     for filename in yield_files():
-        # logger.debug(filename)
         all_but_suffix, suffix = os.path.splitext(filename)
         if suffix == bad_suffix:
             new_filename = all_but_suffix + good_suffix

@@ -22,23 +22,12 @@ do_check = True
 # do you want to redirect standard output?
 do_redirect = False
 opt_codec = "copy"
-# opt_codec="libmp3lame"
 
 
 def fix(filename):
     print(f"fixing [{filename}]...")
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
         out = f.name
-    # args=[
-    #    "ffmpeg",
-    #    "-i",
-    #    filename,
-    #    "-acodec",
-    #    opt_codec,
-    #    out,
-    #    "-loglevel",
-    #    "quiet"
-    # ]
     args = [
         "lame",
         "-m",

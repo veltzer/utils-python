@@ -23,7 +23,6 @@ class Gmail:
         if self.folder == "inbox":
             self.folder = "INBOX"
         else:
-            # self.folder = "[Gmail]/%s" % self.folder
             pass
 
         self.__imap = None

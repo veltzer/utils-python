@@ -38,7 +38,6 @@ def max_output(out):
                 found_cnt += 1
                 found_id = fields[0]
     if found_cnt == 1 and found_id is not None:
-        # time.sleep(2)
         args = [
             "wmctrl",
             "-i",

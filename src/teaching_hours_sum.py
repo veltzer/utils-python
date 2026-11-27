@@ -17,12 +17,9 @@ def main() -> None:
     with open(filename) as stream:
         for raw_line in stream:
             line = raw_line.rstrip()
-            # print(f"line is {line}")
             m = c.match(line)
             if m:
-                # print(f"line {line} matches")
                 current_hours = int(m.group(1))
-                # print(f"current_hours is {current_hours}")
                 hours += current_hours
     print(f"hours is {hours}")
 
