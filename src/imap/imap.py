@@ -19,6 +19,11 @@ import imaplib
 import os
 import os.path
 import time
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # the class of an open gdbm file has a name in the type stubs only
+    from _gdbm import _gdbm
 
 # db functions
 
@@ -78,7 +83,7 @@ def _text(item):
 
 class IMAP:
     def __init__(self):
-        self.db = None
+        self.db: _gdbm | None = None
         self.imap: imaplib.IMAP4_SSL | None = None
 
     def _conn(self) -> imaplib.IMAP4_SSL:

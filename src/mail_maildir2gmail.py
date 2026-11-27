@@ -25,7 +25,7 @@ class Gmail:
         else:
             pass
 
-        self.__imap = None
+        self.__imap: IMAP4_SSL | None = None
 
     def __del__(self):
         if self.__imap is not None:
