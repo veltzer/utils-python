@@ -27,10 +27,11 @@ def get_latest_zoom_version():
         if "zoom_amd64.deb" in final_url:
             return final_url.split("/")[-2]
 
-        return None
 
     except requests.RequestException as e:
         print(f"Error fetching Zoom version: {e}")
+        return None
+    else:
         return None
 
 

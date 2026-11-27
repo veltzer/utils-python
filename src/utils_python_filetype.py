@@ -28,11 +28,12 @@ def check_file_type(file_path):
     try:
         with open(file_path, "rb") as f:
             pickle.load(f)
-        return "Pickle file"
     except pickle.UnpicklingError:
         return "Pickle file (but corrupted or incomplete)"
     except (EOFError, AttributeError, ImportError, IndexError, KeyError, TypeError, ValueError, OSError):
         return "Not a shelf or pickle file"
+    else:
+        return "Pickle file"
 
 
 def main():

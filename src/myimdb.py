@@ -13,9 +13,10 @@ def get_movie_by_imdbid(imdbid: str) -> str | None:
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
-        return response.text
     except requests.RequestException:
         return None
+    else:
+        return response.text
 
 
 def get_movie_by_title(title: str) -> dict[str, Any] | None:
@@ -29,6 +30,7 @@ def get_movie_by_title(title: str) -> dict[str, Any] | None:
             f_title = data.get("Title")
             if f_title == title:
                 return data
-        return None
     except requests.RequestException:
+        return None
+    else:
         return None

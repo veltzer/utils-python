@@ -133,9 +133,9 @@ def main():
             if os.path.isfile(filename):
                 try:
                     gmail.append(filename)
-                except Exception as e:
+                except Exception:
                     log(f"Unable to send [{filename}]")
-                    raise e
+                    raise
 
 
 def parsedate(value):
