@@ -42,7 +42,7 @@ def fetch_schema(schema_url):
     return schema
 
 
-def check_order_recursively(data, schema, filename, path="", debug=False):
+def check_order_recursively(data, schema, filename, path="", *, debug=False):
     """
     Recursively traverses the data and checks property order against the schema.
     Returns True if all orders are valid, False otherwise.
@@ -75,7 +75,7 @@ def check_order_recursively(data, schema, filename, path="", debug=False):
             if sub_schema:
                 new_path = f"{path}.{key}" if path else key
                 if not check_order_recursively(
-                    value, sub_schema, filename, new_path, debug
+                    value, sub_schema, filename, new_path, debug=debug
                 ):
                     is_valid = False
     elif isinstance(data, list):
@@ -84,7 +84,7 @@ def check_order_recursively(data, schema, filename, path="", debug=False):
             for i, item in enumerate(data):
                 new_path = f"{path}[{i}]"
                 if not check_order_recursively(
-                    item, item_schema, filename, new_path, debug
+                    item, item_schema, filename, new_path, debug=debug
                 ):
                     is_valid = False
     return is_valid

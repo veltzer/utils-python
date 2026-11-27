@@ -75,7 +75,7 @@ def lua_keywords(lua_bin: str, file_path: str) -> list[str]:
     return [line.strip() for line in res.stdout.splitlines() if line.strip()]
 
 
-def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
+def sync_one(dir_path: str, owner: str, lua_bin: str, *, dry_run: bool) -> None:
     lua_file = os.path.join(dir_path, "config", "project.lua")
     if not os.path.isfile(lua_file):
         print(f"{dir_path}: no config/project.lua, skipping", file=sys.stderr)
@@ -201,7 +201,7 @@ def sync_one(dir_path: str, owner: str, lua_bin: str, dry_run: bool) -> None:
             pass
 
 
-def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
+def sync_all(owner: str, base_dir: str, lua_bin: str, *, dry_run: bool) -> None:
     res = subprocess.run(
         [
             "gh",
@@ -231,7 +231,7 @@ def sync_all(owner: str, base_dir: str, lua_bin: str, dry_run: bool) -> None:
         if not os.path.isdir(dir_path):
             print(f"{name}: no checkout at {dir_path}, skipping", file=sys.stderr)
             continue
-        sync_one(dir_path, owner, lua_bin, dry_run)
+        sync_one(dir_path, owner, lua_bin, dry_run=dry_run)
 
 
 def main() -> None:
@@ -247,13 +247,13 @@ def main() -> None:
     args = sys.argv[1:]
 
     if not args or (len(args) == 1 and args[0] == "--all"):
-        sync_all(owner, base_dir, lua_bin, dry_run)
+        sync_all(owner, base_dir, lua_bin, dry_run=dry_run)
     else:
         for d in args:
             if d == "--all":
-                sync_all(owner, base_dir, lua_bin, dry_run)
+                sync_all(owner, base_dir, lua_bin, dry_run=dry_run)
             else:
-                sync_one(d, owner, lua_bin, dry_run)
+                sync_one(d, owner, lua_bin, dry_run=dry_run)
 
 
 if __name__ == "__main__":

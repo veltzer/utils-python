@@ -17,7 +17,7 @@ print_all = True
 stop_on_fail = False
 
 
-def run_check_string(args, string, string_to_print=None, do_exit=False, do_print=False):
+def run_check_string(args, string, string_to_print=None, *, do_exit=False, do_print=False):
     """this method runs make and checks that the output does not have lines with warnings in them"""
     with subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         res_out, res_err = p.communicate()
@@ -41,7 +41,7 @@ def run_check_string(args, string, string_to_print=None, do_exit=False, do_print
     return error_code
 
 
-def run_empty_output(args, string_to_print=None, do_exit=False, do_print=False):
+def run_empty_output(args, string_to_print=None, *, do_exit=False, do_print=False):
     with subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE) as p:
         res_out, res_err = p.communicate()
     res_out = res_out.decode()
